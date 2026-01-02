@@ -225,7 +225,13 @@ section [data-aos] {
 }
 
 #about .about-content {
-    padding: 2rem 0;
+    padding: 1rem 0;
+    max-width: 100%;
+}
+
+#about .row {
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 #about .about-content p {
@@ -242,12 +248,134 @@ section [data-aos] {
     margin-bottom: 2rem;
 }
 
+/* About Me 프로필 사진 */
+.about-image-wrapper {
+    text-align: center;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.about-profile-image {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: var(--shadow-lg);
+    object-fit: cover;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+    margin: 0 auto;
+}
+
+.about-profile-image:hover {
+    transform: scale(1.02);
+    box-shadow: var(--shadow-xl);
+}
+
 /* ============================================
    Projects 섹션
    ============================================ */
 #projects {
     background-color: var(--bg-light);
     padding: 8rem 0;
+    position: relative;
+    margin-left: 250px; /* 사이드바 너비만큼 왼쪽 마진 */
+}
+
+@media (max-width: 992px) {
+    #projects {
+        margin-left: 200px;
+    }
+}
+
+@media (max-width: 768px) {
+    #projects {
+        margin-left: 0;
+    }
+}
+
+/* 좌측 사이드바 네비게이션 */
+.project-sidebar {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 250px;
+    max-height: 80vh;
+    background: var(--bg-white);
+    border-right: 2px solid var(--bg-light);
+    box-shadow: var(--shadow-md);
+    z-index: 1000;
+    overflow-y: auto;
+    padding: 2rem 0;
+    transition: all var(--transition-normal);
+}
+
+.sidebar-content {
+    padding: 0 1.5rem;
+}
+
+.sidebar-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--bg-light);
+}
+
+.sidebar-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav li {
+    margin-bottom: 0.5rem;
+}
+
+.sidebar-link {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: var(--text-light);
+    text-decoration: none;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    transition: all var(--transition-fast);
+    position: relative;
+}
+
+.sidebar-link:hover {
+    color: var(--primary-color);
+    background: rgba(99, 102, 241, 0.05);
+    padding-left: 1.25rem;
+}
+
+.sidebar-link.active {
+    color: var(--primary-color);
+    font-weight: 600;
+    background: rgba(99, 102, 241, 0.1);
+    border-left: 3px solid var(--primary-color);
+    padding-left: 1.25rem;
+}
+
+.sidebar-link.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--primary-color);
+    border-radius: 0 3px 3px 0;
+}
+
+.sidebar-divider {
+    height: 1px;
+    background: var(--bg-light);
+    margin: 1rem 0;
+    list-style: none;
 }
 
 #projects .section-title {
@@ -376,7 +504,7 @@ section [data-aos] {
     font-size: 1rem;
     line-height: 1.7;
     color: var(--text-light);
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.75rem;
     flex-grow: 1;
 }
 
@@ -393,6 +521,33 @@ section [data-aos] {
 
 .project-card:hover .badge {
     transform: scale(1.05);
+}
+
+/* 장르 태그 스타일 */
+.genre-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.genre-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+    color: var(--primary-color);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.project-card:hover .genre-tag {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+    border-color: rgba(99, 102, 241, 0.3);
+    transform: translateY(-2px);
 }
 
 /* 프로젝트 링크 버튼 */
@@ -444,7 +599,7 @@ section [data-aos] {
    프로젝트 상세 영역
    ============================================ */
 .project-detail-section {
-    padding: 6rem 0;
+    padding: 0;
     margin-top: 4rem;
     background: var(--bg-white);
     border-top: 2px solid var(--bg-light);
@@ -454,11 +609,51 @@ section [data-aos] {
     border-top: none;
 }
 
+/* 배너 이미지 (전체 너비, 좌우 여백 없음) - 기존 스타일 */
+.project-detail-banner-full {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    aspect-ratio: 21 / 9;
+    margin-bottom: 0;
+}
+
+/* 프로젝트 상세 헤더 영역 */
+.project-detail-header {
+    margin-bottom: 3rem;
+    padding: 2rem 0;
+}
+
+/* 회사명/프로젝트명 영역 (왼쪽 40%) */
+.project-detail-title-area {
+    padding-right: 2rem;
+}
+
+/* 배너 이미지 (오른쪽 60%, 라운딩 처리) */
+.project-detail-banner-right {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    aspect-ratio: 21 / 9;
+    border-radius: 16px;
+    box-shadow: var(--shadow-lg);
+    margin-left: auto;
+}
+
+/* 프로젝트 상세 컨텐츠 영역 */
+.project-detail-content {
+    padding: 2rem 0 4rem;
+    text-align: left;
+}
+
 .company-name {
     font-size: 2.5rem;
     font-weight: 700;
     color: var(--primary-color);
     letter-spacing: -0.02em;
+    text-align: left;
 }
 
 .project-name {
@@ -466,18 +661,62 @@ section [data-aos] {
     font-weight: 600;
     color: var(--text-dark);
     letter-spacing: -0.01em;
+    text-align: left;
 }
 
 .project-description {
     font-size: 1.1rem;
     line-height: 1.8;
     color: var(--text-light);
+    text-align: left;
 }
 
 .project-description p {
     margin-bottom: 1.5rem;
 }
 
+/* 스토어 이미지 영역 */
+.project-detail-store-images {
+    padding: 4rem 0;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.project-detail-store-images .row {
+    align-items: stretch;
+    width: 100%;
+    max-width: 100%;
+}
+
+.project-detail-store-images .col-6 {
+    display: flex;
+}
+
+/* col-lg-5를 40% 이하로 제한 */
+@media (min-width: 992px) {
+    .project-detail-store-images {
+        max-width: 40%;
+        margin-left: auto;
+    }
+}
+
+.project-detail-store-image {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    aspect-ratio: 9 / 16;
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.project-detail-store-image:hover {
+    transform: scale(1.02);
+    box-shadow: var(--shadow-lg);
+}
+
+/* 기존 스타일 유지 (호환성) */
 .project-image-wrapper {
     position: relative;
     border-radius: 16px;
@@ -503,7 +742,7 @@ section [data-aos] {
     box-shadow: var(--shadow-lg);
 }
 
-/* 배너 이미지 (가로로 긴 직사각형) */
+/* 배너 이미지 (가로로 긴 직사각형) - 기존 스타일 */
 .project-detail-banner {
     aspect-ratio: 16 / 9;
     object-fit: cover;
@@ -511,7 +750,7 @@ section [data-aos] {
     width: 100%;
 }
 
-/* 스토어 픽처 이미지 (세로로 긴 직사각형) */
+/* 스토어 픽처 이미지 (세로로 긴 직사각형) - 기존 스타일 */
 .project-detail-store {
     aspect-ratio: 9 / 16;
     object-fit: cover;
@@ -745,6 +984,19 @@ footer p {
         text-align: left;
     }
     
+    /* About Me 반응형 */
+    #about .row {
+        flex-direction: column-reverse;
+    }
+    
+    .about-image-wrapper {
+        margin-bottom: 2rem;
+    }
+    
+    .about-profile-image {
+        max-width: 150px;
+    }
+    
     #contact .contact-links .btn {
         display: block;
         width: 100%;
@@ -781,12 +1033,62 @@ footer p {
         font-size: 1rem;
     }
     
-    .project-detail-section .row {
-        flex-direction: column-reverse;
+    /* 프로젝트 상세 영역 반응형 */
+    .project-detail-banner-full,
+    .project-detail-banner-right {
+        aspect-ratio: 21 / 9;
     }
     
-    .project-detail-section .col-lg-6:first-child {
-        margin-top: 2rem;
+    .project-detail-content {
+        padding: 2rem 0 3rem;
+    }
+    
+    .project-detail-store-images {
+        padding: 3rem 0;
+        justify-content: center;
+    }
+    
+    .project-detail-store-images .row {
+        max-width: 100%;
+    }
+    
+    .project-detail-store-image {
+        margin-bottom: 1rem;
+    }
+    
+    /* 사이드바 반응형 */
+    .project-sidebar {
+        width: 200px;
+        padding: 1.5rem 0;
+    }
+    
+    .sidebar-content {
+        padding: 0 1rem;
+    }
+    
+    .sidebar-link {
+        font-size: 0.85rem;
+        padding: 0.6rem 0.75rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .project-sidebar {
+        display: none;
+    }
+    
+    .project-detail-header {
+        margin-bottom: 2rem;
+        padding: 1.5rem 0;
+    }
+    
+    .project-detail-title-area {
+        padding-right: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .project-detail-banner-right {
+        border-radius: 12px;
     }
 }
 

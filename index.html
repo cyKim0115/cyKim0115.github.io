@@ -21,24 +21,20 @@
 </head>
 <body>
     <!-- 헤더 섹션 -->
-    <header class="header-section">
+    <header id="header" class="header-section">
         <div class="container">
             <div class="row align-items-center min-vh-100">
                 <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
                     <h1 class="display-3 fw-bold mb-3">김찬영</h1>
                     <h2 class="h4 text-muted mb-4">Unity Client Developer</h2>
                     <p class="lead mb-4">
-                        <!-- 한 줄 소개를 여기에 작성하세요 -->
-                        게임 개발에 열정을 가진 Unity 클라이언트 개발자입니다. 사용자 경험을 우선으로 생각합니다.
+                        게임 개발에 열정을 가진 Unity 클라이언트 개발자입니다.
                     </p>
                     <div class="social-links">
-                        <a href="mailto:your.email@example.com" class="btn btn-outline-light me-2 mb-2" target="_blank">
+                        <a href="mailto:cksdud3488@naver.com" class="btn btn-outline-light me-2 mb-2" target="_blank">
                             <i class="bi bi-envelope"></i> Email
                         </a>
-                        <a href="https://linkedin.com/in/yourprofile" class="btn btn-outline-light me-2 mb-2" target="_blank">
-                            <i class="bi bi-linkedin"></i> LinkedIn
-                        </a>
-                        <a href="https://github.com/yourusername" class="btn btn-outline-light mb-2" target="_blank">
+                        <a href="https://github.com/cyKim0115" class="btn btn-outline-light mb-2" target="_blank">
                             <i class="bi bi-github"></i> GitHub
                         </a>
                     </div>
@@ -50,23 +46,36 @@
     <!-- About Me 섹션 -->
     <section id="about" class="py-5">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto" data-aos="fade-up">
-                    <h2 class="section-title text-center mb-5">About Me</h2>
+            <h2 class="section-title text-center mb-5" data-aos="fade-up">About Me</h2>
+            <div class="row align-items-center justify-content-center">
+                <!-- 텍스트 영역 (왼쪽) -->
+                <div class="col-lg-6 col-xl-6" data-aos="fade-right">
                     <div class="about-content">
                         <!-- 자기소개를 여기에 작성하세요 -->
                         <p class="lead">
                             안녕하세요! Unity를 활용한 게임 클라이언트 개발을 전문으로 하는 개발자입니다.
                         </p>
                         <p>
-                            <!-- 더 자세한 자기소개 내용을 여기에 작성하세요 -->
                             게임 개발에 대한 열정과 함께, 사용자에게 최고의 게임 경험을 제공하는 것을 목표로 하고 있습니다. 
-                            Unity 엔진을 활용하여 다양한 장르의 게임을 개발해왔으며, 특히 모바일 게임 최적화와 네트워크 프로그래밍에 강점을 가지고 있습니다.
+                            Unity 엔진을 활용하여 다양한 장르의 게임을 개발해왔으며, 특히 협업과 적응에 강점을 가지고 있습니다.
                         </p>
                         <p>
-                            <!-- 기술 스택이나 전문 분야를 여기에 작성하세요 -->
-                            주요 기술 스택: Unity, C#, 게임 최적화, 멀티플레이어 네트워킹, UI/UX 디자인
+                            <strong>주요 기술 스택</strong><br>
+                            <strong>게임 엔진:</strong> Unity<br>
+                            <strong>프로그래밍 언어:</strong> C#, .Net<br>
+                            <strong>플랫폼:</strong> Android, iOS, Steam<br>
+                            <strong>백엔드서비스:</strong> Firebase, gRPC, PlayNANOO, <br>
+                            <strong>광고, 분석 솔루션:</strong> AppLovin, AppsFlyer, ByteBrew<br>
+                            <strong>그래픽, 애니메이션:</strong> Spine, Shader<br>
+                            <strong>CI/CD:</strong> Jenkins, TeamCity<br>
+                            <strong>프로젝트 도구:</strong> Jira, Mantis, Git, SVN<br>
                         </p>
+                    </div>
+                </div>
+                <!-- 사진 영역 (오른쪽) -->
+                <div class="col-lg-4 col-xl-4" data-aos="fade-left">
+                    <div class="about-image-wrapper">
+                        <img src="Resource/My/증사.jpg" alt="프로필 사진" class="about-profile-image">
                     </div>
                 </div>
             </div>
@@ -75,11 +84,35 @@
 
     <!-- Projects 섹션 -->
     <section id="projects" class="py-5 bg-light">
+        <!-- 좌측 사이드바 네비게이션 -->
+        <nav class="project-sidebar">
+            <div class="sidebar-content">
+                <h5 class="sidebar-title">목차</h5>
+                <ul class="sidebar-nav">
+                    <li><a href="#header" class="sidebar-link" data-section="header">홈</a></li>
+                    <li><a href="#about" class="sidebar-link" data-section="about">About Me</a></li>
+                    <li><a href="#projects" class="sidebar-link" data-section="projects">Featured Projects</a></li>
+                    <li class="sidebar-divider"></li>
+                    <li><a href="#company-ninedigits-project-1" class="sidebar-link" data-section="company-ninedigits-project-1">고양이 오마카세</a></li>
+                    <li><a href="#company-ninedigits-project-2" class="sidebar-link" data-section="company-ninedigits-project-2">네코 식당</a></li>
+                    <li><a href="#company-ninedigits-project-3" class="sidebar-link" data-section="company-ninedigits-project-3">용사마을 타이쿤</a></li>
+                    <li><a href="#ninedigits-minor-projects" class="sidebar-link" data-section="ninedigits-minor-projects">기타 참여 프로젝트</a></li>
+                    <li><a href="#company-cookapps-project-1" class="sidebar-link" data-section="company-cookapps-project-1">테일드 데몬 슬레이어 : 라이즈</a></li>
+                    <li><a href="#company-cookapps-project-2" class="sidebar-link" data-section="company-cookapps-project-2">우당탕탕 탐험대</a></li>
+                    <li><a href="#company-preflow-project-1" class="sidebar-link" data-section="company-preflow-project-1">소울 디멘션</a></li>
+                    <li class="sidebar-divider"></li>
+                    <li><a href="#contact" class="sidebar-link" data-section="contact">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+        
         <div class="container">
-            <h2 class="section-title text-center mb-5" data-aos="fade-up">Projects</h2>
+            <div id="featured-projects-header">
+                <h2 class="section-title text-center mb-5" data-aos="fade-up">Featured Projects</h2>
+            </div>
             
             <!-- 주요 프로젝트 카드 영역 -->
-            <div class="row g-4 mb-5">
+            <div id="featured-projects-cards" class="row g-4 mb-5">
                 <!-- 테일드 데몬 슬레이어 : 라이즈 -->
                 <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
                     <div class="card h-100 project-card-clickable" data-project-detail="company-cookapps-project-1">
@@ -92,8 +125,9 @@
                             <p class="card-text flex-grow-1">
                                 <!-- 프로젝트 간단 설명을 여기에 작성하세요 -->
                             </p>
-                            <div class="mb-3">
-                                <!-- 기술 스택 태그를 여기에 추가하세요 -->
+                            <div class="mb-3 genre-tags">
+                                <span class="genre-tag">Idle</span>
+                                <span class="genre-tag">RPG</span>
                             </div>
                             <div class="project-links">
                                 <a href="https://play.google.com/store/apps/details?id=com.cookapps.newdemonslayer&hl=ko" class="btn btn-sm btn-outline-primary me-2" target="_blank" onclick="event.stopPropagation();">
@@ -119,8 +153,9 @@
                             <p class="card-text flex-grow-1">
                                 <!-- 프로젝트 간단 설명을 여기에 작성하세요 -->
                             </p>
-                            <div class="mb-3">
-                                <!-- 기술 스택 태그를 여기에 추가하세요 -->
+                            <div class="mb-3 genre-tags">
+                                <span class="genre-tag">Idle</span>
+                                <span class="genre-tag">Collecting RPG</span>
                             </div>
                             <div class="project-links">
                                 <a href="https://play.google.com/store/apps/details?id=com.cookapps.hustle&hl=ko" class="btn btn-sm btn-outline-primary me-2" target="_blank" onclick="event.stopPropagation();">
@@ -146,8 +181,9 @@
                             <p class="card-text flex-grow-1">
                                 <!-- 프로젝트 간단 설명을 여기에 작성하세요 -->
                             </p>
-                            <div class="mb-3">
-                                <!-- 기술 스택 태그를 여기에 추가하세요 -->
+                            <div class="mb-3 genre-tags">
+                                <span class="genre-tag">Idle</span>
+                                <span class="genre-tag">Tycoon</span>
                             </div>
                             <div class="project-links">
                                 <a href="https://play.google.com/store/apps/details?id=com.daerigame.nekomakase&hl=ko" class="btn btn-sm btn-outline-primary me-2" target="_blank" onclick="event.stopPropagation();">
@@ -173,8 +209,9 @@
                             <p class="card-text flex-grow-1">
                                 <!-- 프로젝트 간단 설명을 여기에 작성하세요 -->
                             </p>
-                            <div class="mb-3">
-                                <!-- 기술 스택 태그를 여기에 추가하세요 -->
+                            <div class="mb-3 genre-tags">
+                                <span class="genre-tag">Tycoon</span>
+                                <span class="genre-tag">Simulation</span>
                             </div>
                             <div class="project-links">
                                 <a href="https://play.google.com/store/apps/details?id=com.buffstudio.aos.neko.restaurant&hl=ko" class="btn btn-sm btn-outline-primary me-2" target="_blank" onclick="event.stopPropagation();">
@@ -200,8 +237,9 @@
                             <p class="card-text flex-grow-1">
                                 <!-- 프로젝트 간단 설명을 여기에 작성하세요 -->
                             </p>
-                            <div class="mb-3">
-                                <!-- 기술 스택 태그를 여기에 추가하세요 -->
+                            <div class="mb-3 genre-tags">
+                                <span class="genre-tag">Tycoon</span>
+                                <span class="genre-tag">Simulation</span>
                             </div>
                             <div class="project-links">
                                 <a href="https://play.google.com/store/apps/details?id=kr.co.niedigits.herotown&hl=ko" class="btn btn-sm btn-outline-primary me-2" target="_blank" onclick="event.stopPropagation();">
@@ -222,22 +260,50 @@
             <!-- 고양이 오마카세 상세 -->
             <div id="company-ninedigits-project-1" class="project-detail-section">
                 <div class="container">
-                    <div class="row align-items-center mb-5">
-                        <div class="col-lg-6" data-aos="fade-right">
+                    <div class="row align-items-center project-detail-header">
+                        <!-- 회사명/프로젝트명 영역 (왼쪽 40%) -->
+                        <div class="col-lg-4 project-detail-title-area" data-aos="fade-right">
                             <h3 class="company-name mb-3">Nine Digits</h3>
-                            <h4 class="project-name mb-4">고양이 오마카세</h4>
+                            <h4 class="project-name mb-0">고양이 오마카세</h4>
+                        </div>
+                        <!-- 배너 이미지 (오른쪽 60%) -->
+                        <div class="col-lg-8" data-aos="fade-left">
+                            <img src="Resource/Neko Omakase/banner.jpg" alt="고양이 오마카세" class="project-detail-banner-right">
+                        </div>
+                    </div>
+                    
+                    <div class="row align-items-start">
+                        <!-- 텍스트 영역 (왼쪽) -->
+                        <div class="col-lg-7 project-detail-content" data-aos="fade-up">
                             <div class="project-description">
                                 <p>
-                                    <!-- 프로젝트 상세 설명을 여기에 작성하세요 -->
+                                    고양이 오마카세는 Google Play 스토어와 Apple App Store에 출시된 타이쿤 장르의 게임입니다. 
+                                    App Store 미국 마켓 1위를 달성했으며, 2025 Unity Awards 비주얼 부문을 수상했습니다.
                                 </p>
-                                <!-- 특이 사항: 미국 마켓 1위 달성, 2025 Unity Awards 비주얼부문 수상 -->
+                                <p>
+                                    URP(Universal Render Pipeline)와 Shader를 활용하여 게임의 비주얼 품질을 향상시켰습니다. 
+                                    Google Mobile Mediation을 통한 광고 수익화를 구현했으며, Amazon에 배포된 인게임 서버와 운영툴 서버(Node.js)의 유지보수를 담당했습니다.
+                                </p>
+                                <p>
+                                    <strong>주요 기술 스택:</strong><br>
+                                    • URP, Shader<br>
+                                    • Google Mobile Mediation<br>
+                                    • Node.js (서버 유지보수)<br>
+                                    • 딥링크(다이나믹 링크)<br>
+                                    • Sentry, Firebase, AppsFlyer
+                                </p>
                             </div>
                         </div>
-                        <div class="col-lg-6" data-aos="fade-left">
-                            <div class="project-image-wrapper">
-                                <img src="Resource/Neko Omakase/banner.jpg" alt="고양이 오마카세" class="project-detail-image project-detail-banner mb-3">
-                                <img src="Resource/Neko Omakase/store_picture_1.jpg" alt="고양이 오마카세" class="project-detail-image project-detail-store mb-3">
-                                <img src="Resource/Neko Omakase/store_picture_2.jpg" alt="고양이 오마카세" class="project-detail-image project-detail-store">
+                        
+                        <!-- 스토어 이미지 영역 (오른쪽, 40% 이하) -->
+                        <div class="col-lg-5 project-detail-store-images" data-aos="fade-up">
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <img src="Resource/Neko Omakase/store_picture_1.jpg" alt="고양이 오마카세" class="project-detail-store-image">
+                                </div>
+                                <div class="col-6">
+                                    <img src="Resource/Neko Omakase/store_picture_2.jpg" alt="고양이 오마카세" class="project-detail-store-image">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -247,21 +313,35 @@
             <!-- 네코 식당 상세 -->
             <div id="company-ninedigits-project-2" class="project-detail-section">
                 <div class="container">
-                    <div class="row align-items-center mb-5">
-                        <div class="col-lg-6" data-aos="fade-right">
+                    <div class="row align-items-center project-detail-header">
+                        <!-- 회사명/프로젝트명 영역 (왼쪽 40%) -->
+                        <div class="col-lg-4 project-detail-title-area" data-aos="fade-right">
                             <h3 class="company-name mb-3">Nine Digits</h3>
-                            <h4 class="project-name mb-4">네코 식당</h4>
+                            <h4 class="project-name mb-0">네코 식당</h4>
+                        </div>
+                        <!-- 배너 이미지 (오른쪽 60%) -->
+                        <div class="col-lg-8" data-aos="fade-left">
+                            <img src="Resource/Neko Restaurant/banner.png" alt="네코 식당" class="project-detail-banner-right">
+                        </div>
+                    </div>
+                    
+                    <div class="row align-items-start">
+                        <!-- 텍스트 영역 (왼쪽) -->
+                        <div class="col-lg-7 project-detail-content" data-aos="fade-up">
                             <div class="project-description">
-                                <p>
-                                    <!-- 프로젝트 상세 설명을 여기에 작성하세요 -->
-                                </p>
+                                <p>프로젝트 설명</p>
                             </div>
                         </div>
-                        <div class="col-lg-6" data-aos="fade-left">
-                            <div class="project-image-wrapper">
-                                <img src="Resource/Neko Restaurant/banner.png" alt="네코 식당" class="project-detail-image project-detail-banner mb-3">
-                                <img src="Resource/Neko Restaurant/store_picture_1.png" alt="네코 식당" class="project-detail-image project-detail-store mb-3">
-                                <img src="Resource/Neko Restaurant/store_picture_2.png" alt="네코 식당" class="project-detail-image project-detail-store">
+                        
+                        <!-- 스토어 이미지 영역 (오른쪽, 40% 이하) -->
+                        <div class="col-lg-5 project-detail-store-images" data-aos="fade-up">
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <img src="Resource/Neko Restaurant/store_picture_1.png" alt="네코 식당" class="project-detail-store-image">
+                                </div>
+                                <div class="col-6">
+                                    <img src="Resource/Neko Restaurant/store_picture_2.png" alt="네코 식당" class="project-detail-store-image">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -271,27 +351,53 @@
             <!-- 용사마을 타이쿤 상세 -->
             <div id="company-ninedigits-project-3" class="project-detail-section">
                 <div class="container">
-                    <div class="row align-items-center mb-5">
-                        <div class="col-lg-6" data-aos="fade-right">
+                    <div class="row align-items-center project-detail-header">
+                        <!-- 회사명/프로젝트명 영역 (왼쪽 40%) -->
+                        <div class="col-lg-4 project-detail-title-area" data-aos="fade-right">
                             <h3 class="company-name mb-3">Nine Digits</h3>
-                            <h4 class="project-name mb-4">용사마을 타이쿤</h4>
+                            <h4 class="project-name mb-0">용사마을 타이쿤</h4>
+                        </div>
+                        <!-- 배너 이미지 (오른쪽 60%) -->
+                        <div class="col-lg-8" data-aos="fade-left">
+                            <img src="Resource/Hero Craft Town/banner.png" alt="용사마을 타이쿤" class="project-detail-banner-right">
+                        </div>
+                    </div>
+                    
+                    <div class="row align-items-start">
+                        <!-- 텍스트 영역 (왼쪽) -->
+                        <div class="col-lg-7 project-detail-content" data-aos="fade-up">
                             <div class="project-description">
                                 <p>
-                                    <!-- 프로젝트 상세 설명을 여기에 작성하세요 -->
+                                    용사마을 타이쿤은 Google Play 스토어에 출시된 타이쿤 장르의 시뮬레이션 게임입니다.
+                                </p>
+                                <p>
+                                    Google Spreadsheet와 Google Cloud API를 활용하여 게임 내 테이블 데이터를 효율적으로 관리하는 시스템을 구축했습니다. 
+                                    또한 AI 기술을 활용한 에디터용 툴 및 기능을 개발하여 개발 효율성을 향상시켰습니다.
+                                </p>
+                                <p>
+                                    <strong>주요 기술 스택:</strong><br>
+                                    • Firebase<br>
+                                    • AppsFlyer, ByteBrew<br>
+                                    • AppLovin MAX
                                 </p>
                             </div>
                         </div>
-                        <div class="col-lg-6" data-aos="fade-left">
-                            <div class="project-image-wrapper">
-                                <img src="Resource/Hero Craft Town/banner.png" alt="용사마을 타이쿤" class="project-detail-image project-detail-banner mb-3">
-                                <img src="Resource/Hero Craft Town/store_picture_1.png" alt="용사마을 타이쿤" class="project-detail-image project-detail-store mb-3">
-                                <img src="Resource/Hero Craft Town/store_picture_2.png" alt="용사마을 타이쿤" class="project-detail-image project-detail-store">
+                        
+                        <!-- 스토어 이미지 영역 (오른쪽, 40% 이하) -->
+                        <div class="col-lg-5 project-detail-store-images" data-aos="fade-up">
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <img src="Resource/Hero Craft Town/store_picture_1.png" alt="용사마을 타이쿤" class="project-detail-store-image">
+                                </div>
+                                <div class="col-6">
+                                    <img src="Resource/Hero Craft Town/store_picture_2.png" alt="용사마을 타이쿤" class="project-detail-store-image">
+                                </div>
                             </div>
                         </div>
                     </div>
                     
                     <!-- Nine Digits 기타 참여 프로젝트 영역 -->
-                    <div class="minor-projects-section mt-5">
+                    <div id="ninedigits-minor-projects" class="minor-projects-section mt-5">
                         <h5 class="minor-projects-title mb-4">기타 참여 프로젝트</h5>
                         <div class="row g-3">
                             <div class="col-md-6 col-lg-4">
@@ -302,7 +408,7 @@
                                             <img src="Resource/Koyo Town/icon.png" alt="고요의 정원 아이콘" class="minor-project-icon-small me-2">
                                             <h6 class="mb-0">고요의 정원</h6>
                                         </div>
-                                        <p class="small mb-0">기타 프로젝트</p>
+                                        <p class="small mb-0">SDK 및 플러그인 통합, 일부 시스템 구현</p>
                                     </div>
                                 </div>
                             </div>
@@ -314,7 +420,7 @@
                                             <img src="Resource/Memories Millennium Girl Steam/icon.png" alt="천년의 소녀 (스팀) 아이콘" class="minor-project-icon-small me-2">
                                             <h6 class="mb-0">천년의 소녀 (스팀)</h6>
                                         </div>
-                                        <p class="small mb-0">기타 프로젝트</p>
+                                        <p class="small mb-0">게임 컨텐츠 업데이트 진행</p>
                                     </div>
                                 </div>
                             </div>
@@ -326,7 +432,7 @@
                                             <img src="Resource/Memories Millennium Girl Mobile/icon.png" alt="천년의 소녀 (모바일) 아이콘" class="minor-project-icon-small me-2">
                                             <h6 class="mb-0">천년의 소녀 (모바일)</h6>
                                         </div>
-                                        <p class="small mb-0">기타 프로젝트</p>
+                                        <p class="small mb-0">SDK 버전 업데이트 및 스토어 정책 대응</p>
                                     </div>
                                 </div>
                             </div>
@@ -338,7 +444,7 @@
                                             <img src="Resource/Lost Paradise/icon.png" alt="로스트 파라다이스 아이콘" class="minor-project-icon-small me-2">
                                             <h6 class="mb-0">로스트 파라다이스</h6>
                                         </div>
-                                        <p class="small mb-0">기타 프로젝트</p>
+                                        <p class="small mb-0">SDK 버전 업데이트 및 스토어 정책 대응</p>
                                     </div>
                                 </div>
                             </div>
@@ -350,7 +456,7 @@
                                             <img src="Resource/Miracle Choice/icon.png" alt="미라클 초이스 아이콘" class="minor-project-icon-small me-2">
                                             <h6 class="mb-0">미라클 초이스</h6>
                                         </div>
-                                        <p class="small mb-0">기타 프로젝트</p>
+                                        <p class="small mb-0">SDK 버전 업데이트 및 스토어 정책 대응</p>
                                     </div>
                                 </div>
                             </div>
@@ -366,22 +472,36 @@
             <!-- 테일드 데몬 슬레이어 : 라이즈 상세 -->
             <div id="company-cookapps-project-1" class="project-detail-section">
                 <div class="container">
-                    <div class="row align-items-center mb-5">
-                        <div class="col-lg-6" data-aos="fade-right">
+                    <div class="row align-items-center project-detail-header">
+                        <!-- 회사명/프로젝트명 영역 (왼쪽 40%) -->
+                        <div class="col-lg-4 project-detail-title-area" data-aos="fade-right">
                             <h3 class="company-name mb-3">CookApps</h3>
-                            <h4 class="project-name mb-4">테일드 데몬 슬레이어 : 라이즈</h4>
+                            <h4 class="project-name mb-0">테일드 데몬 슬레이어 : 라이즈</h4>
+                        </div>
+                        <!-- 배너 이미지 (오른쪽 60%) -->
+                        <div class="col-lg-8" data-aos="fade-left">
+                            <img src="Resource/Tailed Demon Slayer Rise/banner.png" alt="테일드 데몬 슬레이어 : 라이즈" class="project-detail-banner-right">
+                        </div>
+                    </div>
+                    
+                    <div class="row align-items-start">
+                        <!-- 텍스트 영역 (왼쪽) -->
+                        <div class="col-lg-7 project-detail-content" data-aos="fade-up">
                             <div class="project-description">
-                                <p>
-                                    <!-- 프로젝트 상세 설명을 여기에 작성하세요 -->
-                                </p>
+                                <p>프로젝트 설명</p>
                                 <!-- 특이 사항: 양대 마켓 글로벌 1위 달성 -->
                             </div>
                         </div>
-                        <div class="col-lg-6" data-aos="fade-left">
-                            <div class="project-image-wrapper">
-                                <img src="Resource/Tailed Demon Slayer Rise/banner.png" alt="테일드 데몬 슬레이어 : 라이즈" class="project-detail-image project-detail-banner mb-3">
-                                <img src="Resource/Tailed Demon Slayer Rise/store_picture_1.jpg" alt="테일드 데몬 슬레이어 : 라이즈" class="project-detail-image project-detail-store mb-3">
-                                <img src="Resource/Tailed Demon Slayer Rise/store_picture_2.jpg" alt="테일드 데몬 슬레이어 : 라이즈" class="project-detail-image project-detail-store">
+                        
+                        <!-- 스토어 이미지 영역 (오른쪽, 40% 이하) -->
+                        <div class="col-lg-5 project-detail-store-images" data-aos="fade-up">
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <img src="Resource/Tailed Demon Slayer Rise/store_picture_1.jpg" alt="테일드 데몬 슬레이어 : 라이즈" class="project-detail-store-image">
+                                </div>
+                                <div class="col-6">
+                                    <img src="Resource/Tailed Demon Slayer Rise/store_picture_2.jpg" alt="테일드 데몬 슬레이어 : 라이즈" class="project-detail-store-image">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -391,21 +511,35 @@
             <!-- 우당탕탕 탐험대 상세 -->
             <div id="company-cookapps-project-2" class="project-detail-section">
                 <div class="container">
-                    <div class="row align-items-center mb-5">
-                        <div class="col-lg-6" data-aos="fade-right">
+                    <div class="row align-items-center project-detail-header">
+                        <!-- 회사명/프로젝트명 영역 (왼쪽 40%) -->
+                        <div class="col-lg-4 project-detail-title-area" data-aos="fade-right">
                             <h3 class="company-name mb-3">CookApps</h3>
-                            <h4 class="project-name mb-4">우당탕탕 탐험대</h4>
+                            <h4 class="project-name mb-0">우당탕탕 탐험대</h4>
+                        </div>
+                        <!-- 배너 이미지 (오른쪽 60%) -->
+                        <div class="col-lg-8" data-aos="fade-left">
+                            <img src="Resource/Rumble Squad/banner.png" alt="우당탕탕 탐험대" class="project-detail-banner-right">
+                        </div>
+                    </div>
+                    
+                    <div class="row align-items-start">
+                        <!-- 텍스트 영역 (왼쪽) -->
+                        <div class="col-lg-7 project-detail-content" data-aos="fade-up">
                             <div class="project-description">
-                                <p>
-                                    <!-- 프로젝트 상세 설명을 여기에 작성하세요 -->
-                                </p>
+                                <p>프로젝트 설명</p>
                             </div>
                         </div>
-                        <div class="col-lg-6" data-aos="fade-left">
-                            <div class="project-image-wrapper">
-                                <img src="Resource/Rumble Squad/banner.png" alt="우당탕탕 탐험대" class="project-detail-image project-detail-banner mb-3">
-                                <img src="Resource/Rumble Squad/store_picture_1.jpg" alt="우당탕탕 탐험대" class="project-detail-image project-detail-store mb-3">
-                                <img src="Resource/Rumble Squad/store_picture_2.jpg" alt="우당탕탕 탐험대" class="project-detail-image project-detail-store">
+                        
+                        <!-- 스토어 이미지 영역 (오른쪽, 40% 이하) -->
+                        <div class="col-lg-5 project-detail-store-images" data-aos="fade-up">
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <img src="Resource/Rumble Squad/store_picture_1.jpg" alt="우당탕탕 탐험대" class="project-detail-store-image">
+                                </div>
+                                <div class="col-6">
+                                    <img src="Resource/Rumble Squad/store_picture_2.jpg" alt="우당탕탕 탐험대" class="project-detail-store-image">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -419,19 +553,31 @@
             <!-- 소울 디멘션 상세 -->
             <div id="company-preflow-project-1" class="project-detail-section">
                 <div class="container">
-                    <div class="row align-items-center mb-5">
-                        <div class="col-lg-6" data-aos="fade-right">
+                    <div class="row align-items-center project-detail-header">
+                        <!-- 회사명/프로젝트명 영역 -->
+                        <div class="col-lg-12 project-detail-title-area" data-aos="fade-right">
                             <h3 class="company-name mb-3">Preflow</h3>
-                            <h4 class="project-name mb-4">소울 디멘션</h4>
+                            <h4 class="project-name mb-0">소울 디멘션</h4>
+                        </div>
+                    </div>
+                    
+                    <div class="row align-items-start">
+                        <!-- 텍스트 영역 (왼쪽) -->
+                        <div class="col-lg-5 project-detail-content" data-aos="fade-up">
                             <div class="project-description">
-                                <p>
-                                    <!-- 프로젝트 상세 설명을 여기에 작성하세요 -->
-                                </p>
+                                <p>프로젝트 설명</p>
                             </div>
                         </div>
-                        <div class="col-lg-6" data-aos="fade-left">
-                            <div class="project-image-wrapper">
-                                <!-- 이미지는 리소스 폴더가 비어있으면 표시하지 않음 -->
+                        
+                        <!-- 스토어 이미지 영역 (오른쪽, 60%) -->
+                        <div class="col-lg-7 project-detail-store-images" data-aos="fade-up">
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <img src="Resource/Soul Dimension/Power_saving_1.png" alt="소울 디멘션" class="project-detail-store-image">
+                                </div>
+                                <div class="col-6">
+                                    <img src="Resource/Soul Dimension/Power_saving_2.png" alt="소울 디멘션" class="project-detail-store-image">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -450,13 +596,10 @@
                         프로젝트 협업이나 문의사항이 있으시면 언제든지 연락주세요!
                     </p>
                     <div class="contact-links">
-                        <a href="mailto:your.email@example.com" class="btn btn-primary btn-lg me-3 mb-3" target="_blank">
+                        <a href="mailto:cksdud3488@naver.com" class="btn btn-primary btn-lg me-3 mb-3" target="_blank">
                             <i class="bi bi-envelope"></i> Email
                         </a>
-                        <a href="https://linkedin.com/in/yourprofile" class="btn btn-primary btn-lg me-3 mb-3" target="_blank">
-                            <i class="bi bi-linkedin"></i> LinkedIn
-                        </a>
-                        <a href="https://github.com/yourusername" class="btn btn-primary btn-lg mb-3" target="_blank">
+                        <a href="https://github.com/cyKim0115" class="btn btn-primary btn-lg mb-3" target="_blank">
                             <i class="bi bi-github"></i> GitHub
                         </a>
                     </div>
