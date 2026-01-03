@@ -224,14 +224,32 @@ section [data-aos] {
     padding: 8rem 0;
 }
 
+/* About Me 타이틀만 사이드바 위치에 맞춤 */
+.about-title-wrapper {
+    margin-left: 250px; /* 사이드바 너비만큼 왼쪽 마진 */
+}
+
+@media (max-width: 992px) {
+    .about-title-wrapper {
+        margin-left: 200px;
+    }
+}
+
+@media (max-width: 768px) {
+    .about-title-wrapper {
+        margin-left: 0;
+    }
+}
+
 #about .about-content {
     padding: 1rem 0;
     max-width: 100%;
 }
 
 #about .row {
-    max-width: 1200px;
+    max-width: 1000px;
     margin: 0 auto;
+    justify-content: center;
 }
 
 #about .about-content p {
@@ -395,7 +413,6 @@ section [data-aos] {
     display: flex;
     flex-direction: column;
     position: relative;
-    margin-bottom: 2rem;
 }
 
 /* 클릭 가능한 프로젝트 카드 */
@@ -448,7 +465,7 @@ section [data-aos] {
 /* 프로젝트 카드 배너 이미지 (가로로 긴 직사각형) */
 .project-card-banner {
     aspect-ratio: 16 / 9;
-    height: 180px;
+    height: 120px;
     object-fit: cover;
 }
 
@@ -471,7 +488,7 @@ section [data-aos] {
 }
 
 .project-card .card-body {
-    padding: 1.75rem;
+    padding: 1.25rem;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -481,11 +498,16 @@ section [data-aos] {
 }
 
 .project-card .card-title {
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: 600;
     color: var(--text-dark);
     margin-bottom: 1rem;
     transition: color var(--transition-fast);
+}
+
+/* 프로젝트 카드 내 프로젝트 이름과 장르 태그 사이 여백 조정 */
+.project-card .d-flex.align-items-center.mb-1 {
+    margin-bottom: 0.25rem !important; /* 타이틀과 장르 태그 사이 여백 최소화 */
 }
 
 .project-card .card-title.mb-0 {
@@ -504,8 +526,17 @@ section [data-aos] {
     font-size: 1rem;
     line-height: 1.7;
     color: var(--text-light);
-    margin-bottom: 0.75rem;
-    flex-grow: 1;
+}
+
+/* 빈 card-text 영역 완전히 제거 - 타이틀 바로 아래 장르 태그 표시 */
+.project-card .card-text:empty {
+    display: none !important;
+    flex-grow: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 0 !important;
 }
 
 /* 기술 스택 배지 */
@@ -529,6 +560,12 @@ section [data-aos] {
     flex-wrap: wrap;
     gap: 0.5rem;
     margin-bottom: 1rem;
+    margin-top: 0; /* 상단 여백 제거 */
+}
+
+/* 프로젝트 카드 내 장르 태그 상단 여백 제거 */
+.project-card .genre-tags.mb-3 {
+    margin-top: 0 !important;
 }
 
 .genre-tag {

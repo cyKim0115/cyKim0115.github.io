@@ -122,75 +122,65 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 스크롤 시 현재 보이는 섹션 감지
     function handleScroll() {
-        const viewportTop = window.scrollY + 150; // 뷰포트 상단에서 150px 지점
-        const viewportBottom = window.scrollY + window.innerHeight;
+        const viewportTop = window.scrollY - 1500; // 뷰포트 상단에서 150px 지점
         
         let currentSection = null;
-        let minDistance = Infinity;
         
-        // 각 섹션의 뷰포트 상단과의 거리를 계산
-        sections.forEach(section => {
-            const rect = section.element.getBoundingClientRect();
+        // 섹션들을 역순으로 확인 (아래쪽 섹션부터)
+        for (let i = sections.length - 1; i >= 0; i--) {
+            const section = sections[i];
             const sectionTop = section.element.offsetTop;
             const sectionHeight = section.element.offsetHeight;
             const sectionBottom = sectionTop + sectionHeight;
             
-            // Featured Projects 헤더는 카드 영역까지 포함
-            if (section.id === 'featured-projects-header') {
-                const cardsArea = document.getElementById('featured-projects-cards');
-                if (cardsArea) {
-                    const cardsBottom = cardsArea.offsetTop + cardsArea.offsetHeight;
-                    // 뷰포트 상단이 섹션 내부에 있거나, 섹션이 뷰포트 상단 근처에 있는 경우
-                    if (viewportTop >= sectionTop && viewportTop < cardsBottom) {
-                        const distance = Math.abs(viewportTop - sectionTop);
-                        if (distance < minDistance) {
-                            minDistance = distance;
-                            currentSection = section;
+            // 헤더 섹션은 특별 처리
+            if (section.id === 'header') {
+                if (viewportTop < sections[1].element.offsetTop) {
+                    currentSection = section;
+                    break;
+                }
+            }
+            // Featured Projects 섹션 - 높이가 크므로 넓은 범위로 감지
+            else if (section.id === 'projects') {
+                // 프로젝트 섹션 전체를 감지 (카드 영역까지 포함)
+                if (viewportTop >= sectionTop && viewportTop < sectionBottom) {
+                    currentSection = section;
+                    break;
+                }
+            }
+            // Contact 섹션 - 높이가 작으므로 더 정확한 감지 필요
+            else if (section.id === 'contact') {
+                // Contact 섹션의 상단 200px 지점부터 감지 시작
+                const contactThreshold = sectionTop - 200;
+                if (viewportTop >= contactThreshold && viewportTop < sectionBottom) {
+                    currentSection = section;
+                    break;
+                }
+            }
+            // 다른 섹션들 - 뷰포트 상단이 섹션의 상단 1/3 지점 이상에 있으면 해당 섹션으로 인식
+            else {
+                const sectionThreshold = sectionTop + (sectionHeight * 0.3); // 섹션 상단 30% 지점
+                if (viewportTop >= sectionTop && viewportTop < sectionThreshold) {
+                    // 정확히 해당 섹션
+                    currentSection = section;
+                    break;
+                } else if (viewportTop >= sectionThreshold && viewportTop < sectionBottom) {
+                    // 섹션 내부에 있지만, 다음 섹션이 더 가까운지 확인
+                    if (i < sections.length - 1) {
+                        const nextSection = sections[i + 1];
+                        const nextSectionTop = nextSection.element.offsetTop;
+                        const distanceToCurrent = viewportTop - sectionTop;
+                        const distanceToNext = nextSectionTop - viewportTop;
+                        
+                        // 현재 섹션의 하단 50% 이상에 있고, 다음 섹션이 더 가까우면 다음 섹션 선택
+                        if (viewportTop > sectionTop + (sectionHeight * 0.5) && distanceToNext < distanceToCurrent) {
+                            continue; // 다음 섹션 확인
                         }
                     }
-                } else if (viewportTop >= sectionTop && viewportTop < sectionBottom) {
-                    const distance = Math.abs(viewportTop - sectionTop);
-                    if (distance < minDistance) {
-                        minDistance = distance;
-                        currentSection = section;
-                    }
-                }
-            }
-            // 헤더 섹션은 특별 처리
-            else if (section.id === 'header') {
-                if (viewportTop < sections[1].element.offsetTop) {
-                    const distance = Math.abs(viewportTop - sectionTop);
-                    if (distance < minDistance) {
-                        minDistance = distance;
-                        currentSection = section;
-                    }
-                    return; // continue 대신 return
-                }
-            }
-            // 다른 섹션들 - 뷰포트 상단이 섹션 내부에 있는지 확인
-            else {
-                if (viewportTop >= sectionTop && viewportTop < sectionBottom) {
-                    const distance = Math.abs(viewportTop - sectionTop);
-                    if (distance < minDistance) {
-                        minDistance = distance;
-                        currentSection = section;
-                    }
-                }
-            }
-        });
-        
-        // 가장 가까운 섹션을 찾지 못한 경우, 뷰포트 상단 근처의 섹션 찾기
-        if (!currentSection) {
-            sections.forEach(section => {
-                const sectionTop = section.element.offsetTop;
-                const distance = Math.abs(viewportTop - sectionTop);
-                
-                // 뷰포트 상단에서 200px 이내에 있는 섹션
-                if (distance < 200 && distance < minDistance) {
-                    minDistance = distance;
                     currentSection = section;
+                    break;
                 }
-            });
+            }
         }
         
         if (currentSection) {
