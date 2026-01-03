@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unity Client Developer Portfolio</title>
+    <title>Unity Client Developer Portfolio - PDF</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,18 +13,76 @@
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
-    <!-- AOS CSS -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
+    
+    <!-- PDF 출력 최적화 스타일 -->
+    <style>
+        /* 사이드바 제거로 인한 레이아웃 조정 */
+        .about-title-wrapper {
+            margin-left: 0 !important;
+        }
+        
+        #projects {
+            margin-left: 0 !important;
+        }
+        
+        /* PDF 출력 최적화 */
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            
+            body {
+                font-size: 12pt;
+                line-height: 1.5;
+            }
+            
+            .header-section {
+                min-height: auto;
+                page-break-after: always;
+            }
+            
+            section {
+                page-break-inside: avoid;
+                padding: 2rem 0;
+            }
+            
+            .project-detail-section {
+                page-break-inside: avoid;
+                margin-bottom: 2rem;
+            }
+            
+            img {
+                max-width: 100%;
+                height: auto;
+                page-break-inside: avoid;
+            }
+            
+            .card {
+                page-break-inside: avoid;
+            }
+            
+            a[href^="http"]:after {
+                content: " (" attr(href) ")";
+                font-size: 0.8em;
+                color: #666;
+            }
+            
+            .btn {
+                border: 1px solid #000;
+                padding: 0.25rem 0.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- 헤더 섹션 -->
     <header id="header" class="header-section">
         <div class="container">
             <div class="row align-items-center min-vh-100">
-                <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
+                <div class="col-lg-8 mx-auto text-center">
                     <h1 class="display-3 fw-bold mb-3">김찬영</h1>
                     <h2 class="h4 text-muted mb-4">Unity Client Developer</h2>
                     <p class="lead mb-4">
@@ -50,13 +108,13 @@
     <section id="about" class="py-5">
         <div class="about-title-wrapper">
             <div class="container">
-                <h2 class="section-title text-center mb-5" data-aos="fade-up">About Me</h2>
+                <h2 class="section-title text-center mb-5">About Me</h2>
             </div>
         </div>
         <div class="container">
             <div class="row align-items-center justify-content-center">
                 <!-- 텍스트 영역 (왼쪽) -->
-                <div class="col-lg-5 col-xl-7" data-aos="fade-right">
+                <div class="col-lg-5 col-xl-7">
                     <div class="about-content">
                         <!-- 자기소개를 여기에 작성하세요 -->
                         <p class="lead">
@@ -80,7 +138,7 @@
                     </div>
                 </div>
                 <!-- 사진 영역 (오른쪽) -->
-                <div class="col-lg-3 col-xl-3" data-aos="fade-left">
+                <div class="col-lg-3 col-xl-3">
                     <div class="about-image-wrapper">
                         <img src="Resource/My/증사.jpg" alt="프로필 사진" class="about-profile-image">
                     </div>
@@ -91,37 +149,15 @@
 
     <!-- Projects 섹션 -->
     <section id="projects" class="py-5 bg-light">
-        <!-- 좌측 사이드바 네비게이션 -->
-        <nav class="project-sidebar">
-            <div class="sidebar-content">
-                <h5 class="sidebar-title">목차</h5>
-                <ul class="sidebar-nav">
-                    <li><a href="#header" class="sidebar-link" data-section="header">홈</a></li>
-                    <li><a href="#about" class="sidebar-link" data-section="about">About Me</a></li>
-                    <li><a href="#projects" class="sidebar-link" data-section="projects">Featured Projects</a></li>
-                    <li class="sidebar-divider"></li>
-                    <li><a href="#company-ninedigits-project-1" class="sidebar-link" data-section="company-ninedigits-project-1">고양이 오마카세</a></li>
-                    <li><a href="#company-ninedigits-project-2" class="sidebar-link" data-section="company-ninedigits-project-2">네코 식당</a></li>
-                    <li><a href="#company-ninedigits-project-3" class="sidebar-link" data-section="company-ninedigits-project-3">용사마을 타이쿤</a></li>
-                    <li><a href="#ninedigits-minor-projects" class="sidebar-link" data-section="ninedigits-minor-projects">기타 참여 프로젝트</a></li>
-                    <li><a href="#company-cookapps-project-1" class="sidebar-link" data-section="company-cookapps-project-1">테일드 데몬 슬레이어 : 라이즈</a></li>
-                    <li><a href="#company-cookapps-project-2" class="sidebar-link" data-section="company-cookapps-project-2">우당탕탕 탐험대</a></li>
-                    <li><a href="#company-preflow-project-1" class="sidebar-link" data-section="company-preflow-project-1">소울 디멘션</a></li>
-                    <li class="sidebar-divider"></li>
-                    <li><a href="#contact" class="sidebar-link" data-section="contact">Contact</a></li>
-                </ul>
-            </div>
-        </nav>
-        
         <div class="container">
             <div id="featured-projects-header">
-                <h2 class="section-title text-center mb-5" data-aos="fade-up">Featured Projects</h2>
+                <h2 class="section-title text-center mb-5">Featured Projects</h2>
             </div>
             
             <!-- 주요 프로젝트 카드 영역 -->
             <div id="featured-projects-cards" class="row g-4 mb-5">
                 <!-- 테일드 데몬 슬레이어 : 라이즈 -->
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="col-md-6 col-lg-4">
                     <div class="card h-100 project-card-clickable" data-project-detail="company-cookapps-project-1">
                         <img src="Resource/Tailed Demon Slayer Rise/banner.png" class="card-img-top project-card-banner" alt="테일드 데몬 슬레이어 : 라이즈">
                         <div class="card-body d-flex flex-column">
@@ -148,7 +184,7 @@
                 </div>
 
                 <!-- 우당탕탕 탐험대 -->
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="col-md-6 col-lg-4">
                     <div class="card h-100 project-card-clickable" data-project-detail="company-cookapps-project-2">
                         <img src="Resource/Rumble Squad/banner.png" class="card-img-top project-card-banner" alt="우당탕탕 탐험대">
                         <div class="card-body d-flex flex-column">
@@ -176,7 +212,7 @@
                 </div>
 
                 <!-- 고양이 오마카세 -->
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="col-md-6 col-lg-4">
                     <div class="card h-100 project-card-clickable" data-project-detail="company-ninedigits-project-1">
                         <img src="Resource/Neko Omakase/banner.jpg" class="card-img-top project-card-banner" alt="고양이 오마카세">
                         <div class="card-body d-flex flex-column">
@@ -203,7 +239,7 @@
                 </div>
 
                 <!-- 네코 식당 -->
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="400">
+                <div class="col-md-6 col-lg-4">
                     <div class="card h-100 project-card-clickable" data-project-detail="company-ninedigits-project-2">
                         <img src="Resource/Neko Restaurant/banner.png" class="card-img-top project-card-banner" alt="네코 식당">
                         <div class="card-body d-flex flex-column">
@@ -231,7 +267,7 @@
                 </div>
 
                 <!-- 용사마을 타이쿤 -->
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="500">
+                <div class="col-md-6 col-lg-4">
                     <div class="card h-100 project-card-clickable" data-project-detail="company-ninedigits-project-3">
                         <img src="Resource/Hero Craft Town/banner.png" class="card-img-top project-card-banner" alt="용사마을 타이쿤">
                         <div class="card-body d-flex flex-column">
@@ -267,19 +303,19 @@
                 <div class="container">
                     <div class="row align-items-center project-detail-header">
                         <!-- 회사명/프로젝트명 영역 (왼쪽 40%) -->
-                        <div class="col-lg-4 project-detail-title-area" data-aos="fade-right">
+                        <div class="col-lg-4 project-detail-title-area">
                             <h3 class="company-name mb-3">Nine Digits</h3>
                             <h4 class="project-name mb-0">고양이 오마카세</h4>
                         </div>
                         <!-- 배너 이미지 (오른쪽 60%) -->
-                        <div class="col-lg-8" data-aos="fade-left">
+                        <div class="col-lg-8">
                             <img src="Resource/Neko Omakase/banner.jpg" alt="고양이 오마카세" class="project-detail-banner-right">
                         </div>
                     </div>
                     
                     <div class="row align-items-start">
                         <!-- 텍스트 영역 (왼쪽) -->
-                        <div class="col-lg-7 project-detail-content" data-aos="fade-up">
+                        <div class="col-lg-7 project-detail-content">
                             <div class="project-description">
                                 <p>
                                     고양이 오마카세는 Google Play 스토어와 Apple App Store에 출시된 타이쿤 장르의 게임입니다. 
@@ -313,7 +349,7 @@
                         </div>
                         
                         <!-- 스토어 이미지 영역 (오른쪽, 40% 이하) -->
-                        <div class="col-lg-5 project-detail-store-images" data-aos="fade-up">
+                        <div class="col-lg-5 project-detail-store-images">
                             <div class="row g-3">
                                 <div class="col-6">
                                     <img src="Resource/Neko Omakase/store_picture_1.jpg" alt="고양이 오마카세" class="project-detail-store-image">
@@ -332,19 +368,19 @@
                 <div class="container">
                     <div class="row align-items-center project-detail-header">
                         <!-- 회사명/프로젝트명 영역 (왼쪽 40%) -->
-                        <div class="col-lg-4 project-detail-title-area" data-aos="fade-right">
+                        <div class="col-lg-4 project-detail-title-area">
                             <h3 class="company-name mb-3">Nine Digits</h3>
                             <h4 class="project-name mb-0">네코 식당</h4>
                         </div>
                         <!-- 배너 이미지 (오른쪽 60%) -->
-                        <div class="col-lg-8" data-aos="fade-left">
+                        <div class="col-lg-8">
                             <img src="Resource/Neko Restaurant/banner.png" alt="네코 식당" class="project-detail-banner-right">
                         </div>
                     </div>
                     
                     <div class="row align-items-start">
                         <!-- 텍스트 영역 (왼쪽) -->
-                        <div class="col-lg-7 project-detail-content" data-aos="fade-up">
+                        <div class="col-lg-7 project-detail-content">
                             <div class="project-description">
                                 <p>
                                     네코 식당은 Google Play 스토어와 Apple App Store에 출시된 타이쿤 장르의 게임입니다.
@@ -367,7 +403,7 @@
                         </div>
                         
                         <!-- 스토어 이미지 영역 (오른쪽, 40% 이하) -->
-                        <div class="col-lg-5 project-detail-store-images" data-aos="fade-up">
+                        <div class="col-lg-5 project-detail-store-images">
                             <div class="row g-3">
                                 <div class="col-6">
                                     <img src="Resource/Neko Restaurant/store_picture_1.png" alt="네코 식당" class="project-detail-store-image">
@@ -386,19 +422,19 @@
                 <div class="container">
                     <div class="row align-items-center project-detail-header">
                         <!-- 회사명/프로젝트명 영역 (왼쪽 40%) -->
-                        <div class="col-lg-4 project-detail-title-area" data-aos="fade-right">
+                        <div class="col-lg-4 project-detail-title-area">
                             <h3 class="company-name mb-3">Nine Digits</h3>
                             <h4 class="project-name mb-0">용사마을 타이쿤</h4>
                         </div>
                         <!-- 배너 이미지 (오른쪽 60%) -->
-                        <div class="col-lg-8" data-aos="fade-left">
+                        <div class="col-lg-8">
                             <img src="Resource/Hero Craft Town/banner.png" alt="용사마을 타이쿤" class="project-detail-banner-right">
                         </div>
                     </div>
                     
                     <div class="row align-items-start">
                         <!-- 텍스트 영역 (왼쪽) -->
-                        <div class="col-lg-7 project-detail-content" data-aos="fade-up">
+                        <div class="col-lg-7 project-detail-content">
                             <div class="project-description">
                                 <p>
                                     용사마을 타이쿤은 Google Play 스토어에 출시된 타이쿤 장르의 시뮬레이션 게임입니다.
@@ -420,7 +456,7 @@
                         </div>
                         
                         <!-- 스토어 이미지 영역 (오른쪽, 40% 이하) -->
-                        <div class="col-lg-5 project-detail-store-images" data-aos="fade-up">
+                        <div class="col-lg-5 project-detail-store-images">
                             <div class="row g-3">
                                 <div class="col-6">
                                     <img src="Resource/Hero Craft Town/store_picture_1.png" alt="용사마을 타이쿤" class="project-detail-store-image">
@@ -511,19 +547,19 @@
                 <div class="container">
                     <div class="row align-items-center project-detail-header">
                         <!-- 회사명/프로젝트명 영역 (왼쪽 40%) -->
-                        <div class="col-lg-4 project-detail-title-area" data-aos="fade-right">
+                        <div class="col-lg-4 project-detail-title-area">
                             <h3 class="company-name mb-3">CookApps</h3>
                             <h4 class="project-name mb-0">테일드 데몬 슬레이어 : 라이즈</h4>
                         </div>
                         <!-- 배너 이미지 (오른쪽 60%) -->
-                        <div class="col-lg-8" data-aos="fade-left">
+                        <div class="col-lg-8">
                             <img src="Resource/Tailed Demon Slayer Rise/banner.png" alt="테일드 데몬 슬레이어 : 라이즈" class="project-detail-banner-right">
                         </div>
                     </div>
                     
                     <div class="row align-items-start">
                         <!-- 텍스트 영역 (왼쪽) -->
-                        <div class="col-lg-7 project-detail-content" data-aos="fade-up">
+                        <div class="col-lg-7 project-detail-content">
                             <div class="project-description">
                                 <p>
                                     테일드 데몬 슬레이어 : 라이즈는 테일드 데몬 슬레이어의 후속작으로, Google Play 스토어와 Apple App Store에 출시하여 <strong>양대 마켓 1위</strong>를 달성했습니다.
@@ -548,7 +584,7 @@
                         </div>
                         
                         <!-- 스토어 이미지 영역 (오른쪽, 40% 이하) -->
-                        <div class="col-lg-5 project-detail-store-images" data-aos="fade-up">
+                        <div class="col-lg-5 project-detail-store-images">
                             <div class="row g-3">
                                 <div class="col-6">
                                     <img src="Resource/Tailed Demon Slayer Rise/store_picture_1.jpg" alt="테일드 데몬 슬레이어 : 라이즈" class="project-detail-store-image">
@@ -567,19 +603,19 @@
                 <div class="container">
                     <div class="row align-items-center project-detail-header">
                         <!-- 회사명/프로젝트명 영역 (왼쪽 40%) -->
-                        <div class="col-lg-4 project-detail-title-area" data-aos="fade-right">
+                        <div class="col-lg-4 project-detail-title-area">
                             <h3 class="company-name mb-3">CookApps</h3>
                             <h4 class="project-name mb-0">우당탕탕 탐험대</h4>
                         </div>
                         <!-- 배너 이미지 (오른쪽 60%) -->
-                        <div class="col-lg-8" data-aos="fade-left">
+                        <div class="col-lg-8">
                             <img src="Resource/Rumble Squad/banner.png" alt="우당탕탕 탐험대" class="project-detail-banner-right">
                         </div>
                     </div>
                     
                     <div class="row align-items-start">
                         <!-- 텍스트 영역 (왼쪽) -->
-                        <div class="col-lg-7 project-detail-content" data-aos="fade-up">
+                        <div class="col-lg-7 project-detail-content">
                             <div class="project-description">
                                 <p>
                                     우당탕탕 탐험대는 MVP 프로젝트로 진행하여 재직중이던 당시에는 미국에만 소프트런칭을 진행한 프로젝트입니다.
@@ -600,7 +636,7 @@
                         </div>
                         
                         <!-- 스토어 이미지 영역 (오른쪽, 40% 이하) -->
-                        <div class="col-lg-5 project-detail-store-images" data-aos="fade-up">
+                        <div class="col-lg-5 project-detail-store-images">
                             <div class="row g-3">
                                 <div class="col-6">
                                     <img src="Resource/Rumble Squad/store_picture_1.jpg" alt="우당탕탕 탐험대" class="project-detail-store-image">
@@ -623,7 +659,7 @@
                 <div class="container">
                     <div class="row align-items-center project-detail-header">
                         <!-- 회사명/프로젝트명 영역 -->
-                        <div class="col-lg-12 project-detail-title-area" data-aos="fade-right">
+                        <div class="col-lg-12 project-detail-title-area">
                             <h3 class="company-name mb-3">Preflow</h3>
                             <h4 class="project-name mb-0">소울 디멘션</h4>
                         </div>
@@ -631,7 +667,7 @@
                     
                     <div class="row align-items-start">
                         <!-- 텍스트 영역 (왼쪽) -->
-                        <div class="col-lg-5 project-detail-content" data-aos="fade-up">
+                        <div class="col-lg-5 project-detail-content">
                             <div class="project-description">
                                 <p>
                                     소울 디멘션은 출시되지는 못하였지만, 게임 개발의 세계로 발을 내딛게 해준 첫 프로젝트입니다.
@@ -651,7 +687,7 @@
                         </div>
                         
                         <!-- 스토어 이미지 영역 (오른쪽, 60%) -->
-                        <div class="col-lg-7 project-detail-store-images" data-aos="fade-up">
+                        <div class="col-lg-7 project-detail-store-images">
                             <div class="row g-3">
                                 <div class="col-6">
                                     <img src="Resource/Soul Dimension/Power_saving_1.png" alt="소울 디멘션" class="project-detail-store-image">
@@ -671,7 +707,7 @@
     <section id="contact" class="py-5">
         <div class="container">
             <div class="row">
-                <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
+                <div class="col-lg-8 mx-auto text-center">
                     <h2 class="section-title mb-5">Contact</h2>
                     <p class="lead mb-4">
                         프로젝트 협업이나 문의사항이 있으시면 언제든지 연락주세요!
@@ -706,12 +742,6 @@
     
     <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- AOS JS -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    
-    <!-- Custom JS -->
-    <script src="script.js"></script>
 </body>
 </html>
 
