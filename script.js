@@ -1,26 +1,77 @@
 // AOS (Animate On Scroll) 초기화
 document.addEventListener('DOMContentLoaded', function() {
     AOS.init({
-        duration: 800,         // 애니메이션 지속 시간 (밀리초)
-        once: true             // 한 번만 애니메이션 실행 (스크롤 다시 올려도 재실행 안 함)
+        duration: 800,
+        once: true
     });
 });
 
-// 부드러운 스크롤 (네비게이션 링크용 - 필요시 사용)
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
+// 테마(다크/라이트) 전환 - 초기 상태는 <head> 인라인 스크립트에서 설정
+document.addEventListener('DOMContentLoaded', function () {
+    const root = document.documentElement;
+    const toggleBtn = document.getElementById('theme-toggle');
+
+    function applyTheme(theme) {
+        root.setAttribute('data-theme', theme);
+        if (toggleBtn) {
+            const isDark = theme === 'dark';
+            toggleBtn.setAttribute('aria-label', isDark ? '라이트 모드로 전환' : '다크 모드로 전환');
+            toggleBtn.setAttribute('title', isDark ? '라이트 모드로 전환' : '다크 모드로 전환');
+            toggleBtn.setAttribute('aria-pressed', String(isDark));
         }
-    });
+    }
+
+    applyTheme(root.getAttribute('data-theme') || 'light');
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', function () {
+            const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            applyTheme(next);
+            try {
+                localStorage.setItem('theme', next);
+            } catch (e) { /* 저장 실패는 무시 */ }
+        });
+    }
+
+    // 사용자가 직접 선택한 적이 없으면 OS 테마 변경을 따라감
+    if (window.matchMedia) {
+        const mql = window.matchMedia('(prefers-color-scheme: dark)');
+        const handleSystemThemeChange = function (e) {
+            let saved = null;
+            try { saved = localStorage.getItem('theme'); } catch (err) { /* ignore */ }
+            if (saved) return;
+            applyTheme(e.matches ? 'dark' : 'light');
+        };
+        if (typeof mql.addEventListener === 'function') {
+            mql.addEventListener('change', handleSystemThemeChange);
+        } else if (typeof mql.addListener === 'function') {
+            mql.addListener(handleSystemThemeChange);
+        }
+    }
 });
 
-// 헤더 섹션 스크롤 효과 (선택사항)
+// 스크롤 시 활성 섹션 판정에 사용할 상단 오프셋 (헤더 여백 등 고려)
+const SCROLL_OFFSET = 100;
+
+// 페이지 내 절대 좌표 계산 (offsetTop은 positioned 부모 기준이라 부정확하므로 사용 금지)
+function getAbsoluteTop(element) {
+    return element.getBoundingClientRect().top + window.pageYOffset;
+}
+
+// 공통 스크롤 함수 - 모든 in-page 네비게이션은 이 함수를 거치도록 통일
+function scrollToSection(targetId) {
+    const targetSection = document.getElementById(targetId);
+    if (!targetSection) return false;
+
+    const targetPosition = getAbsoluteTop(targetSection) - SCROLL_OFFSET;
+    window.scrollTo({
+        top: Math.max(0, targetPosition),
+        behavior: 'smooth'
+    });
+    return true;
+}
+
+// 헤더 섹션 패럴럭스 효과
 window.addEventListener('scroll', function() {
     const header = document.querySelector('.header-section');
     if (header) {
@@ -30,7 +81,7 @@ window.addEventListener('scroll', function() {
     }
 });
 
-// 프로젝트 카드 호버 효과 강화 (선택사항)
+// 프로젝트 카드 호버 전환 효과
 document.querySelectorAll('.project-card, .project-card-clickable').forEach(card => {
     card.addEventListener('mouseenter', function() {
         this.style.transition = 'all 0.3s ease';
@@ -40,158 +91,95 @@ document.querySelectorAll('.project-card, .project-card-clickable').forEach(card
 // 프로젝트 카드 클릭 시 상세 영역으로 스크롤
 document.querySelectorAll('.project-card-clickable').forEach(card => {
     card.addEventListener('click', function(e) {
-        // 버튼 클릭이 아닌 경우에만 스크롤
-        if (!e.target.closest('.project-links')) {
-            const projectDetailId = this.getAttribute('data-project-detail');
-            if (projectDetailId) {
-                const targetSection = document.getElementById(projectDetailId);
-                if (targetSection) {
-                    const offset = 80; // 헤더 높이 고려
-                    const targetPosition = targetSection.offsetTop - offset;
-                    
-                    window.scrollTo({
-                        top: targetPosition,
-                        behavior: 'smooth'
-                    });
-                }
-            }
+        // 내부 버튼(스토어 링크 등) 클릭은 무시
+        if (e.target.closest('.project-links')) return;
+
+        const projectDetailId = this.getAttribute('data-project-detail');
+        if (projectDetailId) {
+            scrollToSection(projectDetailId);
         }
     });
 });
 
-// 연락 버튼 클릭 이벤트 (선택사항 - 분석이나 추적을 위해)
+// Contact 버튼 클릭 로그 (분석/추적용 훅)
 document.querySelectorAll('#contact .btn').forEach(button => {
     button.addEventListener('click', function() {
-        // 여기에 Google Analytics나 다른 추적 코드를 추가할 수 있습니다
         console.log('Contact button clicked:', this.textContent.trim());
     });
 });
 
-// 사이드바 네비게이션 기능
+// 사이드바 네비게이션
 document.addEventListener('DOMContentLoaded', function() {
     const sidebarLinks = document.querySelectorAll('.sidebar-link');
-    
-    // 감지할 섹션들 (순서대로)
-    const sections = [
-        { id: 'header', element: document.getElementById('header') },
-        { id: 'about', element: document.getElementById('about') },
-        { id: 'featured-projects-header', element: document.getElementById('featured-projects-header') },
-        { id: 'company-ninedigits-project-1', element: document.getElementById('company-ninedigits-project-1') },
-        { id: 'company-ninedigits-project-2', element: document.getElementById('company-ninedigits-project-2') },
-        { id: 'company-ninedigits-project-3', element: document.getElementById('company-ninedigits-project-3') },
-        { id: 'ninedigits-minor-projects', element: document.getElementById('ninedigits-minor-projects') },
-        { id: 'company-cookapps-project-1', element: document.getElementById('company-cookapps-project-1') },
-        { id: 'company-cookapps-project-2', element: document.getElementById('company-cookapps-project-2') },
-        { id: 'company-preflow-project-1', element: document.getElementById('company-preflow-project-1') },
-        { id: 'contact', element: document.getElementById('contact') }
-    ].filter(section => section.element !== null);
-    
-    // 링크 클릭 시 해당 섹션으로 스크롤
+
+    // 사이드바 링크 순서와 일치해야 함 (HTML 등장 순)
+    const sectionIds = [
+        'header',
+        'about',
+        'featured-projects-header',
+        'company-maximizer-project-1',
+        'company-ninedigits-project-1',
+        'company-ninedigits-project-2',
+        'company-ninedigits-project-3',
+        'ninedigits-minor-projects',
+        'company-cookapps-project-1',
+        'company-cookapps-project-2',
+        'company-preflow-project-1',
+        'contact'
+    ];
+
+    const sections = sectionIds
+        .map(id => ({ id, element: document.getElementById(id) }))
+        .filter(section => section.element !== null);
+
     sidebarLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
-            const targetId = this.getAttribute('href').substring(1); // # 제거
-            const targetSection = document.getElementById(targetId);
-            
-            if (targetSection) {
-                // 정확한 위치 계산
-                const rect = targetSection.getBoundingClientRect();
-                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                const targetPosition = rect.top + scrollTop - 100; // 상단 여백 100px
-                
-                window.scrollTo({
-                    top: Math.max(0, targetPosition),
-                    behavior: 'smooth'
-                });
-                
-                // 클릭한 링크 활성화
+            const targetId = this.getAttribute('href').substring(1);
+            if (scrollToSection(targetId)) {
                 updateActiveLink(this);
             }
         });
     });
-    
-    // 현재 보이는 섹션에 따라 활성 링크 업데이트
+
     function updateActiveLink(activeLink) {
-        sidebarLinks.forEach(link => {
-            link.classList.remove('active');
-        });
+        sidebarLinks.forEach(link => link.classList.remove('active'));
         if (activeLink) {
             activeLink.classList.add('active');
         }
     }
-    
-    // 스크롤 시 현재 보이는 섹션 감지
+
     function handleScroll() {
-        const viewportTop = window.scrollY - 1500; // 뷰포트 상단에서 150px 지점
-        
-        let currentSection = null;
-        
-        // 섹션들을 역순으로 확인 (아래쪽 섹션부터)
-        for (let i = sections.length - 1; i >= 0; i--) {
-            const section = sections[i];
-            const sectionTop = section.element.offsetTop;
-            const sectionHeight = section.element.offsetHeight;
-            const sectionBottom = sectionTop + sectionHeight;
-            
-            // 헤더 섹션은 특별 처리
-            if (section.id === 'header') {
-                if (viewportTop < sections[1].element.offsetTop) {
-                    currentSection = section;
-                    break;
-                }
-            }
-            // Featured Projects 섹션 - 높이가 크므로 넓은 범위로 감지
-            else if (section.id === 'projects') {
-                // 프로젝트 섹션 전체를 감지 (카드 영역까지 포함)
-                if (viewportTop >= sectionTop && viewportTop < sectionBottom) {
-                    currentSection = section;
-                    break;
-                }
-            }
-            // Contact 섹션 - 높이가 작으므로 더 정확한 감지 필요
-            else if (section.id === 'contact') {
-                // Contact 섹션의 상단 200px 지점부터 감지 시작
-                const contactThreshold = sectionTop - 200;
-                if (viewportTop >= contactThreshold && viewportTop < sectionBottom) {
-                    currentSection = section;
-                    break;
-                }
-            }
-            // 다른 섹션들 - 뷰포트 상단이 섹션의 상단 1/3 지점 이상에 있으면 해당 섹션으로 인식
-            else {
-                const sectionThreshold = sectionTop + (sectionHeight * 0.3); // 섹션 상단 30% 지점
-                if (viewportTop >= sectionTop && viewportTop < sectionThreshold) {
-                    // 정확히 해당 섹션
-                    currentSection = section;
-                    break;
-                } else if (viewportTop >= sectionThreshold && viewportTop < sectionBottom) {
-                    // 섹션 내부에 있지만, 다음 섹션이 더 가까운지 확인
-                    if (i < sections.length - 1) {
-                        const nextSection = sections[i + 1];
-                        const nextSectionTop = nextSection.element.offsetTop;
-                        const distanceToCurrent = viewportTop - sectionTop;
-                        const distanceToNext = nextSectionTop - viewportTop;
-                        
-                        // 현재 섹션의 하단 50% 이상에 있고, 다음 섹션이 더 가까우면 다음 섹션 선택
-                        if (viewportTop > sectionTop + (sectionHeight * 0.5) && distanceToNext < distanceToCurrent) {
-                            continue; // 다음 섹션 확인
-                        }
-                    }
-                    currentSection = section;
-                    break;
-                }
+        // 화면 상단에서 SCROLL_OFFSET 만큼 아래 지점이 어느 섹션에 속하는지 판정
+        const viewportTop = window.scrollY + SCROLL_OFFSET + 50;
+
+        let currentSection = sections[0];
+        for (const section of sections) {
+            const sectionTop = getAbsoluteTop(section.element);
+            if (viewportTop >= sectionTop) {
+                currentSection = section;
+            } else {
+                break;
             }
         }
-        
+
+        // 페이지 최하단 도달 시 마지막 섹션(Contact) 활성화 보장
+        const docHeight = document.documentElement.scrollHeight;
+        const winHeight = window.innerHeight;
+        if (window.scrollY + winHeight >= docHeight - 2) {
+            currentSection = sections[sections.length - 1];
+        }
+
         if (currentSection) {
-            const correspondingLink = document.querySelector(`.sidebar-link[href="#${currentSection.id}"]`);
+            const correspondingLink = document.querySelector(
+                `.sidebar-link[href="#${currentSection.id}"]`
+            );
             if (correspondingLink) {
                 updateActiveLink(correspondingLink);
             }
         }
     }
-    
-    // 스크롤 이벤트 리스너 (throttle 적용)
+
     let ticking = false;
     window.addEventListener('scroll', function() {
         if (!ticking) {
@@ -202,8 +190,6 @@ document.addEventListener('DOMContentLoaded', function() {
             ticking = true;
         }
     });
-    
-    // 초기 활성 링크 설정
+
     handleScroll();
 });
-

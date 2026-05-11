@@ -15,11 +15,33 @@
     
     <!-- AOS CSS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
+
+    <!-- 테마 초기화 (FOUC 방지: body 렌더 전 data-theme 설정) -->
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem('theme');
+                var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                var theme = saved || (prefersDark ? 'dark' : 'light');
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
 </head>
 <body>
+    <!-- 다크모드 토글 버튼 -->
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="테마 전환" title="테마 전환">
+        <i class="bi bi-moon-stars-fill theme-icon-moon" aria-hidden="true"></i>
+        <i class="bi bi-sun-fill theme-icon-sun" aria-hidden="true"></i>
+    </button>
     <!-- 헤더 섹션 -->
     <header id="header" class="header-section">
         <div class="container">
@@ -64,17 +86,68 @@
                             게임 개발에 대한 열정과 함께, 사용자에게 최고의 게임 경험을 제공하는 것을 목표로 하고 있습니다. 
                             Unity 엔진을 활용하여 다양한 장르의 게임을 개발해왔으며, 특히 협업과 적응에 강점을 가지고 있습니다.
                         </p>
-                        <p>
-                            <strong>주요 기술 스택</strong><br>
-                            <strong>게임 엔진:</strong> Unity<br>
-                            <strong>프로그래밍 언어:</strong> C#<br>
-                            <strong>플랫폼:</strong> Android, iOS, Steam<br>
-                            <strong>백엔드서비스:</strong> Firebase, gRPC, PlayNANOO, <br>
-                            <strong>광고, 분석 솔루션:</strong> AppLovin, AppsFlyer, ByteBrew<br>
-                            <strong>그래픽, 애니메이션:</strong> Spine, Shader<br>
-                            <strong>CI/CD:</strong> Jenkins, TeamCity<br>
-                            <strong>프로젝트 도구:</strong> Jira, Mantis, Git, SVN<br>
-                        </p>
+                        <div class="tech-stack-section">
+                            <h5 class="tech-stack-title">주요 기술 스택</h5>
+                            <div class="tech-category">
+                                <div class="tech-category-label">게임 엔진</div>
+                                <div class="tech-stack-tags">
+                                    <span class="tech-tag">Unity</span>
+                                </div>
+                            </div>
+                            <div class="tech-category">
+                                <div class="tech-category-label">프로그래밍 언어</div>
+                                <div class="tech-stack-tags">
+                                    <span class="tech-tag">C#</span>
+                                </div>
+                            </div>
+                            <div class="tech-category">
+                                <div class="tech-category-label">플랫폼</div>
+                                <div class="tech-stack-tags">
+                                    <span class="tech-tag">Android</span>
+                                    <span class="tech-tag">iOS</span>
+                                    <span class="tech-tag">Steam</span>
+                                </div>
+                            </div>
+                            <div class="tech-category">
+                                <div class="tech-category-label">백엔드 서비스</div>
+                                <div class="tech-stack-tags">
+                                    <span class="tech-tag">Firebase</span>
+                                    <span class="tech-tag">gRPC</span>
+                                    <span class="tech-tag">PlayNANOO</span>
+                                </div>
+                            </div>
+                            <div class="tech-category">
+                                <div class="tech-category-label">광고 · 분석 솔루션</div>
+                                <div class="tech-stack-tags">
+                                    <span class="tech-tag">AppLovin</span>
+                                    <span class="tech-tag">AppsFlyer</span>
+                                    <span class="tech-tag">ByteBrew</span>
+                                </div>
+                            </div>
+                            <div class="tech-category">
+                                <div class="tech-category-label">그래픽 · 애니메이션</div>
+                                <div class="tech-stack-tags">
+                                    <span class="tech-tag">Spine</span>
+                                    <span class="tech-tag">Shader</span>
+                                </div>
+                            </div>
+                            <div class="tech-category">
+                                <div class="tech-category-label">CI/CD</div>
+                                <div class="tech-stack-tags">
+                                    <span class="tech-tag">Jenkins</span>
+                                    <span class="tech-tag">TeamCity</span>
+                                </div>
+                            </div>
+                            <div class="tech-category">
+                                <div class="tech-category-label">프로젝트 도구</div>
+                                <div class="tech-stack-tags">
+                                    <span class="tech-tag">Jira</span>
+                                    <span class="tech-tag">Mantis</span>
+                                    <span class="tech-tag">Git</span>
+                                    <span class="tech-tag">SVN</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!-- 사진 영역 (오른쪽) -->
@@ -96,8 +169,9 @@
                 <ul class="sidebar-nav">
                     <li><a href="#header" class="sidebar-link" data-section="header">홈</a></li>
                     <li><a href="#about" class="sidebar-link" data-section="about">About Me</a></li>
-                    <li><a href="#projects" class="sidebar-link" data-section="projects">Featured Projects</a></li>
+                    <li><a href="#featured-projects-header" class="sidebar-link" data-section="featured-projects-header">Featured Projects</a></li>
                     <li class="sidebar-divider"></li>
+                    <li><a href="#company-maximizer-project-1" class="sidebar-link" data-section="company-maximizer-project-1">MAXIMIZER Mvp</a></li>
                     <li><a href="#company-ninedigits-project-1" class="sidebar-link" data-section="company-ninedigits-project-1">고양이 오마카세</a></li>
                     <li><a href="#company-ninedigits-project-2" class="sidebar-link" data-section="company-ninedigits-project-2">네코 식당</a></li>
                     <li><a href="#company-ninedigits-project-3" class="sidebar-link" data-section="company-ninedigits-project-3">용사마을 타이쿤</a></li>
@@ -255,7 +329,53 @@
             </div>
 
             <!-- 프로젝트 상세 영역 -->
-            
+
+            <!-- ============================================
+                 MAXIMIZER 회사 섹션
+                 ============================================ -->
+
+            <!-- MAXIMIZER Mvp 상세 -->
+            <div id="company-maximizer-project-1" class="project-detail-section">
+                <div class="container">
+                    <div class="row align-items-center project-detail-header">
+                        <!-- 회사명/프로젝트명 영역 -->
+                        <div class="col-lg-12 project-detail-title-area" data-aos="fade-right">
+                            <h3 class="company-name mb-3">MAXIMIZER</h3>
+                            <h4 class="project-name mb-0">Mvp</h4>
+                        </div>
+                    </div>
+
+                    <div class="row align-items-start">
+                        <!-- 텍스트 영역 (전체 너비) -->
+                        <div class="col-lg-12 project-detail-content" data-aos="fade-up">
+                            <div class="project-description">
+                                <p>
+                                    맥시마이저의 첫 개발 팀에 합류하여 조직의 운영 체계를 기초부터 설계했습니다.
+                                    핵심 기능 중심의 조기 출시(MVP) 방식에 최적화된 개발 환경을 구축하여, 아이디어가 실제 제품으로 구현되는 속도를 높였습니다.
+                                </p>
+                                <p>
+                                    또한 팀원들이 개발에만 집중할 수 있도록 기술적인 가이드라인을 제시하고, 발생하는 기술 이슈에 즉각 대응하며 프로젝트의 완성도를 높였습니다.
+                                </p>
+                                <div class="tech-stack-section">
+                                    <h5 class="tech-stack-title">주요 기술 스택</h5>
+                                    <div class="tech-stack-tags">
+                                        <span class="tech-tag">URP</span>
+                                        <span class="tech-tag">Shader</span>
+                                        <span class="tech-tag">LevelPlay</span>
+                                        <span class="tech-tag">Firebase</span>
+                                        <span class="tech-tag">UniTask</span>
+                                        <span class="tech-tag">LitMotion</span>
+                                        <span class="tech-tag">R3</span>
+                                        <span class="tech-tag">ZString</span>
+                                        <span class="tech-tag">PrimeTween</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- ============================================
                  Nine Digits 회사 섹션
                  ============================================ -->
@@ -287,26 +407,31 @@
                                     URP(Universal Render Pipeline)와 Shader를 활용하여 게임의 비주얼 품질을 향상시켰습니다. 
                                     Google Mobile Mediation을 통한 광고 수익화를 구현했으며, Amazon에 배포된 인게임 서버와 운영툴 서버(Node.js)의 유지보수를 담당했습니다.
                                 </p>
-                                <p>
-                                    <strong>주요 기술 스택:</strong><br>
-                                    • URP, Shader<br>
-                                    • Google Mobile Mediation<br>
-                                    • Node.js<br>
-                                    • 딥링크<br>
-                                    • Sentry, Firebase, AppsFlyer<br>
-                                    • UniTask<br>
-                                    • GPresto<br>
-                                    • PrimeTween<br>
-                                    • Tapjoy<br>
-                                    • Mantis<br>
-                                    • Nginx<br>
-                                    • Docker<br>
-                                    • Ngrok<br>
-                                    • AWS<br>
-                                    • MongoDB<br>
-                                    • JavaScript<br>
-                                    • Redis
-                                </p>
+                                <div class="tech-stack-section">
+                                    <h5 class="tech-stack-title">주요 기술 스택</h5>
+                                    <div class="tech-stack-tags">
+                                        <span class="tech-tag">URP</span>
+                                        <span class="tech-tag">Shader</span>
+                                        <span class="tech-tag">Google Mobile Mediation</span>
+                                        <span class="tech-tag">Node.js</span>
+                                        <span class="tech-tag">딥링크</span>
+                                        <span class="tech-tag">Sentry</span>
+                                        <span class="tech-tag">Firebase</span>
+                                        <span class="tech-tag">AppsFlyer</span>
+                                        <span class="tech-tag">UniTask</span>
+                                        <span class="tech-tag">GPresto</span>
+                                        <span class="tech-tag">PrimeTween</span>
+                                        <span class="tech-tag">Tapjoy</span>
+                                        <span class="tech-tag">Mantis</span>
+                                        <span class="tech-tag">Nginx</span>
+                                        <span class="tech-tag">Docker</span>
+                                        <span class="tech-tag">Ngrok</span>
+                                        <span class="tech-tag">AWS</span>
+                                        <span class="tech-tag">MongoDB</span>
+                                        <span class="tech-tag">JavaScript</span>
+                                        <span class="tech-tag">Redis</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
@@ -351,16 +476,18 @@
                                     프로젝트 초기 단계에서 기존 프로젝트 소스의 대부분을 이전받았지만, 우리 프로젝트의 아키텍처와 요구사항에 맞게 코드 구조와 로직을 전면적으로 재구성하고 최적화하는 작업을 주도했습니다. 
                                     이를 통해 코드의 유지보수성과 확장성을 크게 향상시켰으며, 성능 개선에도 기여했습니다.
                                 </p>
-                                <p>
-                                    <strong>주요 기술 스택:</strong><br>
-                                    • AppLovin Max<br>
-                                    • PlayNANOO<br>
-                                    • Firebase<br>
-                                    • AppsFlyer<br>
-                                    • ByteBrew<br>
-                                    • Tapjoy<br>
-                                    • Shader
-                                </p>
+                                <div class="tech-stack-section">
+                                    <h5 class="tech-stack-title">주요 기술 스택</h5>
+                                    <div class="tech-stack-tags">
+                                        <span class="tech-tag">AppLovin Max</span>
+                                        <span class="tech-tag">PlayNANOO</span>
+                                        <span class="tech-tag">Firebase</span>
+                                        <span class="tech-tag">AppsFlyer</span>
+                                        <span class="tech-tag">ByteBrew</span>
+                                        <span class="tech-tag">Tapjoy</span>
+                                        <span class="tech-tag">Shader</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
@@ -405,15 +532,18 @@
                                     Google Spreadsheet와 Google Cloud API를 활용하여 게임 내 테이블 데이터를 효율적으로 관리하는 시스템을 구축했습니다. 
                                     또한 AI 기술을 활용한 에디터용 툴 및 기능을 개발하여 개발 효율성을 향상시켰습니다.
                                 </p>
-                                <p>
-                                    <strong>주요 기술 스택:</strong><br>
-                                    • Firebase<br>
-                                    • AppsFlyer, ByteBrew<br>
-                                    • AppLovin MAX<br>
-                                    • UniTask<br>
-                                    • PrimeTween<br>
-                                    • AdJust
-                                </p>
+                                <div class="tech-stack-section">
+                                    <h5 class="tech-stack-title">주요 기술 스택</h5>
+                                    <div class="tech-stack-tags">
+                                        <span class="tech-tag">Firebase</span>
+                                        <span class="tech-tag">AppsFlyer</span>
+                                        <span class="tech-tag">ByteBrew</span>
+                                        <span class="tech-tag">AppLovin MAX</span>
+                                        <span class="tech-tag">UniTask</span>
+                                        <span class="tech-tag">PrimeTween</span>
+                                        <span class="tech-tag">AdJust</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
@@ -529,19 +659,21 @@
                                 <p>
                                     gRPC를 활용한 서버 통신 구현, Spine을 이용한 2D 애니메이션 시스템 구축, LIAPP 보안 솔루션 적용, AppLovin을 통한 광고 수익화, 그리고 UniTask를 활용한 비동기 작업 처리 등 다양한 기술 스택을 적용하여 개발했습니다.
                                 </p>
-                                <p>
-                                    <strong>주요 기술 스택:</strong><br>
-                                    • gRPC<br>
-                                    • Spine<br>
-                                    • LIAPP<br>
-                                    • AppLovin<br>
-                                    • UniTask<br>
-                                    • DOTween<br>
-                                    • AdJust<br>
-                                    • OneSignal<br>
-                                    • HelpShift<br>
-                                    • Facebook SDK
-                                </p>
+                                <div class="tech-stack-section">
+                                    <h5 class="tech-stack-title">주요 기술 스택</h5>
+                                    <div class="tech-stack-tags">
+                                        <span class="tech-tag">gRPC</span>
+                                        <span class="tech-tag">Spine</span>
+                                        <span class="tech-tag">LIAPP</span>
+                                        <span class="tech-tag">AppLovin</span>
+                                        <span class="tech-tag">UniTask</span>
+                                        <span class="tech-tag">DOTween</span>
+                                        <span class="tech-tag">AdJust</span>
+                                        <span class="tech-tag">OneSignal</span>
+                                        <span class="tech-tag">HelpShift</span>
+                                        <span class="tech-tag">Facebook SDK</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
@@ -590,10 +722,12 @@
                                 <p>
                                     본인은 성장 시스템, 가챠 시스템 등의 데이터 처리와 관련 UI를 다루는 부분들을 주로 담당했습니다.
                                 </p>
-                                <p>
-                                    <strong>주요 기술 스택:</strong><br>
-                                    • UniTask
-                                </p>
+                                <div class="tech-stack-section">
+                                    <h5 class="tech-stack-title">주요 기술 스택</h5>
+                                    <div class="tech-stack-tags">
+                                        <span class="tech-tag">UniTask</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
@@ -637,14 +771,16 @@
                                 <p>
                                     이 프로젝트를 통해 기술적인 성장도 많이 이뤄냈지만, 사용자의 경험과 협업에 관해 관심을 갖게 해준 계기가 되었습니다.
                                 </p>
-                                <p>
-                                    <strong>주요 기술 스택:</strong><br>
-                                    • AWS CDN<br>
-                                    • SG Patcher<br>
-                                    • Asset Bundle<br>
-                                    • UniRx<br>
-                                    • Shader
-                                </p>
+                                <div class="tech-stack-section">
+                                    <h5 class="tech-stack-title">주요 기술 스택</h5>
+                                    <div class="tech-stack-tags">
+                                        <span class="tech-tag">AWS CDN</span>
+                                        <span class="tech-tag">SG Patcher</span>
+                                        <span class="tech-tag">Asset Bundle</span>
+                                        <span class="tech-tag">UniRx</span>
+                                        <span class="tech-tag">Shader</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
@@ -699,9 +835,6 @@
         </div>
     </footer>
 
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    
     <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     

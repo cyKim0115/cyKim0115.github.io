@@ -179,20 +179,20 @@
         .tech-list ul {
             list-style: none;
             padding-left: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
         .tech-list li {
-            margin-bottom: 5px;
-            padding-left: 20px;
-            position: relative;
-        }
-
-        .tech-list li:before {
-            content: "•";
-            position: absolute;
-            left: 0;
-            color: #6366f1;
-            font-weight: bold;
+            margin-bottom: 0;
+            padding: 4px 12px;
+            background: #f3f4f6;
+            color: #4b5563;
+            border-radius: 999px;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e5e7eb;
         }
 
         .minor-project {
@@ -225,7 +225,7 @@
             background: #f9fafb;
             padding: 20px;
             border-radius: 8px;
-            border-left: 4px solid #6366f1;
+            border-left: 4px solid #9ca3af;
         }
 
         .skill-category-title {
@@ -396,7 +396,8 @@
                             <div class="tech-stack-title">주요 기술 스택:</div>
                             <div class="tech-list">
                                 <ul>
-                                    <li>URP, Shader</li>
+                                    <li>URP</li>
+                                    <li>Shader</li>
                                     <li>Google Mobile Mediation</li>
                                     <li>Node.js</li>
                                     <li>딥링크</li>
