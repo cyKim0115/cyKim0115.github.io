@@ -621,7 +621,8 @@ section [data-aos] {
     transform: scale(1.1);
 }
 
-.project-card .card-body {
+.project-card .card-body,
+.project-card-clickable .card-body {
     padding: 1.25rem;
     display: flex;
     flex-direction: column;
@@ -631,8 +632,9 @@ section [data-aos] {
     background: var(--bg-card);
 }
 
-.project-card .card-title {
-    font-size: 2rem;
+.project-card .card-title,
+.project-card-clickable .card-title {
+    font-size: 1.25rem;
     font-weight: 600;
     color: var(--text-dark);
     margin-bottom: 1rem;
@@ -640,11 +642,13 @@ section [data-aos] {
 }
 
 /* 프로젝트 카드 내 프로젝트 이름과 장르 태그 사이 여백 조정 */
-.project-card .d-flex.align-items-center.mb-1 {
+.project-card .d-flex.align-items-center.mb-1,
+.project-card-clickable .d-flex.align-items-center.mb-1 {
     margin-bottom: 0.25rem !important; /* 타이틀과 장르 태그 사이 여백 최소화 */
 }
 
-.project-card .card-title.mb-0 {
+.project-card .card-title.mb-0,
+.project-card-clickable .card-title.mb-0 {
     margin-bottom: 0;
     flex: 1;
     min-width: 0;
@@ -652,18 +656,21 @@ section [data-aos] {
     overflow-wrap: break-word;
 }
 
-.project-card:hover .card-title {
+.project-card:hover .card-title,
+.project-card-clickable:hover .card-title {
     color: var(--primary-color);
 }
 
-.project-card .card-text {
+.project-card .card-text,
+.project-card-clickable .card-text {
     font-size: 1rem;
     line-height: 1.7;
     color: var(--text-light);
 }
 
 /* 빈 card-text 영역 완전히 제거 - 타이틀 바로 아래 장르 태그 표시 */
-.project-card .card-text:empty {
+.project-card .card-text:empty,
+.project-card-clickable .card-text:empty {
     display: none !important;
     flex-grow: 0 !important;
     height: 0 !important;
@@ -1103,6 +1110,11 @@ section [data-aos] {
     padding: 8rem 0;
     position: relative;
     overflow: hidden;
+    transition: background var(--transition-normal);
+}
+
+[data-theme="dark"] #contact {
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
 }
 
 #contact::before {
@@ -1116,6 +1128,12 @@ section [data-aos] {
         radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
         radial-gradient(circle at 70% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
     z-index: 0;
+}
+
+[data-theme="dark"] #contact::before {
+    background:
+        radial-gradient(circle at 30% 30%, rgba(129, 140, 248, 0.12) 0%, transparent 55%),
+        radial-gradient(circle at 70% 70%, rgba(167, 139, 250, 0.12) 0%, transparent 55%);
 }
 
 #contact .container {
