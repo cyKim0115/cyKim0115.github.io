@@ -237,17 +237,48 @@
         }
 
         /* 인쇄 스타일 */
+        @page {
+            size: A4;
+            margin: 12mm;
+        }
+
         @media print {
+            html, body {
+                width: 210mm;
+                background: #fff !important;
+                color: #111 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
             body {
-                padding: 20px;
+                margin: 0;
+                padding: 0;
+                font-size: 10.5pt;
+                line-height: 1.45;
             }
 
-            .section {
+            .container {
+                max-width: none;
+                width: 100%;
+                margin: 0;
+            }
+
+            .section,
+            .project-item,
+            .subsection {
+                break-inside: avoid-page;
                 page-break-inside: avoid;
             }
 
-            .project-item {
-                page-break-inside: avoid;
+            .period,
+            .project-period,
+            .project-description,
+            .tech-stack-title,
+            .tech-list,
+            .skill-items,
+            .minor-project-desc {
+                color: #222 !important;
             }
         }
 
@@ -330,7 +361,7 @@
                 <!-- 용사 마을 타이쿤 -->
                 <div class="project-item">
                     <div class="project-header">
-                        <div class="project-name">용사 마을 타이쿤</div>
+                        <div class="project-name">용사마을 타이쿤</div>
                         <div class="project-period">2025.05 ~ 2026.01</div>
                     </div>
                     <div class="project-description">
@@ -343,22 +374,24 @@
                         <ul>
                             <li>Google Spreadsheet API와 Google Cloud API 연동을 통한 게임 데이터 테이블 관리 시스템 개발</li>
                             <li>AI 기반 에디터 툴 개발로 게임 데이터 생성 및 수정 프로세스 자동화</li>
-                            <li>Firebase 연동 및 분석 SDK 통합</li>
+                            <li>Firebase, AppsFlyer, ByteBrew 기반 분석 SDK 통합 및 데이터 수집 환경 구성</li>
                             <li>AppLovin MAX를 활용한 광고 수익화 시스템 구현</li>
+                            <li>UniTask, PrimeTween 기반 비동기 로직 및 연출 처리 구조 적용</li>
                         </ul>
                         <p>
-                            <strong>주요 성과:</strong> Google Play 스토어 출시 완료, 개발 효율성 향상을 위한 데이터 관리 시스템 구축 완료
+                            <strong>주요 성과:</strong> Google Play 스토어 출시 완료, 데이터 관리 및 에디터 자동화 체계 구축으로 개발 생산성 향상
                         </p>
                         <div class="tech-stack">
                             <div class="tech-stack-title">주요 기술 스택:</div>
                             <div class="tech-list">
                                 <ul>
                                     <li>Firebase</li>
-                                    <li>AppsFlyer, ByteBrew</li>
+                                    <li>AppsFlyer</li>
+                                    <li>ByteBrew</li>
                                     <li>AppLovin MAX</li>
                                     <li>UniTask</li>
                                     <li>PrimeTween</li>
-                                    <li>AdJust</li>
+                                    <li>Adjust</li>
                                     <li>Google Spreadsheet API</li>
                                     <li>Google Cloud API</li>
                                 </ul>

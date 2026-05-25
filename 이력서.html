@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>클라이언트 프로그래머 이력서 (김찬영)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Malgun Gothic", "맑은 고딕", Arial, sans-serif;
+            line-height: 1.55;
+            color: #333;
+            background: #fff;
+            padding: 36px 20px;
+        }
+
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+        }
+
+        .header {
+            margin-bottom: 30px;
+            padding-bottom: 18px;
+            border-bottom: 3px solid #6366f1;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            color: #1f2937;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #4f46e5;
+            font-size: 1.05em;
+            font-weight: 600;
+        }
+
+        .section {
+            margin-bottom: 28px;
+            page-break-inside: avoid;
+        }
+
+        .section-title {
+            font-size: 1.45em;
+            color: #1f2937;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e5e7eb;
+            font-weight: 700;
+        }
+
+        .card {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px 18px;
+            margin-bottom: 12px;
+        }
+
+        .grid-two {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 20px;
+        }
+
+        .row {
+            display: flex;
+            gap: 12px;
+            align-items: baseline;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+
+        .label {
+            min-width: 86px;
+            font-size: 0.92em;
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        .value {
+            color: #1f2937;
+            font-size: 0.98em;
+        }
+
+        .career-item {
+            border-left: 3px solid #e5e7eb;
+            padding-left: 14px;
+            margin-bottom: 16px;
+        }
+
+        .career-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+        }
+
+        .company {
+            color: #1f2937;
+            font-size: 1.06em;
+            font-weight: 700;
+        }
+
+        .period {
+            color: #6b7280;
+            font-size: 0.92em;
+        }
+
+        ul {
+            margin: 6px 0 8px 18px;
+            color: #374151;
+        }
+
+        li {
+            margin-bottom: 4px;
+        }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chip {
+            border: 1px solid #e5e7eb;
+            background: #f3f4f6;
+            color: #4b5563;
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 0.86em;
+        }
+
+        @page {
+            size: A4;
+            margin: 12mm;
+        }
+
+        @media print {
+            html, body {
+                width: 210mm;
+                background: #fff !important;
+                color: #111 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            body {
+                margin: 0;
+                padding: 0;
+                font-size: 10.4pt;
+                line-height: 1.45;
+            }
+
+            .container {
+                max-width: none;
+                width: 100%;
+            }
+
+            .section,
+            .card,
+            .career-item {
+                break-inside: avoid-page;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>클라이언트 프로그래머 이력서 (김찬영)</h1>
+            <p>Unity Client Developer Resume</p>
+        </header>
+
+        <section class="section">
+            <h2 class="section-title">기본 정보</h2>
+            <div class="card">
+                <div class="grid-two">
+                    <div class="row"><span class="label">이름</span><span class="value">김찬영 (남, 27세 / 1998년생)</span></div>
+                    <div class="row"><span class="label">휴대폰</span><span class="value">010-2780-3588</span></div>
+                    <div class="row"><span class="label">이메일</span><span class="value">cksdud3488@naver.com</span></div>
+                    <div class="row"><span class="label">주소</span><span class="value">서울 구로구 경인로20가길 68 (오류동, 오류동행복주택)</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">희망 근무조건</h2>
+            <div class="card">
+                <div class="row"><span class="label">고용 형태</span><span class="value">정규직</span></div>
+                <div class="row"><span class="label">연봉</span><span class="value">면접 시 협의</span></div>
+                <div class="row"><span class="label">근무지</span><span class="value">전국 → 전국</span></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">지원분야</h2>
+            <div class="card">
+                <div class="row"><span class="label">지원분야</span><span class="value">게임개발(클라이언트), 게임개발(모바일)</span></div>
+                <div class="row"><span class="label">키워드</span><span class="value">클라이언트, 게임프로그래밍, 게임프로그래머</span></div>
+                <div class="row"><span class="label">게임 분야</span><span class="value">온라인/모바일, RPG, Casual, Shooting, 기타</span></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">학력 및 교육</h2>
+            <div class="card">
+                <div class="row"><span class="label">고등학교</span><span class="value">신철원고등학교 졸업 (2014 ~ 2017)</span></div>
+                <div class="row"><span class="label">교육 이수</span><span class="value">광운대학교 정보과학교육원 게임프로그래밍학과 (2017.03 ~ 2018.06)</span></div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">경력 요약 (총 5년 7개월)</h2>
+            <div class="card">
+                <div class="career-item">
+                    <div class="career-head">
+                        <div class="company">MAXIMIZER / 대리</div>
+                        <div class="period">2026.02 ~ 2026.05</div>
+                    </div>
+                    <div class="value">담당 프로젝트: MVP 프로세스</div>
+                    <ul>
+                        <li>신규 개발팀 초기 개발 환경/아키텍처 설계</li>
+                        <li>MVP 방식 개발 프로세스 및 빌드/배포 파이프라인 구축</li>
+                        <li>핵심 기능 중심 빠른 프로토타입과 게임 클라이언트 구현</li>
+                    </ul>
+                </div>
+
+                <div class="career-item">
+                    <div class="career-head">
+                        <div class="company">NineDigits / 과장</div>
+                        <div class="period">2024.02 ~ 2026.01</div>
+                    </div>
+                    <div class="value">고양이 오마카세, 네코 식당, 기타 참여 프로젝트 담당</div>
+                    <ul>
+                        <li>URP/Shader 기반 비주얼 품질 개선 및 렌더링 적용</li>
+                        <li>광고/분석 SDK(AppLovin, Firebase, AppsFlyer 등) 통합</li>
+                        <li>Node.js 서버 유지보수, 딥링크, 운영 도구 및 데이터 관리</li>
+                    </ul>
+                </div>
+
+                <div class="career-item">
+                    <div class="career-head">
+                        <div class="company">CookApps / 사원</div>
+                        <div class="period">2023.02 ~ 2023.11</div>
+                    </div>
+                    <div class="value">테일드 데몬 슬레이어: 라이즈, 우당탕탕 탐험대 담당</div>
+                    <ul>
+                        <li>gRPC/Spine/보안 솔루션 연동 및 클라이언트 기능 유지보수</li>
+                        <li>앱스토어 출시 및 미국 소프트런칭 프로젝트 개발</li>
+                    </ul>
+                </div>
+
+                <div class="career-item">
+                    <div class="career-head">
+                        <div class="company">Preflow / 사원</div>
+                        <div class="period">2020.09 ~ 2023.01</div>
+                    </div>
+                    <div class="value">프로젝트: 소울 디멘션 (미출시)</div>
+                    <ul>
+                        <li>SG Patcher, Asset Bundle, AWS CDN 연동 개발</li>
+                        <li>Shader/UniRx 기반 게임 클라이언트 핵심 기능 구현</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">보유역량</h2>
+            <div class="card">
+                <div class="chips">
+                    <span class="chip">C#</span>
+                    <span class="chip">Unity 3D</span>
+                    <span class="chip">JavaScript</span>
+                    <span class="chip">Node.js</span>
+                    <span class="chip">Android</span>
+                    <span class="chip">iOS</span>
+                    <span class="chip">Steam</span>
+                    <span class="chip">URP</span>
+                    <span class="chip">Shader</span>
+                    <span class="chip">Spine</span>
+                    <span class="chip">gRPC</span>
+                    <span class="chip">Firebase</span>
+                    <span class="chip">AppsFlyer</span>
+                    <span class="chip">ByteBrew</span>
+                    <span class="chip">AppLovin</span>
+                    <span class="chip">LevelPlay</span>
+                    <span class="chip">Google Mobile Mediation</span>
+                    <span class="chip">PlayNANOO</span>
+                    <span class="chip">Tapjoy</span>
+                    <span class="chip">Adjust</span>
+                    <span class="chip">OneSignal</span>
+                    <span class="chip">HelpShift</span>
+                    <span class="chip">Facebook SDK</span>
+                    <span class="chip">LIAPP</span>
+                    <span class="chip">Google Spreadsheet API</span>
+                    <span class="chip">Google Cloud API</span>
+                    <span class="chip">UniTask</span>
+                    <span class="chip">UniRx</span>
+                    <span class="chip">PrimeTween</span>
+                    <span class="chip">DOTween</span>
+                    <span class="chip">LitMotion</span>
+                    <span class="chip">R3</span>
+                    <span class="chip">ZString</span>
+                    <span class="chip">GPresto</span>
+                    <span class="chip">SG Patcher</span>
+                    <span class="chip">Asset Bundle</span>
+                    <span class="chip">AWS</span>
+                    <span class="chip">AWS CDN</span>
+                    <span class="chip">Docker</span>
+                    <span class="chip">Nginx</span>
+                    <span class="chip">Ngrok</span>
+                    <span class="chip">MongoDB</span>
+                    <span class="chip">Redis</span>
+                    <span class="chip">Jenkins</span>
+                    <span class="chip">TeamCity</span>
+                    <span class="chip">Jira</span>
+                    <span class="chip">Confluence</span>
+                    <span class="chip">Git</span>
+                    <span class="chip">SVN</span>
+                    <span class="chip">Trello</span>
+                    <span class="chip">Notion</span>
+                    <span class="chip">Mantis</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">병역 사항</h2>
+            <div class="card">
+                <div class="row"><span class="label">병역</span><span class="value">군필 (2018.06 ~ 2020.01 육군 병장 제대)</span></div>
+            </div>
+        </section>
+
+    </div>
+</body>
+</html>
