@@ -1,0 +1,13 @@
+{
+  "name": "cykim-portfolio-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "pdf": "node scripts/generate-pdfs.mjs",
+    "pdf:portfolio": "node scripts/generate-pdfs.mjs --only=portfolio",
+    "pdf:docs": "node scripts/generate-pdfs.mjs --only=docs"
+  },
+  "devDependencies": {
+    "playwright": "^1.54.2"
+  }
+}
