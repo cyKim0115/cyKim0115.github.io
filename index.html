@@ -1,858 +1,181 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unity Client Developer Portfolio</title>
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- AOS CSS -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css">
-
-    <!-- 테마 초기화 (FOUC 방지: body 렌더 전 data-theme 설정) -->
-    <script>
-        (function () {
-            try {
-                var saved = localStorage.getItem('theme');
-                var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-                var theme = saved || (prefersDark ? 'dark' : 'light');
-                document.documentElement.setAttribute('data-theme', theme);
-            } catch (e) {
-                document.documentElement.setAttribute('data-theme', 'light');
-            }
-        })();
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>김찬영 — Unity Client Developer</title>
+  <meta name="description" content="Unity 클라이언트 개발자 김찬영 포트폴리오. 회사 출시작과 개인 실험·툴을 소개합니다.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    (function () {
+      try {
+        var params = new URLSearchParams(location.search);
+        if (params.get("pdf") === "1") {
+          document.documentElement.setAttribute("data-pdf", "1");
+          document.documentElement.setAttribute("data-theme", "light");
+          return;
+        }
+        var saved = localStorage.getItem("theme");
+        var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.setAttribute("data-theme", saved || (prefersDark ? "dark" : "light"));
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    })();
+  </script>
 </head>
 <body>
-    <!-- 다크모드 토글 버튼 -->
-    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="테마 전환" title="테마 전환">
-        <i class="bi bi-moon-stars-fill theme-icon-moon" aria-hidden="true"></i>
-        <i class="bi bi-sun-fill theme-icon-sun" aria-hidden="true"></i>
-    </button>
-    <!-- 헤더 섹션 -->
-    <header id="header" class="header-section">
-        <div class="container">
-            <div class="row align-items-center min-vh-100">
-                <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
-                    <h1 class="display-3 fw-bold mb-3">김찬영</h1>
-                    <h2 class="h4 text-muted mb-4">Unity Client Developer</h2>
-                    
-                    <div class="social-links">
-                        <a href="mailto:cksdud3488@naver.com" class="btn btn-outline-light me-2 mb-2" target="_blank">
-                            <i class="bi bi-envelope"></i> Email
-                        </a>
-                        <a href="tel:010-2780-3588" class="btn btn-outline-light me-2 mb-2" target="_blank">
-                            <i class="bi bi-phone"></i> Phone
-                        </a>
-                        <a href="https://github.com/cyKim0115" class="btn btn-outline-light me-2 mb-2" target="_blank">
-                            <i class="bi bi-github"></i> GitHub
-                        </a>
-                        <a href="https://cykim0115.github.io/code_portfolio/" class="btn btn-outline-light mb-2" target="_blank">
-                            <i class="bi bi-code-slash"></i> Code Portfolio
-                        </a>
-                    </div>
-                </div>
-            </div>
+  <a class="skip-link" href="#work">본문으로 건너뛰기</a>
+
+  <nav class="site-nav" id="site-nav" aria-label="주요">
+    <a class="nav-brand" href="#top">김찬영</a>
+    <div class="nav-actions">
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#work">Work</a></li>
+        <li><a href="#code">Code</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-label="테마 전환" title="테마 전환">
+        <span class="icon-moon" aria-hidden="true">☾</span>
+        <span class="icon-sun" aria-hidden="true">☀</span>
+      </button>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <h1 class="hero-brand">김찬영</h1>
+      <p class="hero-role">Unity Client Developer</p>
+      <p class="hero-lead">
+        플레이어가 체감하는 클라이언트 품질을 중심으로, 출시·운영 타이쿤/idle부터
+        개인 프로시저럴·툴링까지 만듭니다.
+      </p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#work">작업 보기</a>
+        <a class="btn btn-ghost" href="https://cykim0115.github.io/code_portfolio/" target="_blank" rel="noopener noreferrer">Code Portfolio</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="section section-alt" id="about">
+    <div class="section-inner about-grid">
+      <div class="about-copy">
+        <p class="section-label">About</p>
+        <h2 class="section-title">클라이언트에 집중하는 개발자</h2>
+        <p>
+          Unity로 모바일·스팀 클라이언트를 만들어 왔습니다. 빠른 MVP와 장기 운영 사이
+          트레이드오프를 다루며, 데이터 파이프라인·SDK·비주얼·성능까지 한 판에서
+          맞추는 일을 좋아합니다.
+        </p>
+        <p>
+          현재 <strong>BlackStorm</strong>에서 <strong>프로젝트 T</strong>를 진행 중이며,
+          그전에는 MAXIMIZER·Nine Digits·CookApps·Preflow에서 출시와 운영을 경험했습니다.
+        </p>
+
+        <ul class="career-list" aria-label="경력">
+          <li>
+            <span class="co">BlackStorm</span>
+            <span class="period">2026.06 ~</span>
+            <span class="role">사원 · 프로젝트 T</span>
+          </li>
+          <li>
+            <span class="co">MAXIMIZER</span>
+            <span class="period">2026.02 – 05</span>
+            <span class="role">대리 · MVP</span>
+          </li>
+          <li>
+            <span class="co">Nine Digits</span>
+            <span class="period">2024.02 – 2026.01</span>
+            <span class="role">과장</span>
+          </li>
+          <li>
+            <span class="co">CookApps</span>
+            <span class="period">2023.02 – 11</span>
+            <span class="role">사원</span>
+          </li>
+          <li>
+            <span class="co">Preflow</span>
+            <span class="period">2020.09 – 2023.01</span>
+            <span class="role">사원</span>
+          </li>
+        </ul>
+
+        <div class="stack-wrap">
+          <h3>스택</h3>
+          <div class="stack-tags">
+            <span>Unity</span><span>C#</span><span>Android</span><span>iOS</span><span>Steam</span>
+            <span>Firebase</span><span>gRPC</span><span>Spine</span><span>Shader</span>
+            <span>AppLovin</span><span>UniTask</span><span>Git</span>
+          </div>
         </div>
-    </header>
+      </div>
+      <div class="about-photo">
+        <img src="Resource/My/증사.jpg" alt="김찬영 프로필 사진" width="480" height="640">
+      </div>
+    </div>
+  </section>
 
-    <!-- About Me 섹션 -->
-    <section id="about" class="py-5">
-        <div class="about-title-wrapper">
-            <div class="container">
-                <h2 class="section-title text-center mb-5" data-aos="fade-up">About Me</h2>
-            </div>
+  <section class="section" id="work">
+    <div class="section-inner">
+      <p class="section-label">Work</p>
+      <h2 class="section-title">회사 작업 · 개인 작업</h2>
+      <p class="section-desc">
+        카테고리를 나눠 볼 수 있습니다. 카드를 누르면 요약·스택·스토어 링크가 열립니다.
+        스크린샷이 비어 있는 항목은 나중에 보강합니다.
+      </p>
+
+      <div class="work-toolbar">
+        <div class="filter-group" role="group" aria-label="작업 구분">
+          <button type="button" class="filter-btn" data-filter="company" aria-pressed="true">Company</button>
+          <button type="button" class="filter-btn" data-filter="personal" aria-pressed="false">Personal</button>
         </div>
-        <div class="container">
-            <div class="row align-items-center justify-content-center">
-                <!-- 텍스트 영역 (왼쪽) -->
-                <div class="col-lg-5 col-xl-7" data-aos="fade-right">
-                    <div class="about-content">
-                        <!-- 자기소개를 여기에 작성하세요 -->
-                        <p class="lead">
-                            안녕하세요! Unity를 활용한 게임 클라이언트 개발을 전문으로 하는 개발자입니다.
-                        </p>
-                        <p>
-                            게임 개발에 대한 열정과 함께, 사용자에게 최고의 게임 경험을 제공하는 것을 목표로 하고 있습니다. 
-                            Unity 엔진을 활용하여 다양한 장르의 게임을 개발해왔으며, 특히 협업과 적응에 강점을 가지고 있습니다.
-                        </p>
-                        <div class="tech-stack-section">
-                            <h5 class="tech-stack-title">주요 기술 스택</h5>
-                            <div class="tech-category">
-                                <div class="tech-category-label">게임 엔진</div>
-                                <div class="tech-stack-tags">
-                                    <span class="tech-tag">Unity</span>
-                                </div>
-                            </div>
-                            <div class="tech-category">
-                                <div class="tech-category-label">프로그래밍 언어</div>
-                                <div class="tech-stack-tags">
-                                    <span class="tech-tag">C#</span>
-                                </div>
-                            </div>
-                            <div class="tech-category">
-                                <div class="tech-category-label">플랫폼</div>
-                                <div class="tech-stack-tags">
-                                    <span class="tech-tag">Android</span>
-                                    <span class="tech-tag">iOS</span>
-                                    <span class="tech-tag">Steam</span>
-                                </div>
-                            </div>
-                            <div class="tech-category">
-                                <div class="tech-category-label">백엔드 서비스</div>
-                                <div class="tech-stack-tags">
-                                    <span class="tech-tag">Firebase</span>
-                                    <span class="tech-tag">gRPC</span>
-                                    <span class="tech-tag">PlayNANOO</span>
-                                </div>
-                            </div>
-                            <div class="tech-category">
-                                <div class="tech-category-label">광고 · 분석 솔루션</div>
-                                <div class="tech-stack-tags">
-                                    <span class="tech-tag">AppLovin</span>
-                                    <span class="tech-tag">AppsFlyer</span>
-                                    <span class="tech-tag">ByteBrew</span>
-                                </div>
-                            </div>
-                            <div class="tech-category">
-                                <div class="tech-category-label">그래픽 · 애니메이션</div>
-                                <div class="tech-stack-tags">
-                                    <span class="tech-tag">Spine</span>
-                                    <span class="tech-tag">Shader</span>
-                                </div>
-                            </div>
-                            <div class="tech-category">
-                                <div class="tech-category-label">CI/CD</div>
-                                <div class="tech-stack-tags">
-                                    <span class="tech-tag">Jenkins</span>
-                                    <span class="tech-tag">TeamCity</span>
-                                </div>
-                            </div>
-                            <div class="tech-category">
-                                <div class="tech-category-label">프로젝트 도구</div>
-                                <div class="tech-stack-tags">
-                                    <span class="tech-tag">Jira</span>
-                                    <span class="tech-tag">Mantis</span>
-                                    <span class="tech-tag">Git</span>
-                                    <span class="tech-tag">SVN</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- 사진 영역 (오른쪽) -->
-                <div class="col-lg-3 col-xl-3" data-aos="fade-left">
-                    <div class="about-image-wrapper">
-                        <img src="Resource/My/증사.jpg" alt="프로필 사진" class="about-profile-image">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+        <p class="work-hint" id="work-hint">회사에서 참여·리드한 출시/진행 프로젝트입니다.</p>
+      </div>
 
-    <!-- Projects 섹션 -->
-    <section id="projects" class="py-5 bg-light">
-        <!-- 좌측 사이드바 네비게이션 -->
-        <nav class="project-sidebar">
-            <div class="sidebar-content">
-                <h5 class="sidebar-title">목차</h5>
-                <ul class="sidebar-nav">
-                    <li><a href="#header" class="sidebar-link" data-section="header">홈</a></li>
-                    <li><a href="#about" class="sidebar-link" data-section="about">About Me</a></li>
-                    <li><a href="#featured-projects-header" class="sidebar-link" data-section="featured-projects-header">Featured Projects</a></li>
-                    <li class="sidebar-divider"></li>
-                    <li><a href="#company-maximizer-project-1" class="sidebar-link" data-section="company-maximizer-project-1">MAXIMIZER MVP</a></li>
-                    <li><a href="#company-ninedigits-project-1" class="sidebar-link" data-section="company-ninedigits-project-1">고양이 오마카세</a></li>
-                    <li><a href="#company-ninedigits-project-2" class="sidebar-link" data-section="company-ninedigits-project-2">네코 식당</a></li>
-                    <li><a href="#company-ninedigits-project-3" class="sidebar-link" data-section="company-ninedigits-project-3">용사마을 타이쿤</a></li>
-                    <li><a href="#ninedigits-minor-projects" class="sidebar-link" data-section="ninedigits-minor-projects">기타 참여 프로젝트</a></li>
-                    <li><a href="#company-cookapps-project-1" class="sidebar-link" data-section="company-cookapps-project-1">테일드 데몬 슬레이어 : 라이즈</a></li>
-                    <li><a href="#company-cookapps-project-2" class="sidebar-link" data-section="company-cookapps-project-2">우당탕탕 탐험대</a></li>
-                    <li><a href="#company-preflow-project-1" class="sidebar-link" data-section="company-preflow-project-1">소울 디멘션</a></li>
-                    <li class="sidebar-divider"></li>
-                    <li><a href="#contact" class="sidebar-link" data-section="contact">Contact</a></li>
-                </ul>
-            </div>
-        </nav>
-        
-        <div class="container">
-            <div id="featured-projects-header">
-                <h2 class="section-title text-center mb-5" data-aos="fade-up">Featured Projects</h2>
-            </div>
-            
-            <!-- 주요 프로젝트 카드 영역 -->
-            <div id="featured-projects-cards" class="row g-4 mb-5">
-                <!-- 테일드 데몬 슬레이어 : 라이즈 -->
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
-                    <div class="card h-100 project-card-clickable" data-project-detail="company-cookapps-project-1">
-                        <img src="Resource/Tailed Demon Slayer Rise/banner.png" class="card-img-top project-card-banner" alt="테일드 데몬 슬레이어 : 라이즈">
-                        <div class="card-body d-flex flex-column">
-                            <div class="d-flex align-items-center mb-1">
-                                <img src="Resource/Tailed Demon Slayer Rise/icon.jpg" class="project-card-icon-small me-2" alt="테일드 데몬 슬레이어 아이콘">
-                                <h5 class="card-title mb-0">테일드 데몬 슬레이어 : 라이즈</h5>
-                            </div>
-                            <p class="card-text flex-grow-1">
-                            </p>
-                            <div class="mb-3 genre-tags">
-                                <span class="genre-tag">Idle</span>
-                                <span class="genre-tag">RPG</span>
-                            </div>
-                            <div class="project-links">
-                                <a href="https://play.google.com/store/apps/details?id=com.cookapps.newdemonslayer&hl=ko" class="btn btn-sm btn-outline-primary me-2" target="_blank" onclick="event.stopPropagation();">
-                                    <i class="bi bi-google-play"></i> Google Play
-                                </a>
-                                <a href="https://apps.apple.com/kr/app/%ED%85%8C%EC%9D%BC%EB%93%9C-%EB%8D%B0%EB%AA%AC-%EC%8A%AC%EB%A0%88%EC%9D%B4%EC%96%B4-%EB%9D%BC%EC%9D%B4%EC%A6%88/id6446585105" class="btn btn-sm btn-primary" target="_blank" onclick="event.stopPropagation();">
-                                    <i class="bi bi-apple"></i> App Store
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+      <div class="project-grid" id="project-grid"></div>
+      <div class="detail-panel" id="detail-panel" aria-live="polite"></div>
+      <div class="pdf-doc" id="pdf-doc" aria-hidden="true"></div>
+    </div>
+  </section>
 
-                <!-- 우당탕탕 탐험대 -->
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
-                    <div class="card h-100 project-card-clickable" data-project-detail="company-cookapps-project-2">
-                        <img src="Resource/Rumble Squad/banner.png" class="card-img-top project-card-banner" alt="우당탕탕 탐험대">
-                        <div class="card-body d-flex flex-column">
-                            <div class="d-flex align-items-center mb-1">
-                                <img src="Resource/Rumble Squad/icon.jpg" class="project-card-icon-small me-2" alt="우당탕탕 탐험대 아이콘">
-                                <h5 class="card-title mb-0">우당탕탕 탐험대</h5>
-                            </div>
-                            <p class="card-text flex-grow-1">
-                                <!-- 프로젝트 간단 설명을 여기에 작성하세요 -->
-                            </p>
-                            <div class="mb-3 genre-tags">
-                                <span class="genre-tag">Idle</span>
-                                <span class="genre-tag">Collecting RPG</span>
-                            </div>
-                            <div class="project-links">
-                                <a href="https://play.google.com/store/apps/details?id=com.cookapps.hustle&hl=ko" class="btn btn-sm btn-outline-primary me-2" target="_blank" onclick="event.stopPropagation();">
-                                    <i class="bi bi-google-play"></i> Google Play
-                                </a>
-                                <a href="https://apps.apple.com/kr/app/%EC%9A%B0%EB%8B%B9%ED%83%95%ED%83%95-%ED%83%90%ED%97%98%EB%8C%80-%EB%B0%A9%EC%B9%98%ED%98%95-rpg/id6479223917" class="btn btn-sm btn-primary" target="_blank" onclick="event.stopPropagation();">
-                                    <i class="bi bi-apple"></i> App Store
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  <section class="code-band" id="code">
+    <div class="section-inner">
+      <p class="section-label">Code</p>
+      <h2 class="section-title">토픽별 코드 포트폴리오</h2>
+      <p>
+        전체를 덤프하지 않고, <strong>한 기술·토픽당 관련 원문만</strong> 모아 보여 줍니다.
+        튜토리얼 시스템, 섬 노이즈·메시 결합·콜라이더 최적화, 아키텍처 패턴과
+        개인 툴(GSSL·MyUtil) 링크백을 포함합니다.
+      </p>
+      <ul class="topic-list" id="code-topics"></ul>
+      <a class="btn btn-primary" href="https://cykim0115.github.io/code_portfolio/" target="_blank" rel="noopener noreferrer">
+        Code Portfolio 열기
+      </a>
+    </div>
+  </section>
 
-                <!-- 고양이 오마카세 -->
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
-                    <div class="card h-100 project-card-clickable" data-project-detail="company-ninedigits-project-1">
-                        <img src="Resource/Neko Omakase/banner.jpg" class="card-img-top project-card-banner" alt="고양이 오마카세">
-                        <div class="card-body d-flex flex-column">
-                            <div class="d-flex align-items-center mb-1">
-                                <img src="Resource/Neko Omakase/icon.png" class="project-card-icon-small me-2" alt="고양이 오마카세 아이콘">
-                                <h5 class="card-title mb-0">고양이 오마카세</h5>
-                            </div>
-                            <p class="card-text flex-grow-1">
-                            </p>
-                            <div class="mb-3 genre-tags">
-                                <span class="genre-tag">Idle</span>
-                                <span class="genre-tag">Tycoon</span>
-                            </div>
-                            <div class="project-links">
-                                <a href="https://play.google.com/store/apps/details?id=com.daerigame.nekomakase&hl=ko" class="btn btn-sm btn-outline-primary me-2" target="_blank" onclick="event.stopPropagation();">
-                                    <i class="bi bi-google-play"></i> Google Play
-                                </a>
-                                <a href="https://apps.apple.com/kr/app/%EA%B3%A0%EC%96%91%EC%9D%B4-%EC%98%A4%EB%A7%88%EC%B9%B4%EC%84%B8/id6474983122" class="btn btn-sm btn-primary" target="_blank" onclick="event.stopPropagation();">
-                                    <i class="bi bi-apple"></i> App Store
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  <section class="section section-alt" id="contact">
+    <div class="section-inner">
+      <p class="section-label">Contact</p>
+      <h2 class="section-title">연락</h2>
+      <p class="section-desc">이메일·전화·GitHub로 편하게 연락 주세요. 이력서·경력기술서는 별도 문서로 관리합니다.</p>
+      <div class="contact-row">
+        <a class="btn btn-primary" href="mailto:cksdud3488@naver.com">Email</a>
+        <a class="btn btn-ghost" href="tel:010-2780-3588">Phone</a>
+        <a class="btn btn-ghost" href="https://github.com/cyKim0115" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
+    </div>
+  </section>
 
-                <!-- 네코 식당 -->
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="400">
-                    <div class="card h-100 project-card-clickable" data-project-detail="company-ninedigits-project-2">
-                        <img src="Resource/Neko Restaurant/banner.png" class="card-img-top project-card-banner" alt="네코 식당">
-                        <div class="card-body d-flex flex-column">
-                            <div class="d-flex align-items-center mb-1">
-                                <img src="Resource/Neko Restaurant/icon.png" class="project-card-icon-small me-2" alt="네코 식당 아이콘">
-                                <h5 class="card-title mb-0">네코 식당</h5>
-                            </div>
-                            <p class="card-text flex-grow-1">
-                                <!-- 프로젝트 간단 설명을 여기에 작성하세요 -->
-                            </p>
-                            <div class="mb-3 genre-tags">
-                                <span class="genre-tag">Tycoon</span>
-                                <span class="genre-tag">Simulation</span>
-                            </div>
-                            <div class="project-links">
-                                <a href="https://play.google.com/store/apps/details?id=com.buffstudio.aos.neko.restaurant&hl=ko" class="btn btn-sm btn-outline-primary me-2" target="_blank" onclick="event.stopPropagation();">
-                                    <i class="bi bi-google-play"></i> Google Play
-                                </a>
-                                <a href="https://apps.apple.com/kr/app/%EB%84%A4%EC%BD%94%EC%8B%9D%EB%8B%B9-%EA%B3%A0%EC%96%91%EC%9D%B4-%EC%9A%94%EB%A6%AC-%ED%83%80%EC%9D%B4%EC%BF%A4/id6737997970" class="btn btn-sm btn-primary" target="_blank" onclick="event.stopPropagation();">
-                                    <i class="bi bi-apple"></i> App Store
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  <footer class="site-footer">
+    <p>© 김찬영 · Unity Client Developer</p>
+  </footer>
 
-                <!-- 용사마을 타이쿤 -->
-                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="500">
-                    <div class="card h-100 project-card-clickable" data-project-detail="company-ninedigits-project-3">
-                        <img src="Resource/Hero Craft Town/banner.png" class="card-img-top project-card-banner" alt="용사마을 타이쿤">
-                        <div class="card-body d-flex flex-column">
-                            <div class="d-flex align-items-center mb-1">
-                                <img src="Resource/Hero Craft Town/icon.png" class="project-card-icon-small me-2" alt="용사마을 타이쿤 아이콘">
-                                <h5 class="card-title mb-0">용사마을 타이쿤</h5>
-                            </div>
-                            <p class="card-text flex-grow-1">
-                                <!-- 프로젝트 간단 설명을 여기에 작성하세요 -->
-                            </p>
-                            <div class="mb-3 genre-tags">
-                                <span class="genre-tag">Tycoon</span>
-                                <span class="genre-tag">Simulation</span>
-                            </div>
-                            <div class="project-links">
-                                <a href="https://play.google.com/store/apps/details?id=kr.co.niedigits.herotown&hl=ko" class="btn btn-sm btn-outline-primary me-2" target="_blank" onclick="event.stopPropagation();">
-                                    <i class="bi bi-google-play"></i> Google Play
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 프로젝트 상세 영역 -->
-
-            <!-- ============================================
-                 MAXIMIZER 회사 섹션
-                 ============================================ -->
-
-            <!-- MAXIMIZER Mvp 상세 -->
-            <div id="company-maximizer-project-1" class="project-detail-section">
-                <div class="container">
-                    <div class="row align-items-center project-detail-header">
-                        <!-- 회사명/프로젝트명 영역 (왼쪽 40%) -->
-                        <div class="col-lg-4 project-detail-title-area" data-aos="fade-right">
-                            <h3 class="company-name mb-3">MAXIMIZER</h3>
-                            <h4 class="project-name mb-0">Mvp</h4>
-                        </div>
-                        <!-- 배너 이미지 (오른쪽 60%) -->
-                        <div class="col-lg-8" data-aos="fade-left">
-                            <img src="Resource/MAXIMIZER_MVP/banner.png" alt="MAXIMIZER Mvp" class="project-detail-banner-right">
-                        </div>
-                    </div>
-
-                    <div class="row align-items-start">
-                        <!-- 텍스트 영역 (전체 너비) -->
-                        <div class="col-lg-12 project-detail-content" data-aos="fade-up">
-                            <div class="project-description">
-                                <p>
-                                    맥시마이저의 첫 개발 팀에 합류하여 조직의 운영 체계를 기초부터 설계했습니다.
-                                    핵심 기능 중심의 조기 출시(MVP) 방식에 최적화된 개발 환경을 구축하여, 아이디어가 실제 제품으로 구현되는 속도를 높였습니다.
-                                </p>
-                                <p>
-                                    또한 팀원들이 개발에만 집중할 수 있도록 기술적인 가이드라인을 제시하고, 발생하는 기술 이슈에 즉각 대응하며 프로젝트의 완성도를 높였습니다.
-                                </p>
-                                <div class="tech-stack-section">
-                                    <h5 class="tech-stack-title">주요 기술 스택</h5>
-                                    <div class="tech-stack-tags">
-                                        <span class="tech-tag">URP</span>
-                                        <span class="tech-tag">Shader</span>
-                                        <span class="tech-tag">LevelPlay</span>
-                                        <span class="tech-tag">Firebase</span>
-                                        <span class="tech-tag">UniTask</span>
-                                        <span class="tech-tag">LitMotion</span>
-                                        <span class="tech-tag">R3</span>
-                                        <span class="tech-tag">ZString</span>
-                                        <span class="tech-tag">PrimeTween</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ============================================
-                 Nine Digits 회사 섹션
-                 ============================================ -->
-            
-            <!-- 고양이 오마카세 상세 -->
-            <div id="company-ninedigits-project-1" class="project-detail-section">
-                <div class="container">
-                    <div class="row align-items-center project-detail-header">
-                        <!-- 회사명/프로젝트명 영역 (왼쪽 40%) -->
-                        <div class="col-lg-4 project-detail-title-area" data-aos="fade-right">
-                            <h3 class="company-name mb-3">Nine Digits</h3>
-                            <h4 class="project-name mb-0">고양이 오마카세</h4>
-                        </div>
-                        <!-- 배너 이미지 (오른쪽 60%) -->
-                        <div class="col-lg-8" data-aos="fade-left">
-                            <img src="Resource/Neko Omakase/banner.jpg" alt="고양이 오마카세" class="project-detail-banner-right">
-                        </div>
-                    </div>
-                    
-                    <div class="row align-items-start">
-                        <!-- 텍스트 영역 (왼쪽) -->
-                        <div class="col-lg-7 project-detail-content" data-aos="fade-up">
-                            <div class="project-description">
-                                <p>
-                                    고양이 오마카세는 Google Play 스토어와 Apple App Store에 출시된 타이쿤 장르의 게임입니다. 
-                                    App Store <strong>미국 마켓 1위</strong>를 달성했으며, <strong>2025 Unity Awards</strong> 비주얼 부문을 수상했습니다.
-                                </p>
-                                <p>
-                                    URP(Universal Render Pipeline)와 Shader를 활용하여 게임의 비주얼 품질을 향상시켰습니다. 
-                                    Google Mobile Mediation을 통한 광고 수익화를 구현했으며, Amazon에 배포된 인게임 서버와 운영툴 서버(Node.js)의 유지보수를 담당했습니다.
-                                </p>
-                                <div class="tech-stack-section">
-                                    <h5 class="tech-stack-title">주요 기술 스택</h5>
-                                    <div class="tech-stack-tags">
-                                        <span class="tech-tag">URP</span>
-                                        <span class="tech-tag">Shader</span>
-                                        <span class="tech-tag">Google Mobile Mediation</span>
-                                        <span class="tech-tag">Node.js</span>
-                                        <span class="tech-tag">딥링크</span>
-                                        <span class="tech-tag">Sentry</span>
-                                        <span class="tech-tag">Firebase</span>
-                                        <span class="tech-tag">AppsFlyer</span>
-                                        <span class="tech-tag">UniTask</span>
-                                        <span class="tech-tag">GPresto</span>
-                                        <span class="tech-tag">PrimeTween</span>
-                                        <span class="tech-tag">Tapjoy</span>
-                                        <span class="tech-tag">Mantis</span>
-                                        <span class="tech-tag">Nginx</span>
-                                        <span class="tech-tag">Docker</span>
-                                        <span class="tech-tag">Ngrok</span>
-                                        <span class="tech-tag">AWS</span>
-                                        <span class="tech-tag">MongoDB</span>
-                                        <span class="tech-tag">JavaScript</span>
-                                        <span class="tech-tag">Redis</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- 스토어 이미지 영역 (오른쪽, 40% 이하) -->
-                        <div class="col-lg-5 project-detail-store-images" data-aos="fade-up">
-                            <div class="row g-3">
-                                <div class="col-6">
-                                    <img src="Resource/Neko Omakase/store_picture_1.jpg" alt="고양이 오마카세" class="project-detail-store-image">
-                                </div>
-                                <div class="col-6">
-                                    <img src="Resource/Neko Omakase/store_picture_2.jpg" alt="고양이 오마카세" class="project-detail-store-image">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 네코 식당 상세 -->
-            <div id="company-ninedigits-project-2" class="project-detail-section">
-                <div class="container">
-                    <div class="row align-items-center project-detail-header">
-                        <!-- 회사명/프로젝트명 영역 (왼쪽 40%) -->
-                        <div class="col-lg-4 project-detail-title-area" data-aos="fade-right">
-                            <h3 class="company-name mb-3">Nine Digits</h3>
-                            <h4 class="project-name mb-0">네코 식당</h4>
-                        </div>
-                        <!-- 배너 이미지 (오른쪽 60%) -->
-                        <div class="col-lg-8" data-aos="fade-left">
-                            <img src="Resource/Neko Restaurant/banner.png" alt="네코 식당" class="project-detail-banner-right">
-                        </div>
-                    </div>
-                    
-                    <div class="row align-items-start">
-                        <!-- 텍스트 영역 (왼쪽) -->
-                        <div class="col-lg-7 project-detail-content" data-aos="fade-up">
-                            <div class="project-description">
-                                <p>
-                                    네코 식당은 Google Play 스토어와 Apple App Store에 출시된 타이쿤 장르의 게임입니다.
-                                </p>
-                                <p>
-                                    프로젝트 초기 단계에서 기존 프로젝트 소스의 대부분을 이전받았지만, 우리 프로젝트의 아키텍처와 요구사항에 맞게 코드 구조와 로직을 전면적으로 재구성하고 최적화하는 작업을 주도했습니다. 
-                                    이를 통해 코드의 유지보수성과 확장성을 크게 향상시켰으며, 성능 개선에도 기여했습니다.
-                                </p>
-                                <div class="tech-stack-section">
-                                    <h5 class="tech-stack-title">주요 기술 스택</h5>
-                                    <div class="tech-stack-tags">
-                                        <span class="tech-tag">AppLovin Max</span>
-                                        <span class="tech-tag">PlayNANOO</span>
-                                        <span class="tech-tag">Firebase</span>
-                                        <span class="tech-tag">AppsFlyer</span>
-                                        <span class="tech-tag">ByteBrew</span>
-                                        <span class="tech-tag">Tapjoy</span>
-                                        <span class="tech-tag">Shader</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- 스토어 이미지 영역 (오른쪽, 40% 이하) -->
-                        <div class="col-lg-5 project-detail-store-images" data-aos="fade-up">
-                            <div class="row g-3">
-                                <div class="col-6">
-                                    <img src="Resource/Neko Restaurant/store_picture_1.png" alt="네코 식당" class="project-detail-store-image">
-                                </div>
-                                <div class="col-6">
-                                    <img src="Resource/Neko Restaurant/store_picture_2.png" alt="네코 식당" class="project-detail-store-image">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 용사마을 타이쿤 상세 -->
-            <div id="company-ninedigits-project-3" class="project-detail-section">
-                <div class="container">
-                    <div class="row align-items-center project-detail-header">
-                        <!-- 회사명/프로젝트명 영역 (왼쪽 40%) -->
-                        <div class="col-lg-4 project-detail-title-area" data-aos="fade-right">
-                            <h3 class="company-name mb-3">Nine Digits</h3>
-                            <h4 class="project-name mb-0">용사마을 타이쿤</h4>
-                        </div>
-                        <!-- 배너 이미지 (오른쪽 60%) -->
-                        <div class="col-lg-8" data-aos="fade-left">
-                            <img src="Resource/Hero Craft Town/banner.png" alt="용사마을 타이쿤" class="project-detail-banner-right">
-                        </div>
-                    </div>
-                    
-                    <div class="row align-items-start">
-                        <!-- 텍스트 영역 (왼쪽) -->
-                        <div class="col-lg-7 project-detail-content" data-aos="fade-up">
-                            <div class="project-description">
-                                <p>
-                                    용사마을 타이쿤은 Google Play 스토어에 출시된 타이쿤 장르의 시뮬레이션 게임입니다.
-                                </p>
-                                <p>
-                                    Google Spreadsheet와 Google Cloud API를 활용하여 게임 내 테이블 데이터를 효율적으로 관리하는 시스템을 구축했습니다. 
-                                    또한 AI 기술을 활용한 에디터용 툴 및 기능을 개발하여 개발 효율성을 향상시켰습니다.
-                                </p>
-                                <div class="tech-stack-section">
-                                    <h5 class="tech-stack-title">주요 기술 스택</h5>
-                                    <div class="tech-stack-tags">
-                                        <span class="tech-tag">Firebase</span>
-                                        <span class="tech-tag">AppsFlyer</span>
-                                        <span class="tech-tag">ByteBrew</span>
-                                        <span class="tech-tag">AppLovin MAX</span>
-                                        <span class="tech-tag">UniTask</span>
-                                        <span class="tech-tag">PrimeTween</span>
-                                        <span class="tech-tag">AdJust</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- 스토어 이미지 영역 (오른쪽, 40% 이하) -->
-                        <div class="col-lg-5 project-detail-store-images" data-aos="fade-up">
-                            <div class="row g-3">
-                                <div class="col-6">
-                                    <img src="Resource/Hero Craft Town/store_picture_1.png" alt="용사마을 타이쿤" class="project-detail-store-image">
-                                </div>
-                                <div class="col-6">
-                                    <img src="Resource/Hero Craft Town/store_picture_2.png" alt="용사마을 타이쿤" class="project-detail-store-image">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Nine Digits 기타 참여 프로젝트 영역 -->
-                    <div id="ninedigits-minor-projects" class="minor-projects-section mt-5">
-                        <h3 class="company-name mb-3">Nine Digits</h3>
-                        <h5 class="minor-projects-title mb-4">기타 참여 프로젝트</h5>
-                        <div class="row g-3">
-                            <div class="col-md-6 col-lg-4">
-                                <div class="minor-project-card">
-                                    <img src="Resource/Koyo Town/banner.png" alt="고요의 정원" class="minor-project-image minor-project-banner">
-                                    <div class="minor-project-card-content">
-                                        <div class="d-flex align-items-center mb-2">
-                                            <img src="Resource/Koyo Town/icon.png" alt="고요의 정원 아이콘" class="minor-project-icon-small me-2">
-                                            <h6 class="mb-0">고요의 정원</h6>
-                                        </div>
-                                        <p class="small mb-0">SDK 및 플러그인 통합, 일부 시스템 구현</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="minor-project-card">
-                                    <img src="Resource/Memories Millennium Girl Steam/banner.jpg" alt="천년의 소녀 (스팀)" class="minor-project-image minor-project-banner">
-                                    <div class="minor-project-card-content">
-                                        <div class="d-flex align-items-center mb-2">
-                                            <img src="Resource/Memories Millennium Girl Steam/icon.png" alt="천년의 소녀 (스팀) 아이콘" class="minor-project-icon-small me-2">
-                                            <h6 class="mb-0">천년의 소녀 (스팀)</h6>
-                                        </div>
-                                        <p class="small mb-0">게임 컨텐츠 업데이트 진행</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="minor-project-card">
-                                    <img src="Resource/Memories Millennium Girl Mobile/banner.png" alt="천년의 소녀 (모바일)" class="minor-project-image minor-project-banner">
-                                    <div class="minor-project-card-content">
-                                        <div class="d-flex align-items-center mb-2">
-                                            <img src="Resource/Memories Millennium Girl Mobile/icon.png" alt="천년의 소녀 (모바일) 아이콘" class="minor-project-icon-small me-2">
-                                            <h6 class="mb-0">천년의 소녀 (모바일)</h6>
-                                        </div>
-                                        <p class="small mb-0">SDK 버전 업데이트 및 스토어 정책 대응</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="minor-project-card">
-                                    <img src="Resource/Lost Paradise/banner.png" alt="로스트 파라다이스" class="minor-project-image minor-project-banner">
-                                    <div class="minor-project-card-content">
-                                        <div class="d-flex align-items-center mb-2">
-                                            <img src="Resource/Lost Paradise/icon.png" alt="로스트 파라다이스 아이콘" class="minor-project-icon-small me-2">
-                                            <h6 class="mb-0">로스트 파라다이스</h6>
-                                        </div>
-                                        <p class="small mb-0">SDK 버전 업데이트 및 스토어 정책 대응</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-4">
-                                <div class="minor-project-card">
-                                    <img src="Resource/Miracle Choice/banner.png" alt="미라클 초이스" class="minor-project-image minor-project-banner">
-                                    <div class="minor-project-card-content">
-                                        <div class="d-flex align-items-center mb-2">
-                                            <img src="Resource/Miracle Choice/icon.png" alt="미라클 초이스 아이콘" class="minor-project-icon-small me-2">
-                                            <h6 class="mb-0">미라클 초이스</h6>
-                                        </div>
-                                        <p class="small mb-0">SDK 버전 업데이트 및 스토어 정책 대응</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ============================================
-                 CookApps 회사 섹션
-                 ============================================ -->
-            
-            <!-- 테일드 데몬 슬레이어 : 라이즈 상세 -->
-            <div id="company-cookapps-project-1" class="project-detail-section">
-                <div class="container">
-                    <div class="row align-items-center project-detail-header">
-                        <!-- 회사명/프로젝트명 영역 (왼쪽 40%) -->
-                        <div class="col-lg-4 project-detail-title-area" data-aos="fade-right">
-                            <h3 class="company-name mb-3">CookApps</h3>
-                            <h4 class="project-name mb-0">테일드 데몬 슬레이어 : 라이즈</h4>
-                        </div>
-                        <!-- 배너 이미지 (오른쪽 60%) -->
-                        <div class="col-lg-8" data-aos="fade-left">
-                            <img src="Resource/Tailed Demon Slayer Rise/banner.png" alt="테일드 데몬 슬레이어 : 라이즈" class="project-detail-banner-right">
-                        </div>
-                    </div>
-                    
-                    <div class="row align-items-start">
-                        <!-- 텍스트 영역 (왼쪽) -->
-                        <div class="col-lg-7 project-detail-content" data-aos="fade-up">
-                            <div class="project-description">
-                                <p>
-                                    테일드 데몬 슬레이어 : 라이즈는 테일드 데몬 슬레이어의 후속작으로, Google Play 스토어와 Apple App Store에 출시하여 <strong>양대 마켓 1위</strong>를 달성했습니다.
-                                </p>
-                                <p>
-                                    gRPC를 활용한 서버 통신 구현, Spine을 이용한 2D 애니메이션 시스템 구축, LIAPP 보안 솔루션 적용, AppLovin을 통한 광고 수익화, 그리고 UniTask를 활용한 비동기 작업 처리 등 다양한 기술 스택을 적용하여 개발했습니다.
-                                </p>
-                                <div class="tech-stack-section">
-                                    <h5 class="tech-stack-title">주요 기술 스택</h5>
-                                    <div class="tech-stack-tags">
-                                        <span class="tech-tag">gRPC</span>
-                                        <span class="tech-tag">Spine</span>
-                                        <span class="tech-tag">LIAPP</span>
-                                        <span class="tech-tag">AppLovin</span>
-                                        <span class="tech-tag">UniTask</span>
-                                        <span class="tech-tag">DOTween</span>
-                                        <span class="tech-tag">AdJust</span>
-                                        <span class="tech-tag">OneSignal</span>
-                                        <span class="tech-tag">HelpShift</span>
-                                        <span class="tech-tag">Facebook SDK</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- 스토어 이미지 영역 (오른쪽, 40% 이하) -->
-                        <div class="col-lg-5 project-detail-store-images" data-aos="fade-up">
-                            <div class="row g-3">
-                                <div class="col-6">
-                                    <img src="Resource/Tailed Demon Slayer Rise/store_picture_1.jpg" alt="테일드 데몬 슬레이어 : 라이즈" class="project-detail-store-image">
-                                </div>
-                                <div class="col-6">
-                                    <img src="Resource/Tailed Demon Slayer Rise/store_picture_2.jpg" alt="테일드 데몬 슬레이어 : 라이즈" class="project-detail-store-image">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 우당탕탕 탐험대 상세 -->
-            <div id="company-cookapps-project-2" class="project-detail-section">
-                <div class="container">
-                    <div class="row align-items-center project-detail-header">
-                        <!-- 회사명/프로젝트명 영역 (왼쪽 40%) -->
-                        <div class="col-lg-4 project-detail-title-area" data-aos="fade-right">
-                            <h3 class="company-name mb-3">CookApps</h3>
-                            <h4 class="project-name mb-0">우당탕탕 탐험대</h4>
-                        </div>
-                        <!-- 배너 이미지 (오른쪽 60%) -->
-                        <div class="col-lg-8" data-aos="fade-left">
-                            <img src="Resource/Rumble Squad/banner.png" alt="우당탕탕 탐험대" class="project-detail-banner-right">
-                        </div>
-                    </div>
-                    
-                    <div class="row align-items-start">
-                        <!-- 텍스트 영역 (왼쪽) -->
-                        <div class="col-lg-7 project-detail-content" data-aos="fade-up">
-                            <div class="project-description">
-                                <p>
-                                    우당탕탕 탐험대는 MVP 프로젝트로 진행하여 재직중이던 당시에는 미국에만 소프트런칭을 진행한 프로젝트입니다.
-                                </p>
-                                <p>
-                                    프로젝트 초기 단계에서 효율성을 추구하기 위해 실험적인 프로세스들을 도입했습니다. 
-                                    캐릭터의 도트 에셋은 구매하고, 일러스트는 AI로 생성하는 등의 방식으로 MVP 개발 초기의 효율성을 극대화했습니다.
-                                    결과적으로 <strong>1달만에 런칭</strong>을 완료하면서도 <strong>D1 리텐션 60%</strong>를 달성하는데에 성공하였습니다.
-                                </p>
-                                <p>
-                                    본인은 성장 시스템, 가챠 시스템 등의 데이터 처리와 관련 UI를 다루는 부분들을 주로 담당했습니다.
-                                </p>
-                                <div class="tech-stack-section">
-                                    <h5 class="tech-stack-title">주요 기술 스택</h5>
-                                    <div class="tech-stack-tags">
-                                        <span class="tech-tag">UniTask</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- 스토어 이미지 영역 (오른쪽, 40% 이하) -->
-                        <div class="col-lg-5 project-detail-store-images" data-aos="fade-up">
-                            <div class="row g-3">
-                                <div class="col-6">
-                                    <img src="Resource/Rumble Squad/store_picture_1.jpg" alt="우당탕탕 탐험대" class="project-detail-store-image">
-                                </div>
-                                <div class="col-6">
-                                    <img src="Resource/Rumble Squad/store_picture_2.jpg" alt="우당탕탕 탐험대" class="project-detail-store-image">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ============================================
-                 Preflow 회사 섹션
-                 ============================================ -->
-            
-            <!-- 소울 디멘션 상세 -->
-            <div id="company-preflow-project-1" class="project-detail-section">
-                <div class="container">
-                    <div class="row align-items-center project-detail-header">
-                        <!-- 회사명/프로젝트명 영역 -->
-                        <div class="col-lg-12 project-detail-title-area" data-aos="fade-right">
-                            <h3 class="company-name mb-3">Preflow</h3>
-                            <h4 class="project-name mb-0">소울 디멘션</h4>
-                        </div>
-                    </div>
-                    
-                    <div class="row align-items-start">
-                        <!-- 텍스트 영역 (왼쪽) -->
-                        <div class="col-lg-5 project-detail-content" data-aos="fade-up">
-                            <div class="project-description">
-                                <p>
-                                    소울 디멘션은 출시되지는 못하였지만, 게임 개발의 세계로 발을 내딛게 해준 첫 프로젝트입니다.
-                                </p>
-                                <p>
-                                    이 프로젝트를 통해 기술적인 성장도 많이 이뤄냈지만, 사용자의 경험과 협업에 관해 관심을 갖게 해준 계기가 되었습니다.
-                                </p>
-                                <div class="tech-stack-section">
-                                    <h5 class="tech-stack-title">주요 기술 스택</h5>
-                                    <div class="tech-stack-tags">
-                                        <span class="tech-tag">AWS CDN</span>
-                                        <span class="tech-tag">SG Patcher</span>
-                                        <span class="tech-tag">Asset Bundle</span>
-                                        <span class="tech-tag">UniRx</span>
-                                        <span class="tech-tag">Shader</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- 스토어 이미지 영역 (오른쪽, 60%) -->
-                        <div class="col-lg-7 project-detail-store-images" data-aos="fade-up">
-                            <div class="row g-3">
-                                <div class="col-6">
-                                    <img src="Resource/Soul Dimension/Power_saving_1.png" alt="소울 디멘션" class="project-detail-store-image">
-                                </div>
-                                <div class="col-6">
-                                    <img src="Resource/Soul Dimension/Power_saving_2.png" alt="소울 디멘션" class="project-detail-store-image">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact 섹션 -->
-    <section id="contact" class="py-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
-                    <h2 class="section-title mb-5">Contact</h2>
-                    <p class="lead mb-4">
-                        프로젝트 협업이나 문의사항이 있으시면 언제든지 연락주세요!
-                    </p>
-                    <div class="contact-links">
-                        <a href="mailto:cksdud3488@naver.com" class="btn btn-primary btn-lg me-3 mb-3" target="_blank">
-                            <i class="bi bi-envelope"></i> Email
-                        </a>
-                        <a href="tel:010-2780-3588" class="btn btn-primary btn-lg me-3 mb-3" target="_blank">
-                            <i class="bi bi-phone"></i> Phone
-                        </a>
-                        <a href="https://github.com/cyKim0115" class="btn btn-primary btn-lg me-3 mb-3" target="_blank">
-                            <i class="bi bi-github"></i> GitHub
-                        </a>
-                        <a href="https://cykim0115.github.io/code_portfolio/" class="btn btn-primary btn-lg mb-3" target="_blank">
-                            <i class="bi bi-code-slash"></i> Code Portfolio
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 푸터 -->
-    <footer class="bg-dark text-light py-4">
-        <div class="container text-center">
-            <p class="mb-0">
-                &copy; 2024 Unity Client Developer Portfolio. All rights reserved.
-            </p>
-        </div>
-    </footer>
-
-    <!-- Bootstrap 5 JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- AOS JS -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    
-    <!-- Custom JS -->
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
-
