@@ -12,6 +12,7 @@
   --accent: #0b6e63;
   --accent-bright: #129487;
   --warm: #c45c26;
+  --ai: #6a4fb5;
   --hero-1: rgba(18, 148, 135, 0.28);
   --hero-2: rgba(196, 92, 38, 0.18);
   --hero-3: rgba(21, 32, 28, 0.08);
@@ -44,6 +45,7 @@
   --accent: #3dbeb0;
   --accent-bright: #5ad1c3;
   --warm: #e08955;
+  --ai: #a992e8;
   --hero-1: rgba(61, 190, 176, 0.22);
   --hero-2: rgba(224, 137, 85, 0.14);
   --hero-3: rgba(0, 0, 0, 0.35);
@@ -618,6 +620,10 @@ a:hover {
   color: var(--warm);
 }
 
+.badge-ai {
+  color: var(--ai);
+}
+
 .card-title {
   font-family: var(--font-display);
   font-weight: 700;
@@ -897,6 +903,12 @@ a:hover {
 
   .career-list .period {
     text-align: left;
+  }
+
+  /* 카테고리 3개 — 좁은 화면에서 한 줄 유지 */
+  .filter-btn {
+    padding: 0.5rem 0.7rem;
+    font-size: 0.82rem;
   }
 }
 

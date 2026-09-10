@@ -54,6 +54,7 @@
       <p class="hero-lead">
         플레이어가 체감하는 클라이언트 품질을 중심으로, 출시·운영 타이쿤/idle부터
         개인 프로시저럴·툴링까지 만듭니다.
+        만드는 방식 자체도 설계합니다 — 에이전트 워크플로와 지식 파이프라인을 직접 짜서 씁니다.
       </p>
       <div class="hero-cta">
         <a class="btn btn-primary" href="#work">작업 보기</a>
@@ -111,6 +112,7 @@
             <span>Unity</span><span>C#</span><span>Android</span><span>iOS</span><span>Steam</span>
             <span>Firebase</span><span>gRPC</span><span>Spine</span><span>Shader</span>
             <span>AppLovin</span><span>UniTask</span><span>Git</span>
+            <span>Claude Code</span><span>MCP</span><span>RAG</span>
           </div>
         </div>
       </div>
@@ -123,7 +125,7 @@
   <section class="section" id="work">
     <div class="section-inner">
       <p class="section-label">Work</p>
-      <h2 class="section-title">회사 작업 · 개인 작업</h2>
+      <h2 class="section-title">회사 작업 · 개인 작업 · AI 워크플로</h2>
       <p class="section-desc">
         카테고리를 나눠 볼 수 있습니다. 카드를 누르면 요약·스택·스토어 링크가 열립니다.
         스크린샷이 비어 있는 항목은 나중에 보강합니다.
@@ -133,6 +135,7 @@
         <div class="filter-group" role="group" aria-label="작업 구분">
           <button type="button" class="filter-btn" data-filter="company" aria-pressed="true">Company</button>
           <button type="button" class="filter-btn" data-filter="personal" aria-pressed="false">Personal</button>
+          <button type="button" class="filter-btn" data-filter="ai" aria-pressed="false">AI Workflow</button>
         </div>
         <p class="work-hint" id="work-hint">회사에서 참여·리드한 출시/진행 프로젝트입니다.</p>
       </div>
@@ -151,6 +154,7 @@
         전체를 덤프하지 않고, <strong>한 기술·토픽당 관련 원문만</strong> 모아 보여 줍니다.
         튜토리얼 시스템, 섬 노이즈·메시 결합·콜라이더 최적화, 아키텍처 패턴과
         개인 툴(GSSL·MyUtil) 링크백을 포함합니다.
+        AI 워크플로는 <strong>실제 에이전트 룰 원문</strong>을 같은 방식으로 열어 둡니다.
       </p>
       <ul class="topic-list" id="code-topics"></ul>
       <a class="btn btn-primary" href="https://cykim0115.github.io/code_portfolio/" target="_blank" rel="noopener noreferrer">
@@ -176,6 +180,8 @@
     <p>© 김찬영 · Unity Client Developer</p>
   </footer>
 
+  <!-- 데이터 먼저, 그 다음 UI 로직 (script.js 가 window.PORTFOLIO 를 읽는다) -->
+  <script src="data/projects.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
