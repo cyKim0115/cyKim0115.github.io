@@ -18,6 +18,7 @@
  *     shots: [],                // 상세 스크린샷 (최대 4장 표시)
  *     repo, docs, codeLink,     // 선택 링크 버튼
  *     minor: [{name, img}],     // 선택 · 묶음 프로젝트 아이콘 목록
+ *     hidden: true,             // 선택 · 데이터는 남기고 화면·PDF 에서만 뺀다
  *   }
  *
  * 카테고리를 새로 만들려면 배열 하나와 CATEGORIES 항목 하나를 추가하고,
@@ -33,6 +34,7 @@
 const COMPANY_PROJECTS = [
   {
     id: "project-t",
+    hidden: true,
     company: "BlackStorm",
     title: "프로젝트 T",
     status: "진행중",
@@ -573,6 +575,11 @@ const CATEGORIES = {
     hint: "에이전트에게 일을 시키는 방식 자체를 설계한 작업입니다. 산출물이 코드가 아니라 프로토콜·룰·파이프라인입니다.",
   },
 };
+
+// hidden 항목은 내보내기 전에 걸러서 script.js 가 따로 신경 쓸 필요가 없게 한다
+for (const cat of Object.values(CATEGORIES)) {
+  cat.list = cat.list.filter((p) => !p.hidden);
+}
 
 /** script.js 가 읽는 유일한 진입점. */
 window.PORTFOLIO = {
