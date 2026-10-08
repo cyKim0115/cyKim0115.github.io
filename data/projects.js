@@ -322,6 +322,7 @@ const COMPANY_PROJECTS = [
 const PERSONAL_PROJECTS = [
   {
     id: "narak",
+    hidden: true,
     company: "Personal",
     title: "narak",
     status: "개인",
@@ -367,6 +368,7 @@ const PERSONAL_PROJECTS = [
   },
   {
     id: "myutil",
+    hidden: true,
     company: "Personal",
     title: "MyUtil",
     status: "툴",
@@ -404,6 +406,7 @@ const PERSONAL_PROJECTS = [
   },
   {
     id: "flex-widget",
+    hidden: true,
     company: "Personal",
     title: "flex-work-widget",
     status: "툴",
@@ -490,6 +493,7 @@ const AI_PROJECTS = [
   },
   {
     id: "cursor-bootstrap",
+    hidden: true,
     company: "Dev Env",
     title: "cursor-bootstrap",
     status: "개인",
@@ -509,6 +513,7 @@ const AI_PROJECTS = [
   },
   {
     id: "nim-chat",
+    hidden: true,
     company: "Agent App",
     title: "NIM Chat",
     status: "개인",
@@ -528,6 +533,7 @@ const AI_PROJECTS = [
   },
   {
     id: "nimu-trpg",
+    hidden: true,
     company: "Agent App",
     title: "Nimu-TRPG",
     status: "개인",
@@ -554,7 +560,7 @@ const CODE_TOPICS = [
   "콜라이더 최적화",
   "Managers / Event bus",
   "AI 에이전트 프로토콜 (룰 원문)",
-  "개인 툴 (GSSL · MyUtil)",
+  "개인 툴 (GSSL)",
 ];
 
 /** 카테고리 정의 — 필터·PDF·해시 라우팅이 모두 이 맵을 따른다. */
