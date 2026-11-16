@@ -7,3 +7,6 @@ reference material
 # Node (PDF tooling)
 node_modules/
 package-lock.json
+
+# Screenshot output (npm run shots)
+shots/

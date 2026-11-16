@@ -4,6 +4,9 @@
   "type": "module",
   "scripts": {
     "check": "node scripts/check-data.mjs",
+    "images": "python scripts/optimize-images.py",
+    "og": "node scripts/og-image.mjs",
+    "shots": "node scripts/screenshots.mjs",
     "pdf": "node scripts/generate-pdfs.mjs",
     "pdf:portfolio": "node scripts/generate-pdfs.mjs --only=portfolio",
     "pdf:docs": "node scripts/generate-pdfs.mjs --only=docs"
