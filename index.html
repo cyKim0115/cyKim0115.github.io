@@ -3,11 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>김찬영 — Unity Client Developer</title>
-  <meta name="description" content="Unity 클라이언트 개발자 김찬영 포트폴리오. 회사 출시작과 개인 실험·툴을 소개합니다.">
+  <title>김찬영 — Unity 게임 클라이언트 개발자 포트폴리오</title>
+  <meta name="description" content="Unity 게임 클라이언트 개발자 김찬영의 포트폴리오입니다. 2020년부터 Unity 클라이언트를 개발해 왔고, 2023년부터 모바일 idle·타이쿤·RPG 출시작의 개발과 운영에 참여했습니다. 게임 시스템, 광고·분석 SDK와 데이터 파이프라인, URP/Shader 비주얼, 제작 도구를 맡아 왔습니다.">
+  <link rel="canonical" href="https://cykim0115.github.io/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="김찬영 포트폴리오">
+  <meta property="og:title" content="김찬영 — Unity 게임 클라이언트 개발자 포트폴리오">
+  <meta property="og:description" content="2020년부터 Unity 클라이언트를 개발해 왔고, 2023년부터 모바일 idle·타이쿤·RPG 출시작의 개발과 운영에 참여했습니다. 대표 작업, 담당 범위, 성과 근거를 정리했습니다.">
+  <meta property="og:url" content="https://cykim0115.github.io/">
+  <meta property="og:image" content="https://cykim0115.github.io/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="김찬영 — Unity 게임 클라이언트 개발자 포트폴리오">
+  <meta property="og:locale" content="ko_KR">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="김찬영 — Unity 게임 클라이언트 개발자 포트폴리오">
+  <meta name="twitter:description" content="2020년부터 Unity 클라이언트를 개발해 왔고, 2023년부터 모바일 idle·타이쿤·RPG 출시작의 개발과 운영에 참여했습니다. 대표 작업, 담당 범위, 성과 근거를 정리했습니다.">
+  <meta name="twitter:image" content="https://cykim0115.github.io/assets/og-image.png">
+
+  <meta name="theme-color" content="#e8eeea" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121816" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "url": "https://cykim0115.github.io/",
+    "name": "김찬영 — Unity 게임 클라이언트 개발자 포트폴리오",
+    "inLanguage": "ko",
+    "mainEntity": {
+      "@type": "Person",
+      "name": "김찬영",
+      "jobTitle": "Unity Client Developer",
+      "url": "https://cykim0115.github.io/",
+      "image": "https://cykim0115.github.io/Resource/My/%EC%A6%9D%EC%82%AC.webp",
+      "sameAs": [
+        "https://github.com/cyKim0115",
+        "https://cykim0115.github.io/code_portfolio/"
+      ],
+      "worksFor": {
+        "@type": "Organization",
+        "name": "BlackStorm"
+      },
+      "knowsAbout": ["Unity", "C#", "URP", "Shader", "Firebase", "gRPC", "Spine", "UniTask", "Claude Code", "MCP"]
+    }
+  }
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="style.css">
   <script>
     (function () {
@@ -28,17 +79,18 @@
   </script>
 </head>
 <body>
-  <a class="skip-link" href="#work">본문으로 건너뛰기</a>
+  <a class="skip-link" href="#main">본문으로 건너뛰기</a>
 
   <nav class="site-nav" id="site-nav" aria-label="주요">
     <a class="nav-brand" href="#top">김찬영</a>
     <div class="nav-actions">
       <ul class="nav-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#work">Work</a></li>
+        <li><a href="#featured">Work</a></li>
         <li><a href="#code">Code</a></li>
+        <li><a href="#about">About</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
+      <a class="nav-resume" href="pdf/resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="이력서 PDF (새 탭)">이력서</a>
       <button type="button" class="theme-toggle" id="theme-toggle" aria-label="테마 전환" title="테마 전환">
         <span class="icon-moon" aria-hidden="true">☾</span>
         <span class="icon-sun" aria-hidden="true">☀</span>
@@ -46,138 +98,213 @@
     </div>
   </nav>
 
-  <header class="hero" id="top">
-    <div class="hero-bg" aria-hidden="true"></div>
-    <div class="hero-inner">
-      <h1 class="hero-brand">김찬영</h1>
-      <p class="hero-role">Unity Client Developer</p>
-      <p class="hero-lead">
-        플레이어가 체감하는 클라이언트 품질을 중심으로, 출시·운영 타이쿤/idle부터
-        개인 프로시저럴·툴링까지 만듭니다.
-        만드는 방식 자체도 설계합니다 — 에이전트 워크플로와 지식 파이프라인을 직접 짜서 씁니다.
-      </p>
-      <div class="hero-cta">
-        <a class="btn btn-primary" href="#work">작업 보기</a>
-        <a class="btn btn-ghost" href="https://cykim0115.github.io/code_portfolio/" target="_blank" rel="noopener noreferrer">Code Portfolio</a>
-      </div>
-    </div>
-  </header>
+  <main id="main">
+    <section class="hero" id="top" aria-labelledby="hero-name">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="hero-inner">
+        <div class="hero-intro">
+          <h1 class="hero-brand" id="hero-name">김찬영</h1>
+          <p class="hero-role">
+            Unity 게임 클라이언트 개발자
+            <span class="hero-role-en" lang="en">Unity Client Developer</span>
+          </p>
+          <p class="hero-lead">
+            2020년부터 Unity 클라이언트를 개발해 왔고, 2023년부터 모바일 idle·타이쿤·RPG 출시작의
+            개발과 운영에 참여했습니다. 게임 시스템, 광고·분석 SDK와 데이터 파이프라인,
+            URP/Shader 비주얼, 제작 도구까지 클라이언트 여러 영역을 맡아 왔습니다.
+          </p>
+          <p class="hero-sub">반복 작업과 검증은 에이전트 워크플로를 직접 설계해 줄입니다.</p>
+        </div>
 
-  <section class="section section-alt" id="about">
-    <div class="section-inner about-grid">
-      <div class="about-copy">
-        <p class="section-label">About</p>
-        <h2 class="section-title">클라이언트에 집중하는 개발자</h2>
-        <p>
-          Unity로 모바일·스팀 클라이언트를 만들어 왔습니다. 빠른 MVP와 장기 운영 사이
-          트레이드오프를 다루며, 데이터 파이프라인·SDK·비주얼·성능까지 한 판에서
-          맞추는 일을 좋아합니다.
-        </p>
-        <p>
-          현재 <strong>BlackStorm</strong>에서 근무 중이며,
-          그전에는 MAXIMIZER·Nine Digits·CookApps·Preflow에서 출시와 운영을 경험했습니다.
-        </p>
+        <div class="hero-proof">
+          <p class="hero-proof-label" id="hero-proof-label">참여작 팀 성과</p>
+          <ul class="hero-highlights" aria-labelledby="hero-proof-label">
+            <li>
+              <a href="#neko-omakase" data-project-link="neko-omakase" aria-controls="detail-panel">
+                <span class="hl-name">고양이 오마카세</span>
+                <span class="hl-text"><span class="nw">미국 Google Play 게임 1위 (2024.07)</span> · <span class="nw">Unity Awards Best 2D Visual</span></span>
+                <span class="hl-arrow" aria-hidden="true">→</span>
+              </a>
+            </li>
+            <li>
+              <a href="#tailed-demon" data-project-link="tailed-demon" aria-controls="detail-panel">
+                <span class="hl-name">테일드 데몬 슬레이어: 라이즈</span>
+                <span class="hl-text"><span class="nw">구글 플레이 인기 1위 (2023.07)</span></span>
+                <span class="hl-arrow" aria-hidden="true">→</span>
+              </a>
+            </li>
+            <li>
+              <a href="#rumble-squad" data-project-link="rumble-squad" aria-controls="detail-panel">
+                <span class="hl-name">우당탕탕 탐험대</span>
+                <span class="hl-text"><span class="nw">1개월 MVP 미국 소프트런칭</span> · <span class="nw">D1 약 60%</span></span>
+                <span class="hl-arrow" aria-hidden="true">→</span>
+              </a>
+            </li>
+          </ul>
+          <p class="hero-note">순위·수상·리텐션은 팀 성과입니다. 순위·수상 보도 링크와 담당 범위는 상세에 있습니다.</p>
+        </div>
 
-        <ul class="career-list" aria-label="경력">
-          <li>
-            <span class="co">BlackStorm</span>
-            <span class="period">2026.06 ~</span>
-            <span class="role">사원</span>
-          </li>
-          <li>
-            <span class="co">MAXIMIZER</span>
-            <span class="period">2026.02 – 05</span>
-            <span class="role">대리 · MVP</span>
-          </li>
-          <li>
-            <span class="co">Nine Digits</span>
-            <span class="period">2024.02 – 2026.01</span>
-            <span class="role">과장</span>
-          </li>
-          <li>
-            <span class="co">CookApps</span>
-            <span class="period">2023.02 – 11</span>
-            <span class="role">사원</span>
-          </li>
-          <li>
-            <span class="co">Preflow</span>
-            <span class="period">2020.09 – 2023.01</span>
-            <span class="role">사원</span>
-          </li>
+        <ul class="hero-facts" aria-label="경력 요약">
+          <li>Unity 클라이언트 6년+</li>
+          <li>출시작 5종 개발 참여</li>
+          <li>Android · iOS · Steam</li>
         </ul>
 
-        <div class="stack-wrap">
-          <h3>스택</h3>
-          <div class="stack-tags">
-            <span>Unity</span><span>C#</span><span>Android</span><span>iOS</span><span>Steam</span>
-            <span>Firebase</span><span>gRPC</span><span>Spine</span><span>Shader</span>
-            <span>AppLovin</span><span>UniTask</span><span>Git</span>
-            <span>Claude Code</span><span>MCP</span><span>RAG</span>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#featured">대표 작업 보기</a>
+          <a class="btn btn-ghost" href="pdf/resume.pdf" target="_blank" rel="noopener noreferrer">이력서 PDF</a>
+          <a class="btn btn-ghost" href="pdf/career.pdf" target="_blank" rel="noopener noreferrer">경력기술서</a>
+          <a class="btn btn-ghost" href="mailto:cksdud3488@naver.com">이메일</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section featured-section screen-only" id="featured" aria-labelledby="featured-title">
+      <div class="section-inner">
+        <p class="section-label">Featured</p>
+        <h2 class="section-title" id="featured-title">대표 작업</h2>
+        <p class="section-desc">
+          담당 범위와 결과를 함께 정리한 대표 사례 세 가지입니다.
+          카드를 누르면 아래 전체 작업에서 상세가 열립니다.
+        </p>
+        <div class="featured-grid" id="featured-grid"></div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="work" aria-labelledby="work-title">
+      <div class="section-inner">
+        <p class="section-label">Work</p>
+        <h2 class="section-title" id="work-title">전체 작업</h2>
+        <p class="section-desc screen-only">
+          회사 출시작, 개인 툴, AI 워크플로를 나눠 볼 수 있습니다.
+          카드를 누르면 내 역할·성과·근거 링크가 열립니다.
+        </p>
+
+        <div class="work-toolbar">
+          <div class="filter-group" role="group" aria-label="작업 구분">
+            <button type="button" class="filter-btn" data-filter="company" aria-pressed="true">Company</button>
+            <button type="button" class="filter-btn" data-filter="personal" aria-pressed="false">Personal</button>
+            <button type="button" class="filter-btn" data-filter="ai" aria-pressed="false">AI Workflow</button>
+          </div>
+          <p class="work-hint" id="work-hint">회사에서 맡은 출시·개발 프로젝트입니다. 순위·수상·리텐션은 팀 성과로 따로 표기합니다.</p>
+        </div>
+
+        <!-- 상세 패널은 그리드 안에 두고, 열 때 누른 카드가 있는 줄 바로 뒤로 옮긴다 (script.js placePanel) -->
+        <div class="project-grid" id="project-grid">
+          <div class="detail-panel" id="detail-panel" role="region" aria-labelledby="detail-title" hidden></div>
+        </div>
+        <div class="pdf-doc" id="pdf-doc" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <section class="code-band" id="code" aria-labelledby="code-title">
+      <div class="section-inner">
+        <p class="section-label">Code</p>
+        <h2 class="section-title" id="code-title">토픽별 코드 포트폴리오</h2>
+        <p>
+          전체를 덤프하지 않고, <strong>한 기술·토픽당 관련 원문만</strong> 모아 보여 줍니다.
+          AI 워크플로는 <strong>실제 에이전트 룰 원문</strong>을 같은 방식으로 열어 둡니다.
+          아래 토픽을 누르면 해당 위치로 바로 이동합니다.
+        </p>
+        <ul class="topic-list" id="code-topics" aria-label="코드 토픽"></ul>
+        <a class="btn btn-primary" href="https://cykim0115.github.io/code_portfolio/" target="_blank" rel="noopener noreferrer">
+          Code Portfolio 열기
+        </a>
+      </div>
+    </section>
+
+    <section class="section" id="about" aria-labelledby="about-title">
+      <div class="section-inner about-grid">
+        <div class="about-copy">
+          <p class="section-label">About</p>
+          <h2 class="section-title" id="about-title">클라이언트에 집중하는 개발자</h2>
+          <p>
+            1개월 MVP 소프트런칭부터 출시 후 유지보수·업데이트, 기존 코드베이스의 전면 재구성까지
+            단계가 다른 프로젝트를 거쳤습니다. 기능을 붙이는 것만큼, 다음 사람이 고치기 쉬운 구조와
+            반복 작업을 줄이는 도구를 중요하게 봅니다.
+          </p>
+          <p>
+            현재 <strong>BlackStorm</strong>에서 근무 중입니다. 그전에는 MAXIMIZER에서 신규 팀의 MVP를,
+            Nine&nbsp;Digits·CookApps에서 출시작 개발과 운영을, Preflow에서 미출시 첫 상업 프로젝트를 경험했습니다.
+          </p>
+
+          <ul class="career-list" aria-label="경력">
+            <li>
+              <span class="co">BlackStorm</span>
+              <span class="period">2026.06 ~ 재직 중</span>
+              <span class="role">사원</span>
+            </li>
+            <li>
+              <span class="co">MAXIMIZER</span>
+              <span class="period">2026.02 ~ 2026.05</span>
+              <span class="role">대리 · MVP</span>
+            </li>
+            <li>
+              <span class="co">Nine Digits</span>
+              <span class="period">2024.02 ~ 2026.01</span>
+              <span class="role">과장</span>
+            </li>
+            <li>
+              <span class="co">CookApps</span>
+              <span class="period">2023.02 ~ 2023.11</span>
+              <span class="role">사원</span>
+            </li>
+            <li>
+              <span class="co">Preflow</span>
+              <span class="period">2020.09 ~ 2023.01</span>
+              <span class="role">사원</span>
+            </li>
+          </ul>
+
+          <div class="stack-wrap">
+            <h3>스택</h3>
+            <div class="stack-tags">
+              <span>Unity</span><span>C#</span><span>Android</span><span>iOS</span><span>Steam</span>
+              <span>Firebase</span><span>gRPC</span><span>Spine</span><span>Shader</span>
+              <span>AppLovin</span><span>UniTask</span><span>Git</span>
+              <span>Claude Code</span><span>MCP</span><span>RAG</span>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="about-photo">
-        <img src="Resource/My/증사.jpg" alt="김찬영 프로필 사진" width="480" height="640">
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="work">
-    <div class="section-inner">
-      <p class="section-label">Work</p>
-      <h2 class="section-title">회사 작업 · 개인 작업 · AI 워크플로</h2>
-      <p class="section-desc">
-        카테고리를 나눠 볼 수 있습니다. 카드를 누르면 요약·스택·스토어 링크가 열립니다.
-        스크린샷이 비어 있는 항목은 나중에 보강합니다.
-      </p>
-
-      <div class="work-toolbar">
-        <div class="filter-group" role="group" aria-label="작업 구분">
-          <button type="button" class="filter-btn" data-filter="company" aria-pressed="true">Company</button>
-          <button type="button" class="filter-btn" data-filter="personal" aria-pressed="false">Personal</button>
-          <button type="button" class="filter-btn" data-filter="ai" aria-pressed="false">AI Workflow</button>
+        <div class="about-photo">
+          <img src="Resource/My/증사.webp" alt="김찬영 프로필 사진" width="480" height="640" loading="lazy" decoding="async">
         </div>
-        <p class="work-hint" id="work-hint">회사에서 참여·리드한 출시/진행 프로젝트입니다.</p>
       </div>
+    </section>
 
-      <div class="project-grid" id="project-grid"></div>
-      <div class="detail-panel" id="detail-panel" aria-live="polite"></div>
-      <div class="pdf-doc" id="pdf-doc" aria-hidden="true"></div>
-    </div>
-  </section>
-
-  <section class="code-band" id="code">
-    <div class="section-inner">
-      <p class="section-label">Code</p>
-      <h2 class="section-title">토픽별 코드 포트폴리오</h2>
-      <p>
-        전체를 덤프하지 않고, <strong>한 기술·토픽당 관련 원문만</strong> 모아 보여 줍니다.
-        튜토리얼 시스템, 섬 노이즈·메시 결합·콜라이더 최적화, 아키텍처 패턴과
-        개인 툴(GSSL) 링크백을 포함합니다.
-        AI 워크플로는 <strong>실제 에이전트 룰 원문</strong>을 같은 방식으로 열어 둡니다.
-      </p>
-      <ul class="topic-list" id="code-topics"></ul>
-      <a class="btn btn-primary" href="https://cykim0115.github.io/code_portfolio/" target="_blank" rel="noopener noreferrer">
-        Code Portfolio 열기
-      </a>
-    </div>
-  </section>
-
-  <section class="section section-alt" id="contact">
-    <div class="section-inner">
-      <p class="section-label">Contact</p>
-      <h2 class="section-title">연락</h2>
-      <p class="section-desc">이메일·전화·GitHub로 편하게 연락 주세요. 이력서·경력기술서는 별도 문서로 관리합니다.</p>
-      <div class="contact-row">
-        <a class="btn btn-primary" href="mailto:cksdud3488@naver.com">Email</a>
-        <a class="btn btn-ghost" href="tel:010-2780-3588">Phone</a>
-        <a class="btn btn-ghost" href="https://github.com/cyKim0115" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <section class="section section-alt" id="contact" aria-labelledby="contact-title">
+      <div class="section-inner">
+        <p class="section-label">Contact</p>
+        <h2 class="section-title" id="contact-title">연락</h2>
+        <p class="section-desc">
+          이메일·전화·GitHub로 편하게 연락 주세요.
+          이력서와 경력기술서는 아래 PDF로 바로 볼 수 있습니다.
+        </p>
+        <div class="contact-row">
+          <a class="btn btn-primary" href="mailto:cksdud3488@naver.com">cksdud3488@naver.com</a>
+          <a class="btn btn-ghost" href="tel:010-2780-3588" data-print="010-2780-3588">Phone</a>
+          <a class="btn btn-ghost" href="https://github.com/cyKim0115" target="_blank" rel="noopener noreferrer" data-print="github.com/cyKim0115">GitHub</a>
+        </div>
+        <div class="contact-row contact-docs">
+          <a class="btn btn-ghost" href="pdf/resume.pdf" target="_blank" rel="noopener noreferrer" data-print="cykim0115.github.io/pdf/resume.pdf">이력서 PDF</a>
+          <a class="btn btn-ghost" href="pdf/career.pdf" target="_blank" rel="noopener noreferrer" data-print="cykim0115.github.io/pdf/career.pdf">경력기술서 PDF</a>
+          <a class="btn btn-ghost" href="https://cykim0115.github.io/code_portfolio/" target="_blank" rel="noopener noreferrer" data-print="cykim0115.github.io/code_portfolio">Code Portfolio</a>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
   <footer class="site-footer">
-    <p>© 김찬영 · Unity Client Developer</p>
+    <div class="footer-inner">
+      <p>© 김찬영 · Unity 게임 클라이언트 개발자 · <span class="nw">최종 업데이트 <span id="profile-updated">2026.11</span></span></p>
+      <ul class="footer-links" aria-label="문서·링크">
+        <li><a href="pdf/resume.pdf" target="_blank" rel="noopener noreferrer">이력서 PDF</a></li>
+        <li><a href="pdf/career.pdf" target="_blank" rel="noopener noreferrer">경력기술서 PDF</a></li>
+        <li><a href="https://github.com/cyKim0115" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+        <li><a href="https://cykim0115.github.io/code_portfolio/" target="_blank" rel="noopener noreferrer">Code Portfolio</a></li>
+        <li><a href="mailto:cksdud3488@naver.com">이메일</a></li>
+      </ul>
+    </div>
   </footer>
 
   <!-- 데이터 먼저, 그 다음 UI 로직 (script.js 가 window.PORTFOLIO 를 읽는다) -->

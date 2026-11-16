@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>페이지를 찾을 수 없습니다 — 김찬영 포트폴리오</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#e8eeea" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121816" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("theme");
+        if (saved === "light" || saved === "dark") {
+          document.documentElement.setAttribute("data-theme", saved);
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <style>
+    :root {
+      --ink: #15201c;
+      --ink-soft: #3d4a44;
+      --muted: #5a6962;
+      --bg: #e8eeea;
+      --surface: #f5f8f6;
+      --line: rgba(21, 32, 28, 0.14);
+      --accent: #0b6e63;
+      --focus: #0b6e63;
+      --glow-1: rgba(18, 148, 135, 0.26);
+      --glow-2: rgba(196, 92, 38, 0.16);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --ink: #e8eeea;
+        --ink-soft: #b7c4bc;
+        --muted: #8a9a91;
+        --bg: #121816;
+        --surface: #171e1b;
+        --line: rgba(232, 238, 234, 0.16);
+        --accent: #3dbeb0;
+        --focus: #5ad1c3;
+        --glow-1: rgba(61, 190, 176, 0.2);
+        --glow-2: rgba(224, 137, 85, 0.12);
+      }
+    }
+
+    :root[data-theme="dark"] {
+      --ink: #e8eeea;
+      --ink-soft: #b7c4bc;
+      --muted: #8a9a91;
+      --bg: #121816;
+      --surface: #171e1b;
+      --line: rgba(232, 238, 234, 0.16);
+      --accent: #3dbeb0;
+      --focus: #5ad1c3;
+      --glow-1: rgba(61, 190, 176, 0.2);
+      --glow-2: rgba(224, 137, 85, 0.12);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      padding: 2rem 1rem;
+      font-family: "Source Sans 3", "Pretendard", "Apple SD Gothic Neo", sans-serif;
+      line-height: 1.6;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse 70% 55% at 15% 15%, var(--glow-1), transparent 60%),
+        radial-gradient(ellipse 60% 45% at 90% 10%, var(--glow-2), transparent 55%),
+        var(--bg);
+      word-break: keep-all;
+    }
+
+    main {
+      width: 100%;
+      max-width: 34rem;
+    }
+
+    .code {
+      margin: 0 0 1rem;
+      font-family: "Syne", sans-serif;
+      font-weight: 800;
+      font-size: clamp(4rem, 18vw, 7rem);
+      line-height: 0.9;
+      letter-spacing: -0.05em;
+      color: var(--accent);
+    }
+
+    h1 {
+      margin: 0 0 0.6rem;
+      font-family: "Syne", "Pretendard", sans-serif;
+      font-size: clamp(1.4rem, 5vw, 1.9rem);
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+    }
+
+    p {
+      margin: 0 0 1.5rem;
+      color: var(--ink-soft);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.65rem 1.1rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      border: 1.5px solid var(--ink);
+      border-radius: 2px;
+      color: var(--ink);
+      background: transparent;
+    }
+
+    .btn-primary {
+      background: var(--ink);
+      color: var(--bg);
+    }
+
+    .btn:hover {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    .note {
+      margin: 1.5rem 0 0;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="code" aria-hidden="true">404</p>
+    <h1>페이지를 찾을 수 없습니다</h1>
+    <p>주소가 바뀌었거나 없는 페이지입니다. 포트폴리오 첫 화면에서 다시 찾아 주세요.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="/">포트폴리오 홈</a>
+      <a class="btn" href="https://cykim0115.github.io/code_portfolio/">Code Portfolio</a>
+    </div>
+    <p class="note">김찬영 · Unity 게임 클라이언트 개발자</p>
+  </main>
+</body>
+</html>
