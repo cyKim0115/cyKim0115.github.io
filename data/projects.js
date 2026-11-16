@@ -1,25 +1,38 @@
 /**
  * 포트폴리오 데이터 — 화면 로직(script.js)과 분리된 파일.
  *
- * 항목을 추가·수정할 때는 이 파일만 고치면 된다. 렌더링·필터·PDF 는
+ * 항목을 추가·수정할 때는 이 파일만 고치면 된다. 렌더링·필터·대표 작업·PDF 는
  * 아래 CATEGORIES 를 그대로 따라가므로 script.js 를 건드릴 필요가 없다.
  *
  * 프로젝트 한 항목의 형태:
  *   {
- *     id,                       // 필수 · 해시 링크(#id)로 쓰인다. 카테고리 안에서 유일
+ *     id,                       // 필수 · 해시 링크(#id)로 쓰인다. 전체에서 유일 · 바꾸지 않는다
  *     company,                  // 카드 배지 문구 (회사명 또는 유형 라벨)
- *     title, status, period,
+ *     title, status,
+ *     period,                   // "YYYY.MM ~ YYYY.MM" (진행 중이면 "YYYY.MM ~"). 경력기술서 기준, 모르면 ""
+ *     headline,                 // 역량 중심 사례 제목 한 문장 (게임명은 title, 이건 무엇을 했는지)
+ *     role,                     // "내 역할" 한 문장 — 경력기술서 "주요 담당 업무"에서만
+ *     platforms: [],            // 선택 · "Android" / "iOS" / "Steam" / "Windows" … 모르면 생략
  *     blurb,                    // 카드에 보이는 한 줄
  *     summary,                  // 상세 패널 문단
- *     bullets: [],              // 상세 패널 목록
+ *     bullets: [],              // 상세 패널 "주요 작업" (본인 작업만)
+ *     results: [{text, scope}], // 선택 · 성과. scope 는 "team"(순위·수상·리텐션 등) | "personal"
+ *     proof: [{label, href}],   // 선택 · 순위·수상 근거 링크. 순위·수상 result 에는 반드시 단다
  *     tech: [],                 // 스택 태그
- *     image: null,              // 배너 (없으면 placeholder)
+ *     image: null,              // 배너 .webp (없으면 placeholder)
  *     stores: [{label, href}],  // 스토어 링크
- *     shots: [],                // 상세 스크린샷 (최대 4장 표시)
- *     repo, docs, codeLink,     // 선택 링크 버튼
+ *     shots: [],                // 상세 스크린샷 .webp (최대 4장 표시)
+ *     repo, docs, codeLink,     // 선택 링크 버튼 (비공개 저장소에는 repo 를 달지 않는다)
  *     minor: [{name, img}],     // 선택 · 묶음 프로젝트 아이콘 목록
+ *     featured: 1 | 2 | 3,      // 선택 · 첫 화면 "대표 작업" 고정 순서. 전체에서 세 개만
  *     hidden: true,             // 선택 · 데이터는 남기고 화면·PDF 에서만 뺀다
  *   }
+ *
+ * 이미지는 Resource/ 원본(.png/.jpg) 옆의 같은 이름 .webp 를 가리킨다.
+ * 새 이미지를 넣으면 `npm run images` 로 .webp 를 만든 뒤 경로를 적는다.
+ *
+ * 순위·수상·리텐션은 팀 성과다. 공개 근거로 확인된 표기만 쓰고(차트·부문·시점까지),
+ * results 에 scope: "team" 으로 두고 proof 에 출처를 단다. 확인 안 된 표기는 쓰지 않는다.
  *
  * 카테고리를 새로 만들려면 배열 하나와 CATEGORIES 항목 하나를 추가하고,
  * index.html 의 filter-group 에 같은 key 로 버튼을 넣는다.
@@ -39,14 +52,18 @@ const COMPANY_PROJECTS = [
     title: "프로젝트 T",
     status: "진행중",
     period: "2026.06 ~",
+    headline: "프로시저럴 섬 생성과 메시 결합·콜라이더 최적화를 포함한 Idle/Tycoon 클라이언트",
+    role: "아일랜드·생산·성장 루프 클라이언트, 섬 노이즈 생성·메시 결합·콜라이더 최적화, 월드 스페이스 UI·캐릭터/건물 배치 구현 담당",
     blurb: "Unity idle/tycoon — 아일랜드·생산·성장 루프 클라이언트.",
     summary:
       "BlackStorm에서 진행 중인 Unity idle/tycoon 클라이언트입니다. 섬·생산 건물·캐릭터 배치와 월드 UI를 중심으로 구현하고 있으며, 섬 노이즈 생성·메시 결합·콜라이더 최적화 등 런타임 퍼포먼스 작업도 포함합니다.",
     bullets: [
       "아일랜드 기반 생산·성장 루프 클라이언트",
       "월드 스페이스 UI · 캐릭터/건물 배치",
-      "프로시저럴 섬·메시/콜라이더 최적화 진행",
+      "섬 노이즈 생성 · 메시 결합 · 콜라이더 최적화",
     ],
+    results: [],
+    proof: [],
     tech: ["Unity 6", "C#", "UniTask"],
     image: null,
     stores: [],
@@ -56,16 +73,21 @@ const COMPANY_PROJECTS = [
     id: "maximizer-mvp",
     company: "MAXIMIZER",
     title: "MAXIMIZER MVP",
-    status: "2026.02–05",
+    status: "MVP",
     period: "2026.02 ~ 2026.05",
+    headline: "신규 팀의 개발 환경·아키텍처와 MVP 빌드·배포 파이프라인 구축",
+    role: "신규 개발팀의 초기 개발 환경·아키텍처 설계, 빌드·배포 파이프라인 구축, 프로토타입·클라이언트 구현, 기술 가이드라인 수립 담당",
     blurb: "신규팀 개발 환경·아키텍처·MVP 파이프라인 구축.",
     summary:
       "MAXIMIZER 합류 후 신규 개발팀의 초기 개발 환경과 아키텍처를 설계하고, MVP 방식에 맞춘 빌드/배포 파이프라인과 핵심 기능 중심 프로토타이핑을 담당했습니다.",
     bullets: [
       "초기 개발 환경 및 아키텍처 설계",
-      "MVP 빌드·배포 파이프라인 구축",
+      "MVP 방식 개발 프로세스 · 빌드/배포 파이프라인 구축",
       "핵심 기능 중심 빠른 프로토타입·클라이언트 구현",
+      "팀 기술 가이드라인 수립 · 기술 이슈 대응",
     ],
+    results: [{ text: "MVP 기간 완료", scope: "team" }],
+    proof: [],
     tech: [
       "URP",
       "Shader",
@@ -77,23 +99,40 @@ const COMPANY_PROJECTS = [
       "ZString",
       "PrimeTween",
     ],
-    image: "Resource/MAXIMIZER_MVP/banner.png",
+    image: "Resource/MAXIMIZER_MVP/banner.webp",
     stores: [],
     shots: [],
   },
   {
     id: "neko-omakase",
+    featured: 1,
     company: "Nine Digits",
     title: "고양이 오마카세",
     status: "출시",
-    period: "",
-    blurb: "Idle tycoon · App Store US #1 · Unity Awards Visual.",
+    period: "2024.02 ~ 2024.11",
+    headline: "URP·Shader 비주얼 개선과 Node.js 인게임 서버 유지보수·운영툴 서버 개발을 맡은 상용 출시작",
+    role: "URP 적용·Shader 개발, 광고·분석 SDK 연동, AWS Node.js 인게임 서버 유지보수·기능 개발과 운영툴 서버 개발·유지보수, 딥링크 구현 담당",
+    platforms: ["Android", "iOS"],
+    blurb: "Idle tycoon · 미국 Google Play 게임 1위 (2024.07) · Unity Awards Best 2D Visual.",
     summary:
-      "구글 플레이·앱스토어에 출시한 idle tycoon입니다. 미국 앱스토어 1위, 2025 Unity Awards Visual을 기록했으며 URP/Shader 비주얼, 광고·분석 SDK, 서버/운영 도구 유지보수를 담당했습니다.",
+      "구글 플레이·앱스토어에 출시한 idle tycoon입니다. 팀 성과로 미국 Google Play 게임 카테고리 1위(2024.07)를 기록했고, 제16회 Unity Awards Best 2D Visual 수상작입니다. URP/Shader 비주얼, 광고·분석 SDK, AWS에 배포된 Node.js 인게임 서버와 운영툴 서버 유지보수를 담당했습니다.",
     bullets: [
-      "App Store 미국 1위 · 2025 Unity Awards Visual",
-      "URP/Shader 기반 비주얼 품질",
-      "광고·분석 SDK 및 Node.js 운영 도구",
+      "URP 적용 · Shader 개발로 비주얼 품질 개선",
+      "Google Mobile Mediation 광고 · Sentry/Firebase/AppsFlyer 분석 SDK 통합",
+      "AWS Node.js 인게임 서버 유지보수·기능 개발 · 운영툴 서버 개발·유지보수",
+      "딥링크 시스템 구현 · Docker/Nginx, MongoDB/Redis 관리",
+    ],
+    results: [
+      { text: "미국 Google Play 게임 카테고리 1위 (2024.07)", scope: "team" },
+      { text: "제16회 Unity Awards Best 2D Visual 수상작", scope: "team" },
+      { text: "Google Play · App Store 출시", scope: "team" },
+    ],
+    proof: [
+      {
+        label: "Google Play 미국 1위 보도 (마이데일리, 2024.07)",
+        href: "https://mydaily.co.kr/page/view/2024072308054084793",
+      },
+      { label: "Unity Awards 수상 언급 (게임동아, 2025.08)", href: "https://game.donga.com/118732/" },
     ],
     tech: [
       "URP",
@@ -101,11 +140,16 @@ const COMPANY_PROJECTS = [
       "Google Mobile Mediation",
       "Firebase",
       "AppsFlyer",
+      "Sentry",
       "UniTask",
       "PrimeTween",
       "Node.js",
+      "AWS",
+      "Docker",
+      "MongoDB",
+      "Redis",
     ],
-    image: "Resource/Neko Omakase/banner.jpg",
+    image: "Resource/Neko Omakase/banner.webp",
     stores: [
       {
         label: "Google Play",
@@ -117,33 +161,44 @@ const COMPANY_PROJECTS = [
       },
     ],
     shots: [
-      "Resource/Neko Omakase/store_picture_1.jpg",
-      "Resource/Neko Omakase/store_picture_2.jpg",
+      "Resource/Neko Omakase/store_picture_1.webp",
+      "Resource/Neko Omakase/store_picture_2.webp",
     ],
   },
   {
     id: "neko-restaurant",
+    featured: 2,
     company: "Nine Digits",
     title: "네코 식당",
     status: "출시",
-    period: "",
-    blurb: "Tycoon/sim · 인수 코드베이스 전면 재설계.",
+    period: "2024.11 ~ 2025.04",
+    headline: "기존 코드베이스를 유지보수·확장 가능한 구조로 전면 재구성",
+    role: "기존 소스 코드 구조 전면 재구성·아키텍처 개선, 로직 재구현·성능 최적화, SDK 통합, Shader 효과 구현 담당",
+    platforms: ["Android", "iOS"],
+    blurb: "Tycoon/sim · 기존 코드베이스 전면 재구성.",
     summary:
-      "타이쿤/시뮬레이션 출시작입니다. 인수받은 코드베이스를 유지보수·확장·성능 관점에서 전면 재설계·리팩터링을 주도했습니다.",
+      "구글 플레이·앱스토어에 출시한 타이쿤/시뮬레이션입니다. 기존 코드베이스를 유지보수·확장·성능 관점에서 전면 재구성하고, 요구사항에 맞게 로직을 재구현·리팩터링했습니다.",
     bullets: [
-      "출시 타이쿤/시뮬레이션 클라이언트",
-      "레거시 코드 전면 재아키텍처",
-      "광고·분석·계정 SDK 통합",
+      "기존 코드 구조 전면 재구성 · 아키텍처 개선",
+      "요구사항에 맞춘 로직 재구현 · 리팩터링 · 성능 최적화",
+      "AppLovin Max · PlayNANOO · Firebase 등 SDK 통합",
+      "Shader 기반 비주얼 효과",
     ],
+    results: [
+      { text: "기존 코드 구조 재구성 완료 — 유지보수성·성능 개선", scope: "personal" },
+      { text: "Google Play · App Store 출시", scope: "team" },
+    ],
+    proof: [],
     tech: [
       "AppLovin Max",
       "PlayNANOO",
       "Firebase",
       "AppsFlyer",
       "ByteBrew",
+      "Tapjoy",
       "Shader",
     ],
-    image: "Resource/Neko Restaurant/banner.png",
+    image: "Resource/Neko Restaurant/banner.webp",
     stores: [
       {
         label: "Google Play",
@@ -155,25 +210,37 @@ const COMPANY_PROJECTS = [
       },
     ],
     shots: [
-      "Resource/Neko Restaurant/store_picture_1.png",
-      "Resource/Neko Restaurant/store_picture_2.png",
+      "Resource/Neko Restaurant/store_picture_1.webp",
+      "Resource/Neko Restaurant/store_picture_2.webp",
     ],
   },
   {
     id: "hero-craft-town",
+    featured: 3,
     company: "Nine Digits",
     title: "용사마을 타이쿤",
     status: "출시",
-    period: "",
+    period: "2025.05 ~ 2026.01",
+    headline: "Google Sheets·Cloud API 테이블 파이프라인과 AI 에디터 툴로 게임 데이터 제작 자동화",
+    role: "Google Spreadsheet·Cloud API 기반 데이터 테이블 관리 시스템과 AI 에디터 툴 개발, 분석·광고 SDK 연동 담당",
+    platforms: ["Android"],
     blurb: "Sheets/Cloud 테이블 파이프라인 · AI 에디터 툴.",
     summary:
-      "구글 플레이 타이쿤 시뮬레이션입니다. 스프레드시트·클라우드 API 기반 테이블 파이프라인과 에디터 AI 툴링으로 제작 효율을 높였습니다.",
+      "구글 플레이에 출시한 타이쿤 시뮬레이션입니다. Google Spreadsheet API·Google Cloud API 연동으로 게임 데이터 테이블 관리 시스템을 만들고, AI 기반 에디터 툴로 게임 데이터 생성·수정 과정을 자동화했습니다.",
     bullets: [
-      "Google Spreadsheet / Cloud 테이블 파이프라인",
-      "에디터 AI 툴로 콘텐츠 제작 효율화",
-      "광고·분석 SDK 연동",
+      "Google Spreadsheet · Cloud API 기반 데이터 테이블 관리 시스템",
+      "AI 기반 에디터 툴로 데이터 생성·수정 자동화",
+      "Firebase · AppsFlyer · ByteBrew 분석, AppLovin MAX 광고 수익화",
+      "UniTask · PrimeTween 비동기 로직·연출 구조",
     ],
+    results: [
+      { text: "데이터 관리·에디터 자동화 체계 구축", scope: "personal" },
+      { text: "Google Play 출시", scope: "team" },
+    ],
+    proof: [],
     tech: [
+      "Google Sheets API",
+      "Google Cloud API",
       "Firebase",
       "AppsFlyer",
       "ByteBrew",
@@ -181,7 +248,7 @@ const COMPANY_PROJECTS = [
       "UniTask",
       "PrimeTween",
     ],
-    image: "Resource/Hero Craft Town/banner.png",
+    image: "Resource/Hero Craft Town/banner.webp",
     stores: [
       {
         label: "Google Play",
@@ -189,8 +256,8 @@ const COMPANY_PROJECTS = [
       },
     ],
     shots: [
-      "Resource/Hero Craft Town/store_picture_1.png",
-      "Resource/Hero Craft Town/store_picture_2.png",
+      "Resource/Hero Craft Town/store_picture_1.webp",
+      "Resource/Hero Craft Town/store_picture_2.webp",
     ],
   },
   {
@@ -198,14 +265,28 @@ const COMPANY_PROJECTS = [
     company: "CookApps",
     title: "테일드 데몬 슬레이어 : 라이즈",
     status: "출시",
-    period: "",
-    blurb: "Idle RPG · 양대 스토어 1위 · gRPC / Spine.",
+    period: "2023.02 ~ 2023.10",
+    headline: "gRPC 서버 통신 구현과 Spine·보안·광고 SDK 유지보수",
+    role: "gRPC 서버 통신 구현, Spine·LIAPP·AppLovin 등 외부 SDK 유지보수, UniTask 비동기 로직 개발 담당",
+    platforms: ["Android", "iOS"],
+    blurb: "Idle RPG · 구글 플레이 인기 1위 (2023.07) · gRPC / Spine.",
     summary:
-      "시퀄 idle RPG로 구글 플레이·앱스토어 출시 후 양대 스토어 1위를 기록했습니다. gRPC, Spine, 보안·광고 SDK, UniTask 비동기를 담당했습니다.",
+      "테일드 데몬 슬레이어 후속작으로 구글 플레이·앱스토어에 출시한 idle RPG입니다. 팀 성과로 구글 플레이 인기 순위 1위(2023.07)를 기록했습니다. gRPC 서버 통신, Spine, 보안·광고 SDK, UniTask 비동기를 담당했습니다.",
     bullets: [
-      "양대 스토어 1위",
-      "gRPC · Spine · LIAPP · AppLovin",
-      "UniTask 기반 비동기 클라이언트",
+      "gRPC 프로토콜 기반 서버 통신 시스템 구현",
+      "Spine 2D 애니메이션 · LIAPP 보안 · AppLovin 광고 유지보수",
+      "UniTask 비동기 로직 · DOTween 애니메이션",
+      "Adjust · OneSignal · HelpShift · Facebook SDK 유지보수",
+    ],
+    results: [
+      { text: "구글 플레이 인기 순위 1위 (2023.07)", scope: "team" },
+      { text: "Google Play · App Store 출시", scope: "team" },
+    ],
+    proof: [
+      {
+        label: "구글 플레이 인기 1위 보도 (전자신문, 2023.07)",
+        href: "https://www.etnews.com/20230704000185",
+      },
     ],
     tech: [
       "gRPC",
@@ -214,9 +295,10 @@ const COMPANY_PROJECTS = [
       "AppLovin",
       "UniTask",
       "DOTween",
+      "Adjust",
       "OneSignal",
     ],
-    image: "Resource/Tailed Demon Slayer Rise/banner.png",
+    image: "Resource/Tailed Demon Slayer Rise/banner.webp",
     stores: [
       {
         label: "Google Play",
@@ -228,8 +310,8 @@ const COMPANY_PROJECTS = [
       },
     ],
     shots: [
-      "Resource/Tailed Demon Slayer Rise/store_picture_1.jpg",
-      "Resource/Tailed Demon Slayer Rise/store_picture_2.jpg",
+      "Resource/Tailed Demon Slayer Rise/store_picture_1.webp",
+      "Resource/Tailed Demon Slayer Rise/store_picture_2.webp",
     ],
   },
   {
@@ -237,17 +319,26 @@ const COMPANY_PROJECTS = [
     company: "CookApps",
     title: "우당탕탕 탐험대",
     status: "출시",
-    period: "",
-    blurb: "미국 소프트런칭 MVP · 1개월 런칭 · D1 60%.",
+    period: "2023.10 ~ 2023.11",
+    headline: "MVP의 시스템 데이터 처리·상태 관리 로직과 UI 구현",
+    role: "게임 시스템 데이터 처리·시스템 간 연동·상태 관리 로직과 게임플레이·시스템 UI 개발 담당",
+    platforms: ["Android", "iOS"],
+    blurb: "미국 소프트런칭 MVP · 약 1개월 런칭 · D1 약 60%.",
     summary:
-      "수집형 idle RPG MVP로 약 1개월 만에 미국 소프트런칭을 완료했고 D1 리텐션 약 60%를 기록했습니다. 성장·가챠 데이터와 UI를 담당했습니다.",
+      "방치형 RPG MVP입니다. 팀이 약 1개월 만에 미국 소프트런칭(Google Play·App Store)을 마쳤고 D1 리텐션 약 60%를 기록했습니다. 게임 시스템 데이터 처리·상태 관리와 UI를 담당했습니다.",
     bullets: [
-      "약 1개월 내 미국 소프트런칭",
-      "D1 리텐션 약 60%",
-      "성장·가챠 데이터 및 UI",
+      "게임 시스템 데이터 처리 로직 개발",
+      "시스템 간 데이터 연동 · 상태 관리",
+      "게임플레이 · 시스템 UI 개발",
+      "UniTask 비동기 처리",
     ],
-    tech: ["UniTask", "Unity"],
-    image: "Resource/Rumble Squad/banner.png",
+    results: [
+      { text: "약 1개월 내 미국 소프트런칭", scope: "team" },
+      { text: "D1 리텐션 약 60%", scope: "team" },
+    ],
+    proof: [],
+    tech: ["Unity", "UniTask"],
+    image: "Resource/Rumble Squad/banner.webp",
     stores: [
       {
         label: "Google Play",
@@ -259,8 +350,8 @@ const COMPANY_PROJECTS = [
       },
     ],
     shots: [
-      "Resource/Rumble Squad/store_picture_1.jpg",
-      "Resource/Rumble Squad/store_picture_2.jpg",
+      "Resource/Rumble Squad/store_picture_1.webp",
+      "Resource/Rumble Squad/store_picture_2.webp",
     ],
   },
   {
@@ -268,21 +359,29 @@ const COMPANY_PROJECTS = [
     company: "Preflow",
     title: "소울 디멘션",
     status: "미출시",
-    period: "",
+    period: "2020.09 ~ 2023.01",
+    headline: "SG Patcher·AWS CDN 패치와 Asset Bundle 기반 리소스 관리 시스템 구축",
+    role: "SG Patcher·AWS CDN 패치 시스템, Asset Bundle 개발·관리, Shader·UniRx 기반 클라이언트 핵심 기능 개발 담당",
+    platforms: ["Mobile"],
     blurb: "첫 상업 프로젝트 · CDN / AssetBundle / UniRx.",
     summary:
-      "첫 상업 게임 프로젝트(미출시)입니다. AWS CDN, Asset Bundle, UniRx, Shader 작업을 하며 UX와 협업의 중요성을 체득한 시작점이 되었습니다.",
+      "첫 상업 게임 프로젝트(모바일, 미출시)입니다. SG Patcher와 AWS CDN을 연동한 패치 시스템, Asset Bundle 관리, Shader·UniRx 기반 클라이언트 핵심 기능을 개발했습니다.",
     bullets: [
-      "AWS CDN · Asset Bundle 파이프라인",
-      "UniRx · Shader",
-      "클라이언트 UX·협업 관점의 출발점",
+      "SG Patcher 패치 시스템 · AWS CDN 연동",
+      "Asset Bundle 시스템 개발·관리",
+      "Shader 비주얼 효과 · UniRx 반응형 패턴",
+      "게임 클라이언트 핵심 기능 개발",
     ],
-    tech: ["AWS CDN", "Asset Bundle", "UniRx", "Shader"],
-    image: "Resource/Soul Dimension/Power_saving_1.png",
+    results: [
+      { text: "Asset Bundle·CDN 기반 리소스 관리 시스템 구축", scope: "personal" },
+    ],
+    proof: [],
+    tech: ["SG Patcher", "AWS CDN", "Asset Bundle", "UniRx", "Shader"],
+    image: "Resource/Soul Dimension/Power_saving_1.webp",
     stores: [],
     shots: [
-      "Resource/Soul Dimension/Power_saving_1.png",
-      "Resource/Soul Dimension/Power_saving_2.png",
+      "Resource/Soul Dimension/Power_saving_1.webp",
+      "Resource/Soul Dimension/Power_saving_2.webp",
     ],
   },
   {
@@ -290,34 +389,41 @@ const COMPANY_PROJECTS = [
     company: "Nine Digits",
     title: "기타 참여 프로젝트",
     status: "참여",
-    period: "",
+    period: "2024.07 ~ 2024.09",
+    headline: "참여 타이틀의 SDK·플러그인 통합과 업데이트, 스토어 정책 대응, 콘텐츠 업데이트 지원",
+    role: "SDK·플러그인 통합과 버전 업데이트, 스토어 정책 대응, 콘텐츠 업데이트 담당",
+    platforms: ["Mobile", "Steam"],
     blurb: "SDK·스토어 정책·콘텐츠 업데이트 지원.",
     summary:
       "고요의 정원, 천년의 소녀(스팀/모바일), 로스트 파라다이스, 미라클 초이스 등에서 SDK·플러그인, 스토어 정책, 콘텐츠 업데이트를 지원했습니다.",
     bullets: [
-      "고요의 정원 — SDK/플러그인·일부 시스템",
-      "천년의 소녀 Steam — 콘텐츠 업데이트",
-      "모바일·기타 타이틀 — SDK·스토어 정책",
+      "고요의 정원 (2024.07 ~ 2024.08) — SDK·플러그인 통합, 일부 게임 시스템",
+      "미라클 초이스 · 로스트 파라다이스 · 천년의 소녀 Steam/Mobile (2024.08 ~ 2024.09) — SDK 버전 업데이트",
+      "스토어 정책 대응 · 게임 콘텐츠 업데이트",
     ],
-    tech: ["Unity", "Firebase", "Store policy"],
-    image: "Resource/Koyo Town/banner.png",
+    results: [],
+    proof: [],
+    tech: ["Unity", "SDK·플러그인", "스토어 정책"],
+    image: "Resource/Koyo Town/banner.webp",
     stores: [],
     shots: [],
     minor: [
-      { name: "고요의 정원", img: "Resource/Koyo Town/icon.png" },
+      { name: "고요의 정원", img: "Resource/Koyo Town/icon.webp" },
       {
         name: "천년의 소녀 Steam",
-        img: "Resource/Memories Millennium Girl Steam/icon.png",
+        img: "Resource/Memories Millennium Girl Steam/icon.webp",
       },
       {
         name: "천년의 소녀 Mobile",
-        img: "Resource/Memories Millennium Girl Mobile/icon.png",
+        img: "Resource/Memories Millennium Girl Mobile/icon.webp",
       },
-      { name: "로스트 파라다이스", img: "Resource/Lost Paradise/icon.png" },
-      { name: "미라클 초이스", img: "Resource/Miracle Choice/icon.png" },
+      { name: "로스트 파라다이스", img: "Resource/Lost Paradise/icon.webp" },
+      { name: "미라클 초이스", img: "Resource/Miracle Choice/icon.webp" },
     ],
   },
 ];
+
+const PERSONAL_ROLE = "개인 프로젝트 — 설계·구현";
 
 const PERSONAL_PROJECTS = [
   {
@@ -327,6 +433,8 @@ const PERSONAL_PROJECTS = [
     title: "narak",
     status: "개인",
     period: "",
+    headline: "걸을 수 있는 경로를 고려한 수직 동굴 프로시저럴 생성 실험",
+    role: PERSONAL_ROLE,
     blurb: "수직 동굴 프로시저럴 생성.",
     summary:
       "수직·레이어드 동굴 탐험을 위한 프로시저럴 생성 실험입니다. 걸을 수 있는 경로, 아트리움, 청크 스트리밍 프로토타입을 다룹니다.",
@@ -336,11 +444,11 @@ const PERSONAL_PROJECTS = [
       "청크 스트리밍 프로토타입",
     ],
     tech: ["Unity 6", "C#", "Procedural"],
-    image: "Resource/Personal/narak/preview.png",
+    image: "Resource/Personal/narak/preview.webp",
     stores: [],
     shots: [
-      "Resource/Personal/narak/preview.png",
-      "Resource/Personal/narak/angle.png",
+      "Resource/Personal/narak/preview.webp",
+      "Resource/Personal/narak/angle.webp",
     ],
     repo: null,
   },
@@ -350,6 +458,9 @@ const PERSONAL_PROJECTS = [
     title: "GoogleSpreadSheetLoader",
     status: "툴",
     period: "",
+    headline: "비공개 Google Sheets를 Enum·TableData·로컬라이즈 JSON으로 자동 생성하는 에디터 파이프라인",
+    role: PERSONAL_ROLE,
+    platforms: ["Unity Editor"],
     blurb: "Private Sheets → Enum / TableData / 로컬라이즈.",
     summary:
       "비공개 Google Sheets를 Unity Enum, TableData ScriptableObject, 로컬라이즈 JSON으로 생성하는 에디터 파이프라인입니다.",
@@ -373,6 +484,8 @@ const PERSONAL_PROJECTS = [
     title: "MyUtil",
     status: "툴",
     period: "",
+    headline: "반복해서 쓰는 Unity 유틸·어트리뷰트·UI 헬퍼를 재사용 팩으로 정리",
+    role: PERSONAL_ROLE,
     blurb: "Unity 일상 유틸·어트리뷰트·UI 헬퍼.",
     summary:
       "ChildUtil, PlatformUtil, SerializableDictionary, LitMotion/UniTask UI 헬퍼 등 재사용 Unity 유틸리티 팩입니다.",
@@ -395,6 +508,9 @@ const PERSONAL_PROJECTS = [
     title: "cursor-usage-widget",
     status: "툴",
     period: "",
+    headline: "대시보드를 열지 않고 Cursor 사용량을 확인하는 상시 데스크톱 위젯",
+    role: PERSONAL_ROLE,
+    platforms: ["Windows"],
     blurb: "Cursor 사용량 플로팅 데스크톱 위젯.",
     summary:
       "Cursor Included usage(Cursor / Other 트랙)를 대시보드 없이 확인하는 Windows 플로팅 위젯입니다.",
@@ -411,6 +527,8 @@ const PERSONAL_PROJECTS = [
     title: "flex-work-widget",
     status: "툴",
     period: "",
+    headline: "브라우저 세션으로 Flex 오늘 근무시간을 바로 보여주는 위젯",
+    role: PERSONAL_ROLE,
     blurb: "Flex 오늘 누적 근무시간 위젯.",
     summary:
       "브라우저 세션을 활용해 Flex 오늘의 누적 근무·출퇴근 상태를 보여주는 가벼운 데스크톱 위젯입니다.",
@@ -425,6 +543,7 @@ const PERSONAL_PROJECTS = [
 /**
  * AI Workflow — 에이전트에게 일을 시키는 방식 자체를 설계한 작업.
  * 산출물이 코드가 아니라 프로토콜·룰·파이프라인인 항목을 모은다.
+ * 측정 수치가 없으면 "생산성 향상"을 results 에 쓰지 않는다.
  */
 const AI_PROJECTS = [
   {
@@ -433,6 +552,8 @@ const AI_PROJECTS = [
     title: "system-crew",
     status: "공개 팩",
     period: "",
+    headline: "추측 코딩을 막는 승인 게이트형 4역할 에이전트 프로토콜",
+    role: PERSONAL_ROLE,
     blurb: "참고 → 스펙 → 구현 → 검수, 4역할 에이전트 프로토콜.",
     summary:
       "참고 자료에서 비슷한 게임 시스템을 설계·구현·검증하기 위한 4역할 에이전트 프로토콜 팩입니다. Producer가 오케스트레이터로 접수·범위 확정·라우팅만 맡고, Systems Analyst·Implementer·Fidelity QA가 각 단계를 이어받습니다. 추측으로 바로 코딩하지 않도록 승인 게이트를 강제하고, 룰 자체를 버전 관리해 서브모듈로 여러 게임 프로젝트에 배포합니다.",
@@ -456,6 +577,8 @@ const AI_PROJECTS = [
     title: "Better Plan Mode",
     status: "공개",
     period: "",
+    headline: "에이전트 계획을 웹 보드에서 검토·수정하고 골라서 실행시키는 도구",
+    role: PERSONAL_ROLE,
     blurb: "계획을 웹 보드에서 검토·수정하고 부분 착수시키는 Claude 루프.",
     summary:
       "에이전트의 계획 수립을 채팅 밖 웹 보드로 꺼낸 도구입니다. Agent SDK가 코드베이스를 읽기 전용으로 탐색해 실행 계획을 세우면, 계획표에 코멘트를 달아 수정시키고 원하는 태스크만 골라 실행시킵니다. MCP로 필요할 때만 보드를 띄우고, 원격 워커 모드로 다른 PC의 Claude가 이 PC에 작업을 제출합니다.",
@@ -477,6 +600,8 @@ const AI_PROJECTS = [
     title: "지식 RAG 파이프라인",
     status: "개인",
     period: "",
+    headline: "작업에서 나온 결론을 정제·색인해 다음 작업에서 다시 찾게 하는 개인 RAG",
+    role: PERSONAL_ROLE,
     blurb: "작업에서 얻은 지식을 정제·색인해 에디터에서 검색.",
     summary:
       "세션에서 나온 결론·리서치를 그때만 쓰고 버리지 않도록, 정제본으로 적재하고 검색까지 붙인 개인 RAG 파이프라인입니다. 색인을 쓰는 기기(Canon)와 검색만 하는 기기(Thin)를 분리하고, 에디터에서는 MCP 서버로 붙습니다. 에이전트가 작업 마무리에 캡처 여부를 판단해 정제본을 남기고 Discord로 보고합니다.",
@@ -498,6 +623,8 @@ const AI_PROJECTS = [
     title: "cursor-bootstrap",
     status: "개인",
     period: "",
+    headline: "AI 작업 환경(스킬·룰·MCP)을 새 장치에 그대로 재현하는 부트스트랩",
+    role: PERSONAL_ROLE,
     blurb: "AI 작업 환경(스킬·룰·MCP)을 새 장치에 그대로 재현.",
     summary:
       "장치를 옮길 때마다 AI 설정을 다시 맞추는 문제를 없앤 부트스트랩 저장소입니다. 스킬·룰·훅의 정본을 플러그인 번들 하나로 유지해 복제 트리가 갈라지지 않게 하고, 설치·진단 스크립트와 네트워크 없는 통합 테스트로 장치 간 차이를 검증합니다. 비밀값·인증 파일은 저장하지 않습니다.",
@@ -518,6 +645,9 @@ const AI_PROJECTS = [
     title: "NIM Chat",
     status: "개인",
     period: "",
+    headline: "정적 호스팅의 CORS 한계를 Worker 프록시로 풀고 tool-calling 루프를 직접 구현",
+    role: PERSONAL_ROLE,
+    platforms: ["Web"],
     blurb: "Cloudflare Worker 안에서 도는 tool-calling 에이전트 웹앱.",
     summary:
       "NVIDIA NIM 모델을 쓰는 모바일 우선 채팅 웹앱입니다. 브라우저 CORS 때문에 정적 호스팅만으로는 불가능한 구조를, Workers로 UI와 API 프록시를 함께 배포해 풀었습니다. 채팅 모드 외에 에이전트 모드를 두어 Worker 안에서 tool-calling 루프를 직접 돌리고, 규칙·스킬·웹검색·원격 MCP를 도구로 붙였습니다.",
@@ -538,6 +668,9 @@ const AI_PROJECTS = [
     title: "Nimu-TRPG",
     status: "개인",
     period: "",
+    headline: "세션이 끊겨도 맥락이 이어지도록 상태를 파일로 영속화한 LLM GM TRPG",
+    role: PERSONAL_ROLE,
+    platforms: ["Web"],
     blurb: "LLM을 GM으로 두고 턴 단위로 진행하는 TRPG 웹앱.",
     summary:
       "LLM GM(니무)이 진행하는 TRPG 웹 애플리케이션입니다. 월드·캐릭터 상태를 파일로 영속화해 세션이 끊겨도 맥락이 이어지도록 했고, GM 프로바이더를 교체할 수 있게 추상화했습니다.",
@@ -553,14 +686,15 @@ const AI_PROJECTS = [
   },
 ];
 
+/** Code 섹션 토픽 — id 는 https://cykim0115.github.io/code_portfolio/#<id> 앵커 (그쪽 topics.json 에 실재해야 한다). */
 const CODE_TOPICS = [
-  "튜토리얼 시스템",
-  "섬 노이즈 생성",
-  "메시 결합",
-  "콜라이더 최적화",
-  "Managers / Event bus",
-  "AI 에이전트 프로토콜 (룰 원문)",
-  "개인 툴 (GSSL)",
+  { label: "튜토리얼 시스템", id: "tutorial" },
+  { label: "섬 노이즈 생성", id: "island-noise" },
+  { label: "메시 결합 · 콜라이더 최적화", id: "mesh-collider" },
+  { label: "Managers · Event · Pool", id: "architecture" },
+  { label: "AI 에이전트 프로토콜 · 룰 원문", id: "agent-protocol" },
+  { label: "개인 툴 GSSL", id: "tools-gssl" },
+  { label: "MyUtil", id: "tools-myutil" },
 ];
 
 /** 카테고리 정의 — 필터·PDF·해시 라우팅이 모두 이 맵을 따른다. */
@@ -568,17 +702,17 @@ const CATEGORIES = {
   company: {
     label: "Company",
     list: COMPANY_PROJECTS,
-    hint: "회사에서 참여·리드한 출시/진행 프로젝트입니다.",
+    hint: "회사에서 맡은 출시·개발 프로젝트입니다. 순위·수상·리텐션은 팀 성과로 따로 표기합니다.",
   },
   personal: {
     label: "Personal",
     list: PERSONAL_PROJECTS,
-    hint: "개인 실험·툴입니다. 스크린샷은 추후 보강합니다.",
+    hint: "업무 밖에서 직접 만든 Unity 에디터 툴과 데스크톱 유틸리티입니다.",
   },
   ai: {
     label: "AI Workflow",
     list: AI_PROJECTS,
-    hint: "에이전트에게 일을 시키는 방식 자체를 설계한 작업입니다. 산출물이 코드가 아니라 프로토콜·룰·파이프라인입니다.",
+    hint: "Unity 클라이언트가 주력이고, 반복 작업·검증·지식 탐색을 줄이려고 에이전트 워크플로를 직접 설계해 씁니다. 산출물은 코드보다 프로토콜·룰·파이프라인입니다.",
   },
 };
 
@@ -587,10 +721,19 @@ for (const cat of Object.values(CATEGORIES)) {
   cat.list = cat.list.filter((p) => !p.hidden);
 }
 
+// 대표 작업 — featured 번호 순으로 id 를 모은다 (hidden 은 위에서 이미 빠졌다)
+const FEATURED = Object.values(CATEGORIES)
+  .flatMap((cat) => cat.list)
+  .filter((p) => p.featured)
+  .sort((a, b) => a.featured - b.featured)
+  .map((p) => p.id);
+
 /** script.js 가 읽는 유일한 진입점. */
 window.PORTFOLIO = {
   categories: CATEGORIES,
+  featured: FEATURED,
   codeTopics: CODE_TOPICS,
+  profile: { updated: "2026.11" },
 };
 
 })();
