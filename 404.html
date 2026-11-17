@@ -5,62 +5,64 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>페이지를 찾을 수 없습니다 — 김찬영 포트폴리오</title>
   <meta name="robots" content="noindex">
-  <meta name="theme-color" content="#e8eeea" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#121816" media="(prefers-color-scheme: dark)">
+  <!-- 아무 경로에서나 서빙되므로 로컬 경로는 루트 기준(/…)으로 적는다 -->
+  <meta name="theme-color" content="#f0f3f0" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#262e2c" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <script>
+    // 사이트와 같은 "theme" 저장값을 따른다. 없으면 prefers-color-scheme.
     (function () {
       try {
-        var saved = localStorage.getItem("theme");
-        if (saved === "light" || saved === "dark") {
-          document.documentElement.setAttribute("data-theme", saved);
+        var t = localStorage.getItem("theme");
+        if (t === "light" || t === "dark") {
+          document.documentElement.setAttribute("data-theme", t);
+          // 직접 고른 테마면 브라우저 UI 색도 그 테마로 고정한다 (index 의 script.js setupTheme 과 같은 값)
+          document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) {
+            m.setAttribute("content", t === "dark" ? "#262e2c" : "#f0f3f0");
+          });
         }
       } catch (e) {}
     })();
   </script>
   <style>
+    /* 색은 style.css 의 세이지 차콜 토큰과 같은 값 (라이트 · 다크 미디어 쿼리 · [data-theme="dark"]) */
     :root {
-      --ink: #15201c;
-      --ink-soft: #3d4a44;
-      --muted: #5a6962;
-      --bg: #e8eeea;
-      --surface: #f5f8f6;
-      --line: rgba(21, 32, 28, 0.14);
-      --accent: #0b6e63;
-      --focus: #0b6e63;
-      --glow-1: rgba(18, 148, 135, 0.26);
-      --glow-2: rgba(196, 92, 38, 0.16);
+      color-scheme: light;
+      --bg: #fcfdfc;
+      --surface: #f0f3f0;
+      --fg: #2c3333;
+      --muted: #515b56;
+      --line: #dae1da;
+      --accent: #567e65;
+      --accent-text: #3f6150;
+      --on-accent: #ffffff;
     }
-
     @media (prefers-color-scheme: dark) {
       :root:not([data-theme="light"]) {
-        --ink: #e8eeea;
-        --ink-soft: #b7c4bc;
-        --muted: #8a9a91;
-        --bg: #121816;
-        --surface: #171e1b;
-        --line: rgba(232, 238, 234, 0.16);
-        --accent: #3dbeb0;
-        --focus: #5ad1c3;
-        --glow-1: rgba(61, 190, 176, 0.2);
-        --glow-2: rgba(224, 137, 85, 0.12);
+        color-scheme: dark;
+        --bg: #1b2221;
+        --surface: #262e2c;
+        --fg: #e4eae4;
+        --muted: #949a96;
+        --line: #474e4c;
+        --accent: #96bea1;
+        --accent-text: #96bea1;
+        --on-accent: #1b2221;
       }
     }
-
     :root[data-theme="dark"] {
-      --ink: #e8eeea;
-      --ink-soft: #b7c4bc;
-      --muted: #8a9a91;
-      --bg: #121816;
-      --surface: #171e1b;
-      --line: rgba(232, 238, 234, 0.16);
-      --accent: #3dbeb0;
-      --focus: #5ad1c3;
-      --glow-1: rgba(61, 190, 176, 0.2);
-      --glow-2: rgba(224, 137, 85, 0.12);
+      color-scheme: dark;
+      --bg: #1b2221;
+      --surface: #262e2c;
+      --fg: #e4eae4;
+      --muted: #949a96;
+      --line: #474e4c;
+      --accent: #96bea1;
+      --accent-text: #96bea1;
+      --on-accent: #1b2221;
     }
 
     *, *::before, *::after { box-sizing: border-box; }
@@ -69,99 +71,100 @@
       margin: 0;
       min-height: 100vh;
       min-height: 100dvh;
-      display: grid;
-      place-items: center;
-      padding: 2rem 1rem;
-      font-family: "Source Sans 3", "Pretendard", "Apple SD Gothic Neo", sans-serif;
-      line-height: 1.6;
-      color: var(--ink);
-      background:
-        radial-gradient(ellipse 70% 55% at 15% 15%, var(--glow-1), transparent 60%),
-        radial-gradient(ellipse 60% 45% at 90% 10%, var(--glow-2), transparent 55%),
-        var(--bg);
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: "Pretendard Variable", "Pretendard", "Malgun Gothic", "Apple SD Gothic Neo", system-ui, -apple-system, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
       word-break: keep-all;
+      overflow-wrap: break-word;
+      -webkit-font-smoothing: antialiased;
     }
 
     main {
+      flex: 1;
       width: 100%;
-      max-width: 34rem;
+      max-width: 640px;
+      margin: 0 auto;
+      padding: clamp(48px, 14vh, 140px) clamp(16px, 5vw, 40px) 64px;
     }
 
     .code {
-      margin: 0 0 1rem;
-      font-family: "Syne", sans-serif;
-      font-weight: 800;
-      font-size: clamp(4rem, 18vw, 7rem);
-      line-height: 0.9;
-      letter-spacing: -0.05em;
-      color: var(--accent);
+      margin: 0 0 6px;
+      font-family: "D2Coding", "Cascadia Code", "Cascadia Mono", Consolas, "SF Mono", Menlo, monospace, "Malgun Gothic";
+      font-size: 13px;
+      color: var(--muted);
     }
 
     h1 {
-      margin: 0 0 0.6rem;
-      font-family: "Syne", "Pretendard", sans-serif;
-      font-size: clamp(1.4rem, 5vw, 1.9rem);
+      margin: 0 0 14px;
+      padding-bottom: 0.3em;
+      border-bottom: 1px solid var(--line);
+      font-size: clamp(26px, 6vw, 32px);
+      line-height: 1.3;
+      font-weight: 700;
       letter-spacing: -0.02em;
-      line-height: 1.25;
     }
 
-    p {
-      margin: 0 0 1.5rem;
-      color: var(--ink-soft);
-    }
+    p { margin: 0 0 20px; }
 
-    .actions {
+    .links {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.6rem;
+      align-items: center;
+      gap: 6px 12px;
+      font-size: 15px;
     }
 
-    .btn {
+    a {
+      color: var(--accent-text);
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+      text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+    }
+    a:hover { text-decoration-color: currentColor; }
+    /* :focus-visible 하나로 둔다 — a:focus-visible 이면 .btn-accent 의 6px 모서리를 2px 로 덮는다 */
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+
+    .btn-accent {
       display: inline-flex;
       align-items: center;
-      padding: 0.65rem 1.1rem;
-      font-weight: 600;
-      font-size: 0.95rem;
-      text-decoration: none;
-      border: 1.5px solid var(--ink);
-      border-radius: 2px;
-      color: var(--ink);
-      background: transparent;
-    }
-
-    .btn-primary {
-      background: var(--ink);
-      color: var(--bg);
-    }
-
-    .btn:hover {
-      border-color: var(--accent);
+      padding: 6px 14px;
+      border-radius: 6px;
       background: var(--accent);
-      color: var(--bg);
+      color: var(--on-accent);
+      font-weight: 600;
+      text-decoration: none;
     }
+    .btn-accent:hover { background: color-mix(in srgb, var(--accent) 88%, var(--fg)); }
 
-    .btn:focus-visible {
-      outline: 2px solid var(--focus);
-      outline-offset: 3px;
-    }
+    .nw { white-space: nowrap; }
 
-    .note {
-      margin: 1.5rem 0 0;
-      font-size: 0.85rem;
+    footer {
+      padding: 6px 20px;
+      border-top: 1px solid var(--line);
+      background: var(--surface);
+      font-size: 12px;
       color: var(--muted);
     }
+    footer p { margin: 0; }
   </style>
 </head>
 <body>
   <main>
-    <p class="code" aria-hidden="true">404</p>
+    <p class="code">404</p>
     <h1>페이지를 찾을 수 없습니다</h1>
     <p>주소가 바뀌었거나 없는 페이지입니다. 포트폴리오 첫 화면에서 다시 찾아 주세요.</p>
-    <div class="actions">
-      <a class="btn btn-primary" href="/">포트폴리오 홈</a>
-      <a class="btn" href="https://cykim0115.github.io/code_portfolio/">Code Portfolio</a>
-    </div>
-    <p class="note">김찬영 · Unity 게임 클라이언트 개발자</p>
+    <p class="links">
+      <a class="btn-accent" href="/">포트폴리오 홈</a>
+      <a href="https://cykim0115.github.io/code_portfolio/">Code Portfolio</a>
+    </p>
   </main>
+  <footer>
+    <p><span class="nw">김찬영 ·</span> Unity 게임 클라이언트 개발자</p>
+  </footer>
 </body>
 </html>

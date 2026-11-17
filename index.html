@@ -23,8 +23,9 @@
   <meta name="twitter:description" content="2020년부터 Unity 클라이언트를 개발해 왔고, 2023년부터 모바일 idle·타이쿤·RPG 출시작의 개발과 운영에 참여했습니다. 대표 작업, 담당 범위, 성과 근거를 정리했습니다.">
   <meta name="twitter:image" content="https://cykim0115.github.io/assets/og-image.png">
 
-  <meta name="theme-color" content="#e8eeea" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#121816" media="(prefers-color-scheme: dark)">
+  <!-- 브라우저 UI 색 = 좁은 화면 머리 띠·목차 열의 면(--surface). 테마를 직접 고르면 script.js 가 고정한다 -->
+  <meta name="theme-color" content="#f0f3f0" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#262e2c" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 
@@ -54,260 +55,236 @@
   }
   </script>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <link rel="stylesheet" href="style.css">
   <script>
+    // 첫 그림 전에 테마를 정해 깜박임을 막는다.
+    // 저장값("theme")이 있을 때만 data-theme 을 달고, 없으면 CSS 가 prefers-color-scheme 을 따른다.
+    // ?pdf=1 (scripts/generate-pdfs.mjs): 라이트로 고정하고 data-pdf="1" 을 단다.
     (function () {
+      var root = document.documentElement;
       try {
-        var params = new URLSearchParams(location.search);
-        if (params.get("pdf") === "1") {
-          document.documentElement.setAttribute("data-pdf", "1");
-          document.documentElement.setAttribute("data-theme", "light");
+        if (new URLSearchParams(location.search).get("pdf") === "1") {
+          root.setAttribute("data-pdf", "1");
+          root.setAttribute("data-theme", "light");
           return;
         }
-        var saved = localStorage.getItem("theme");
-        var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-        document.documentElement.setAttribute("data-theme", saved || (prefersDark ? "dark" : "light"));
-      } catch (e) {
-        document.documentElement.setAttribute("data-theme", "light");
-      }
+        var t = localStorage.getItem("theme");
+        if (t === "dark" || t === "light") root.setAttribute("data-theme", t);
+      } catch (e) {}
     })();
   </script>
 </head>
 <body>
   <a class="skip-link" href="#main">본문으로 건너뛰기</a>
 
-  <nav class="site-nav" id="site-nav" aria-label="주요">
-    <a class="nav-brand" href="#top">김찬영</a>
-    <div class="nav-actions">
-      <ul class="nav-links">
-        <li><a href="#featured">Work</a></li>
-        <li><a href="#code">Code</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-      <a class="nav-resume" href="pdf/resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="이력서 PDF (새 탭)">이력서</a>
-      <button type="button" class="theme-toggle" id="theme-toggle" aria-label="테마 전환" title="테마 전환">
-        <span class="icon-moon" aria-hidden="true">☾</span>
-        <span class="icon-sun" aria-hidden="true">☀</span>
-      </button>
-    </div>
-  </nav>
-
-  <main id="main">
-    <section class="hero" id="top" aria-labelledby="hero-name">
-      <div class="hero-bg" aria-hidden="true"></div>
-      <div class="hero-inner">
-        <div class="hero-intro">
-          <h1 class="hero-brand" id="hero-name">김찬영</h1>
-          <p class="hero-role">
-            Unity 게임 클라이언트 개발자
-            <span class="hero-role-en" lang="en">Unity Client Developer</span>
-          </p>
-          <p class="hero-lead">
-            2020년부터 Unity 클라이언트를 개발해 왔고, 2023년부터 모바일 idle·타이쿤·RPG 출시작의
-            개발과 운영에 참여했습니다. 게임 시스템, 광고·분석 SDK와 데이터 파이프라인,
-            URP/Shader 비주얼, 제작 도구까지 클라이언트 여러 영역을 맡아 왔습니다.
-          </p>
-          <p class="hero-sub">반복 작업과 검증은 에이전트 워크플로를 직접 설계해 줄입니다.</p>
+  <div class="shell">
+    <!-- 넓은 화면: 왼쪽 목차 열 / 좁은 화면: 위에 붙는 머리 띠 + 펼치는 목차 -->
+    <aside class="side" id="side">
+      <div class="side-head">
+        <a class="side-name" href="#top">김찬영</a>
+        <div class="side-tools">
+          <a class="icon-btn side-resume" href="pdf/resume.pdf" target="_blank" rel="noopener noreferrer">이력서<span class="sr-only"> PDF (새 탭)</span></a>
+          <button type="button" class="icon-btn toc-btn" id="toc-btn" aria-expanded="false" aria-controls="side-body">
+            <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+            <span class="toc-btn-label">목차</span>
+          </button>
+          <button type="button" class="icon-btn theme-btn" id="theme-btn" aria-label="테마 전환">
+            <svg class="i i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+            <svg class="i i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+          </button>
         </div>
+      </div>
 
-        <div class="hero-proof">
-          <p class="hero-proof-label" id="hero-proof-label">참여작 팀 성과</p>
-          <ul class="hero-highlights" aria-labelledby="hero-proof-label">
+      <div class="side-body" id="side-body">
+        <nav class="toc" aria-label="목차">
+          <p class="side-caption">목차</p>
+          <ol>
+            <li><a href="#top" data-section="top">소개</a></li>
             <li>
-              <a href="#neko-omakase" data-project-link="neko-omakase" aria-controls="detail-panel">
-                <span class="hl-name">고양이 오마카세</span>
-                <span class="hl-text"><span class="nw">미국 Google Play 게임 1위 (2024.07)</span> · <span class="nw">Unity Awards Best 2D Visual</span></span>
-                <span class="hl-arrow" aria-hidden="true">→</span>
-              </a>
+              <a href="#featured" data-section="featured">대표 작업</a>
+              <ol id="toc-featured"></ol>
             </li>
             <li>
-              <a href="#tailed-demon" data-project-link="tailed-demon" aria-controls="detail-panel">
-                <span class="hl-name">테일드 데몬 슬레이어: 라이즈</span>
-                <span class="hl-text"><span class="nw">구글 플레이 인기 1위 (2023.07)</span></span>
-                <span class="hl-arrow" aria-hidden="true">→</span>
-              </a>
+              <a href="#work" data-section="work">전체 작업</a>
+              <ol id="toc-work"></ol>
             </li>
-            <li>
-              <a href="#rumble-squad" data-project-link="rumble-squad" aria-controls="detail-panel">
-                <span class="hl-name">우당탕탕 탐험대</span>
-                <span class="hl-text"><span class="nw">약 1개월 MVP 미국 소프트런칭</span> · <span class="nw">D1 약 60%</span></span>
-                <span class="hl-arrow" aria-hidden="true">→</span>
-              </a>
-            </li>
+            <li><a href="#code" data-section="code">코드</a></li>
+            <li><a href="#about" data-section="about">경력</a></li>
+            <li><a href="#contact" data-section="contact">연락</a></li>
+          </ol>
+        </nav>
+
+        <div class="side-docs">
+          <p class="side-caption">문서</p>
+          <ul>
+            <li><a href="pdf/resume.pdf" target="_blank" rel="noopener noreferrer">이력서 PDF<span class="sr-only"> (새 탭)</span></a></li>
+            <li><a href="pdf/career.pdf" target="_blank" rel="noopener noreferrer">경력기술서 PDF<span class="sr-only"> (새 탭)</span></a></li>
           </ul>
-          <p class="hero-note">순위·수상·리텐션은 팀 성과입니다. 순위·수상 보도 링크와 담당 범위는 상세에 있습니다.</p>
         </div>
+      </div>
+    </aside>
 
-        <ul class="hero-facts" aria-label="경력 요약">
+    <!--
+      가운뎃점 줄바꿈: "광고·분석"처럼 붙여 쓴 말과 " ·" 앞 낱말은 <span class="nw"> 로 묶는다.
+      줄이 "·"로 시작하거나 붙여 쓴 말이 가운데서 갈리지 않게 한다 (script.js 가 그리는 글자는 textNodes 가 같은 일을 한다).
+    -->
+    <main class="doc" id="main">
+      <!-- 소개 -->
+      <section class="intro" id="top" aria-labelledby="intro-title">
+        <h1 id="intro-title">김찬영</h1>
+        <p class="role">Unity 게임 클라이언트 개발자 <span class="role-en" lang="en">Unity Client Developer</span></p>
+        <ul class="facts-line" aria-label="경력 요약">
+          <li>BlackStorm <span class="mono">2026.06 ~</span> 재직 중</li>
           <li>Unity 클라이언트 6년+</li>
           <li>출시작 5종 개발 참여</li>
           <li>Android · iOS · Steam</li>
         </ul>
 
-        <div class="hero-cta">
-          <a class="btn btn-primary" href="#featured">대표 작업 보기</a>
-          <a class="btn btn-ghost" href="pdf/resume.pdf" target="_blank" rel="noopener noreferrer">이력서 PDF</a>
-          <a class="btn btn-ghost" href="pdf/career.pdf" target="_blank" rel="noopener noreferrer">경력기술서</a>
-          <a class="btn btn-ghost" href="mailto:cksdud3488@naver.com">이메일</a>
-        </div>
-      </div>
-    </section>
+        <div class="intro-grid">
+          <div class="intro-copy">
+            <p class="lead">
+              2020년부터 Unity 클라이언트를 개발해 왔고, 2023년부터 모바일 <span class="nw">idle·타이쿤·RPG</span> 출시작의
+              개발과 운영에 참여했습니다. 게임 시스템, <span class="nw">광고·분석</span> SDK와 데이터 파이프라인,
+              URP/Shader 비주얼, 제작 도구까지 클라이언트 여러 영역을 맡아 왔습니다.
+            </p>
+            <p class="lead-sub">반복 작업과 검증은 에이전트 워크플로를 직접 설계해 줄입니다.</p>
 
-    <section class="section featured-section screen-only" id="featured" aria-labelledby="featured-title">
-      <div class="section-inner">
-        <p class="section-label">Featured</p>
-        <h2 class="section-title" id="featured-title">대표 작업</h2>
-        <p class="section-desc">
-          담당 범위와 결과를 함께 정리한 대표 사례 세 가지입니다.
-          카드를 누르면 아래 전체 작업에서 상세가 열립니다.
-        </p>
-        <div class="featured-grid" id="featured-grid"></div>
-      </div>
-    </section>
-
-    <section class="section section-alt" id="work" aria-labelledby="work-title">
-      <div class="section-inner">
-        <p class="section-label">Work</p>
-        <h2 class="section-title" id="work-title">전체 작업</h2>
-        <p class="section-desc screen-only">
-          회사 출시작, 개인 툴, AI 워크플로를 나눠 볼 수 있습니다.
-          카드를 누르면 내 역할·성과·근거 링크가 열립니다.
-        </p>
-
-        <div class="work-toolbar">
-          <div class="filter-group" role="group" aria-label="작업 구분">
-            <button type="button" class="filter-btn" data-filter="company" aria-pressed="true">Company</button>
-            <button type="button" class="filter-btn" data-filter="personal" aria-pressed="false">Personal</button>
-            <button type="button" class="filter-btn" data-filter="ai" aria-pressed="false">AI Workflow</button>
+            <p class="link-line">
+              <a class="btn-accent" href="pdf/resume.pdf" target="_blank" rel="noopener noreferrer">이력서 PDF<span class="sr-only"> (새 탭)</span></a>
+              <a href="pdf/career.pdf" target="_blank" rel="noopener noreferrer">경력기술서 PDF<span class="sr-only"> (새 탭)</span></a>
+              <span class="sep" aria-hidden="true">·</span>
+              <a href="mailto:cksdud3488@naver.com">이메일</a>
+              <span class="sep" aria-hidden="true">·</span>
+              <a href="https://github.com/cyKim0115" target="_blank" rel="noopener noreferrer">GitHub<span class="sr-only"> (새 탭)</span></a>
+            </p>
           </div>
-          <p class="work-hint" id="work-hint">회사에서 맡은 출시·개발 프로젝트입니다. 순위·수상·리텐션은 팀 성과로 따로 표기합니다.</p>
-        </div>
 
-        <!-- 상세 패널은 그리드 안에 두고, 열 때 누른 카드가 있는 줄 바로 뒤로 옮긴다 (script.js placePanel) -->
-        <div class="project-grid" id="project-grid">
-          <div class="detail-panel" id="detail-panel" role="region" aria-labelledby="detail-title" hidden></div>
+          <div class="team">
+            <p class="group-label" id="team-label"><span>참여작 팀 성과</span></p>
+            <ul class="team-list" aria-labelledby="team-label">
+              <li>
+                <a class="team-name" href="#neko-omakase" data-project-link="neko-omakase">고양이 오마카세</a>
+                <span class="team-desc"><span class="nw">미국 Google Play 게임 1위 (2024.07) ·</span> <span class="nw">Unity Awards Best 2D Visual</span></span>
+              </li>
+              <li>
+                <a class="team-name" href="#tailed-demon" data-project-link="tailed-demon">테일드 데몬 슬레이어 : 라이즈</a>
+                <span class="team-desc"><span class="nw">구글 플레이 인기 1위 (2023.07)</span></span>
+              </li>
+              <li>
+                <a class="team-name" href="#rumble-squad" data-project-link="rumble-squad">우당탕탕 탐험대</a>
+                <span class="team-desc"><span class="nw">약 1개월 MVP 미국 소프트런칭 ·</span> <span class="nw">D1 약 60%</span></span>
+              </li>
+            </ul>
+            <p class="footnote"><span class="nw">순위·수상·리텐션은</span> 팀 성과입니다. <span class="nw">순위·수상</span> 보도 링크와 담당 범위는 상세에 있습니다.</p>
+          </div>
         </div>
-        <div class="pdf-doc" id="pdf-doc" aria-hidden="true"></div>
-      </div>
-    </section>
+      </section>
 
-    <section class="code-band" id="code" aria-labelledby="code-title">
-      <div class="section-inner">
-        <p class="section-label">Code</p>
-        <h2 class="section-title" id="code-title">토픽별 코드 포트폴리오</h2>
+      <!-- 대표 작업 -->
+      <section class="block" id="featured" aria-labelledby="featured-title">
+        <h2 id="featured-title">대표 작업</h2>
+        <div class="featured-list" id="featured-list"></div>
+      </section>
+
+      <!-- 전체 작업 -->
+      <section class="block" id="work" aria-labelledby="work-title">
+        <h2 id="work-title">전체 작업</h2>
+        <div class="tabs" role="tablist" aria-label="작업 구분" id="work-tabs"></div>
+        <div id="work-panels"></div>
+        <!-- PDF(?pdf=1)·인쇄 전용: 모든 카테고리의 모든 작업을 펼친 목록 (script.js renderPdfDoc) -->
+        <div class="pdf-doc" id="pdf-doc"></div>
+        <noscript><p class="footnote">작업 목록은 JavaScript로 그립니다. 회사 프로젝트는 <a href="pdf/career.pdf">경력기술서 PDF</a>에서도 볼 수 있습니다.</p></noscript>
+      </section>
+
+      <!-- 코드 -->
+      <section class="block" id="code" aria-labelledby="code-title">
+        <h2 id="code-title">코드</h2>
         <p>
-          전체를 덤프하지 않고, <strong>한 기술·토픽당 관련 원문만</strong> 모아 보여 줍니다.
+          전체를 덤프하지 않고, <strong>한 <span class="nw">기술·토픽당</span> 관련 원문만</strong> 모아 보여 줍니다.
           AI 워크플로는 <strong>실제 에이전트 룰 원문</strong>을 같은 방식으로 열어 둡니다.
-          아래 토픽을 누르면 해당 위치로 바로 이동합니다.
         </p>
-        <ul class="topic-list" id="code-topics" aria-label="코드 토픽"></ul>
-        <a class="btn btn-primary" href="https://cykim0115.github.io/code_portfolio/" target="_blank" rel="noopener noreferrer">
-          Code Portfolio 열기
-        </a>
-      </div>
-    </section>
+        <ul class="topics" id="code-topics" aria-label="코드 토픽"></ul>
+        <p class="more-line"><a href="https://cykim0115.github.io/code_portfolio/" target="_blank" rel="noopener noreferrer">Code Portfolio 열기<span class="sr-only"> (새 탭)</span></a></p>
+      </section>
 
-    <section class="section" id="about" aria-labelledby="about-title">
-      <div class="section-inner about-grid">
-        <div class="about-copy">
-          <p class="section-label">About</p>
-          <h2 class="section-title" id="about-title">클라이언트에 집중하는 개발자</h2>
-          <p>
-            약 1개월 MVP 소프트런칭부터 출시 후 유지보수·업데이트, 기존 코드베이스의 전면 재구성까지
-            단계가 다른 프로젝트를 거쳤습니다. 기능을 붙이는 것만큼, 다음 사람이 고치기 쉬운 구조와
-            반복 작업을 줄이는 도구를 중요하게 봅니다.
-          </p>
-          <p>
-            현재 <strong>BlackStorm</strong>에서 근무 중입니다. 그전에는 MAXIMIZER에서 신규 팀의 MVP를,
-            Nine&nbsp;Digits·CookApps에서 출시작 개발과 운영을, Preflow에서 미출시 첫 상업 프로젝트를 경험했습니다.
-          </p>
-
-          <ul class="career-list" aria-label="경력">
-            <li>
-              <span class="co">BlackStorm</span>
-              <span class="period">2026.06 ~ 재직 중</span>
-              <span class="role">사원</span>
-            </li>
-            <li>
-              <span class="co">MAXIMIZER</span>
-              <span class="period">2026.02 ~ 2026.05</span>
-              <span class="role">대리 · MVP</span>
-            </li>
-            <li>
-              <span class="co">Nine Digits</span>
-              <span class="period">2024.02 ~ 2026.01</span>
-              <span class="role">과장</span>
-            </li>
-            <li>
-              <span class="co">CookApps</span>
-              <span class="period">2023.02 ~ 2023.11</span>
-              <span class="role">사원</span>
-            </li>
-            <li>
-              <span class="co">Preflow</span>
-              <span class="period">2020.09 ~ 2023.01</span>
-              <span class="role">사원</span>
-            </li>
-          </ul>
-
-          <div class="stack-wrap">
-            <h3>스택</h3>
-            <div class="stack-tags">
-              <span>Unity</span><span>C#</span><span>Android</span><span>iOS</span><span>Steam</span>
-              <span>Firebase</span><span>gRPC</span><span>Spine</span><span>Shader</span>
-              <span>AppLovin</span><span>UniTask</span><span>Git</span>
-              <span>Claude Code</span><span>MCP</span><span>RAG</span>
-            </div>
+      <!-- 경력 -->
+      <section class="block" id="about" aria-labelledby="about-title">
+        <h2 id="about-title">경력</h2>
+        <div class="about-grid">
+          <div class="about-copy">
+            <p>
+              약 1개월 MVP 소프트런칭부터 출시 후 <span class="nw">유지보수·업데이트,</span> 기존 코드베이스의 전면 재구성까지
+              단계가 다른 프로젝트를 거쳤습니다. 기능을 붙이는 것만큼, 다음 사람이 고치기 쉬운 구조와
+              반복 작업을 줄이는 도구를 중요하게 봅니다.
+            </p>
+            <p>
+              현재 <strong>BlackStorm</strong>에서 근무 중입니다. 그전에는 MAXIMIZER에서 신규 팀의 MVP를,
+              <span class="nw">Nine&nbsp;Digits·CookApps에서</span> 출시작 개발과 운영을, Preflow에서 미출시 첫 상업 프로젝트를 경험했습니다.
+            </p>
           </div>
+          <figure class="about-photo">
+            <img src="Resource/My/%EC%A6%9D%EC%82%AC.webp" alt="김찬영 프로필 사진" width="720" height="960" loading="lazy" decoding="async">
+          </figure>
         </div>
-        <div class="about-photo">
-          <img src="Resource/My/증사.webp" alt="김찬영 프로필 사진" width="480" height="640" loading="lazy" decoding="async">
-        </div>
-      </div>
-    </section>
 
-    <section class="section section-alt" id="contact" aria-labelledby="contact-title">
-      <div class="section-inner">
-        <p class="section-label">Contact</p>
-        <h2 class="section-title" id="contact-title">연락</h2>
-        <p class="section-desc">
-          이메일·전화·GitHub로 편하게 연락 주세요.
-          이력서와 경력기술서는 아래 PDF로 바로 볼 수 있습니다.
-        </p>
-        <div class="contact-row">
-          <a class="btn btn-primary" href="mailto:cksdud3488@naver.com">cksdud3488@naver.com</a>
-          <a class="btn btn-ghost" href="tel:010-2780-3588" data-print="010-2780-3588">Phone</a>
-          <a class="btn btn-ghost" href="https://github.com/cyKim0115" target="_blank" rel="noopener noreferrer" data-print="github.com/cyKim0115">GitHub</a>
-        </div>
-        <div class="contact-row contact-docs">
-          <a class="btn btn-ghost" href="pdf/resume.pdf" target="_blank" rel="noopener noreferrer" data-print="cykim0115.github.io/pdf/resume.pdf">이력서 PDF</a>
-          <a class="btn btn-ghost" href="pdf/career.pdf" target="_blank" rel="noopener noreferrer" data-print="cykim0115.github.io/pdf/career.pdf">경력기술서 PDF</a>
-          <a class="btn btn-ghost" href="https://cykim0115.github.io/code_portfolio/" target="_blank" rel="noopener noreferrer" data-print="cykim0115.github.io/code_portfolio">Code Portfolio</a>
-        </div>
-      </div>
-    </section>
-  </main>
+        <table class="career" id="career">
+          <caption class="sr-only">경력 — 회사, 기간, 직급</caption>
+          <thead>
+            <tr>
+              <th scope="col" class="col-co">회사</th>
+              <th scope="col">기간</th>
+              <th scope="col">직급</th>
+              <th scope="col" class="col-bar" aria-hidden="true"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-from="2026.06" data-to="">
+              <th scope="row">BlackStorm</th><td class="period"><span class="mono">2026.06 ~</span> 재직 중</td><td>사원</td><td class="col-bar" aria-hidden="true"></td>
+            </tr>
+            <tr data-from="2026.02" data-to="2026.05">
+              <th scope="row">MAXIMIZER</th><td class="period"><span class="mono">2026.02 ~ 2026.05</span></td><td>대리</td><td class="col-bar" aria-hidden="true"></td>
+            </tr>
+            <tr data-from="2024.02" data-to="2026.01">
+              <th scope="row">Nine Digits</th><td class="period"><span class="mono">2024.02 ~ 2026.01</span></td><td>과장</td><td class="col-bar" aria-hidden="true"></td>
+            </tr>
+            <tr data-from="2023.02" data-to="2023.11">
+              <th scope="row">CookApps</th><td class="period"><span class="mono">2023.02 ~ 2023.11</span></td><td>사원</td><td class="col-bar" aria-hidden="true"></td>
+            </tr>
+            <tr data-from="2020.09" data-to="2023.01">
+              <th scope="row">Preflow</th><td class="period"><span class="mono">2020.09 ~ 2023.01</span></td><td>사원</td><td class="col-bar" aria-hidden="true"></td>
+            </tr>
+          </tbody>
+        </table>
 
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <p>© 김찬영 · Unity 게임 클라이언트 개발자 · <span class="nw">최종 업데이트 <span id="profile-updated">2026.11</span></span></p>
-      <ul class="footer-links" aria-label="문서·링크">
-        <li><a href="pdf/resume.pdf" target="_blank" rel="noopener noreferrer">이력서 PDF</a></li>
-        <li><a href="pdf/career.pdf" target="_blank" rel="noopener noreferrer">경력기술서 PDF</a></li>
-        <li><a href="https://github.com/cyKim0115" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-        <li><a href="https://cykim0115.github.io/code_portfolio/" target="_blank" rel="noopener noreferrer">Code Portfolio</a></li>
-        <li><a href="mailto:cksdud3488@naver.com">이메일</a></li>
-      </ul>
-    </div>
-  </footer>
+        <dl class="kv kv-stack">
+          <div><dt>스택</dt><dd class="dot-list"><span class="nw">Unity ·</span> <span class="nw">C# ·</span> <span class="nw">Android ·</span> <span class="nw">iOS ·</span> <span class="nw">Steam ·</span> <span class="nw">Firebase ·</span> <span class="nw">gRPC ·</span> <span class="nw">Spine ·</span> <span class="nw">Shader ·</span> <span class="nw">AppLovin ·</span> <span class="nw">UniTask ·</span> <span class="nw">Git ·</span> <span class="nw">Claude Code ·</span> <span class="nw">MCP ·</span> <span class="nw">RAG</span></dd></div>
+        </dl>
+      </section>
 
-  <!-- 데이터 먼저, 그 다음 UI 로직 (script.js 가 window.PORTFOLIO 를 읽는다) -->
+      <!-- 연락 — .on-screen / .on-paper: 화면에서는 링크 문구, PDF·인쇄에서는 종이에서 읽을 수 있는 주소 -->
+      <section class="block" id="contact" aria-labelledby="contact-title">
+        <h2 id="contact-title">연락</h2>
+        <dl class="kv kv-contact">
+          <div><dt>이메일</dt><dd><a class="mono" href="mailto:cksdud3488@naver.com">cksdud3488@naver.com</a></dd></div>
+          <div><dt>전화</dt><dd><a href="tel:010-2780-3588"><span class="on-screen">바로 걸기</span><span class="on-paper mono">010-2780-3588</span></a></dd></div>
+          <div><dt>GitHub</dt><dd><a class="mono" href="https://github.com/cyKim0115" target="_blank" rel="noopener noreferrer">github.com/cyKim0115<span class="sr-only"> (새 탭)</span></a></dd></div>
+          <div><dt>문서</dt><dd class="doc-links">
+            <a href="pdf/resume.pdf" target="_blank" rel="noopener noreferrer">이력서 PDF<span class="on-paper"> — <span class="mono">cykim0115.github.io/pdf/resume.pdf</span></span><span class="sr-only"> (새 탭)</span></a><span class="sep" aria-hidden="true">·</span><a href="pdf/career.pdf" target="_blank" rel="noopener noreferrer">경력기술서 PDF<span class="on-paper"> — <span class="mono">cykim0115.github.io/pdf/career.pdf</span></span><span class="sr-only"> (새 탭)</span></a>
+          </dd></div>
+          <div><dt>코드</dt><dd><a class="mono" href="https://cykim0115.github.io/code_portfolio/" target="_blank" rel="noopener noreferrer">cykim0115.github.io/code_portfolio<span class="sr-only"> (새 탭)</span></a></dd></div>
+        </dl>
+      </section>
+    </main>
+
+    <footer class="status">
+      <p><span class="nw">© 김찬영 ·</span> 최종 업데이트 <span class="mono" id="profile-updated">2026.11</span></p>
+      <p class="status-top"><a href="#top">맨 위로</a></p>
+    </footer>
+  </div>
+
+  <!-- 데이터 먼저, 그 다음 화면 로직 (script.js 는 window.PORTFOLIO 만 읽는다) -->
   <script src="data/projects.js"></script>
   <script src="script.js"></script>
 </body>

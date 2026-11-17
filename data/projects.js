@@ -1,28 +1,31 @@
 /**
  * 포트폴리오 데이터 — 화면 로직(script.js)과 분리된 파일.
  *
- * 항목을 추가·수정할 때는 이 파일만 고치면 된다. 렌더링·필터·대표 작업·PDF 는
+ * 항목을 추가·수정할 때는 이 파일만 고치면 된다. 렌더링·탭·목차·대표 작업·PDF 는
  * 아래 CATEGORIES 를 그대로 따라가므로 script.js 를 건드릴 필요가 없다.
  *
  * 프로젝트 한 항목의 형태:
  *   {
  *     id,                       // 필수 · 해시 링크(#id)로 쓰인다. 전체에서 유일 · 바꾸지 않는다
- *     company,                  // 카드 배지 문구 (회사명 또는 유형 라벨)
+ *     company,                  // 회사명 또는 유형 라벨 (회사 탭은 이 값으로 묶는다)
  *     title, status,
  *     period,                   // "YYYY.MM ~ YYYY.MM" (진행 중이면 "YYYY.MM ~"). 경력기술서 기준, 모르면 ""
  *     headline,                 // 역량 중심 사례 제목 한 문장 (게임명은 title, 이건 무엇을 했는지)
  *     role,                     // "내 역할" 한 문장 — 경력기술서 "주요 담당 업무"에서만
  *     platforms: [],            // 선택 · "Android" / "iOS" / "Steam" / "Windows" … 모르면 생략
- *     blurb,                    // 카드에 보이는 한 줄
- *     summary,                  // 상세 패널 문단
- *     bullets: [],              // 상세 패널 "주요 작업" (본인 작업만)
+ *     blurb,                    // 접힌 행에 보이는 한 줄 (" · "로 구간을 나눈다)
+ *     blurbTeam: [],            // 선택 · blurb 구간 중 팀 성과(순위·수상·리텐션·팀 런칭 일정 등)인 것 — 끝 마침표 없이
+ *                               //   blurb 구간과 똑같이 적는다. 이 구간에만 "팀" 표시가 붙는다 (npm run check 가 대조)
+ *     summary,                  // 펼친 행 첫 문단
+ *     bullets: [],              // 펼친 행 "주요 작업" (본인 작업만)
  *     results: [{text, scope}], // 선택 · 성과. scope 는 "team"(순위·수상·리텐션 등) | "personal"
  *     proof: [{label, href}],   // 선택 · 순위·수상 근거 링크. 순위·수상 result 에는 반드시 단다
- *     tech: [],                 // 스택 태그
- *     image: null,              // 배너 .webp (없으면 placeholder)
+ *     tech: [],                 // 스택 (가운뎃점으로 이은 한 줄로 보인다)
+ *     image: null,              // 배너 .webp (없으면 그림 없이 글만)
+ *     icon,                     // 선택 · 행 머리의 타이틀 아이콘 .webp (없고 minor 아이콘이 넷 이상이면 2×2 로 묶어 쓴다)
  *     stores: [{label, href}],  // 스토어 링크
  *     shots: [],                // 상세 스크린샷 .webp (최대 4장 표시)
- *     repo, docs, codeLink,     // 선택 링크 버튼 (비공개 저장소에는 repo 를 달지 않는다)
+ *     repo, docs, codeLink,     // 선택 링크 (비공개 저장소에는 repo 를 달지 않는다)
  *     minor: [{name, img}],     // 선택 · 묶음 프로젝트 아이콘 목록
  *     featured: 1 | 2 | 3,      // 선택 · 첫 화면 "대표 작업" 고정 순서. 전체에서 세 개만
  *     hidden: true,             // 선택 · 데이터는 남기고 화면·PDF 에서만 뺀다
@@ -34,9 +37,9 @@
  * 순위·수상·리텐션은 팀 성과다. 공개 근거로 확인된 표기만 쓰고(차트·부문·시점까지),
  * results 에 scope: "team" 으로 두고 proof 에 출처를 단다. 확인 안 된 표기는 쓰지 않는다.
  *
- * 카테고리를 새로 만들려면 배열 하나와 CATEGORIES 항목 하나를 추가하고,
- * index.html 의 filter-group 에 같은 key 로 버튼을 넣는다.
- * 배지 색이 필요하면 style.css 에 `.badge-<key>` 를 더한다.
+ * 카테고리를 새로 만들려면 배열 하나와 CATEGORIES 항목 하나(label · hint · list)만 추가한다.
+ * 전체 작업의 탭(#work-<key>)과 목차 항목은 script.js 가 이 맵에서 그린다.
+ * key 는 소문자·숫자·하이픈만 쓴다 (요소 id 에 들어간다).
  *
  * 클래식 스크립트라 전역 스코프를 script.js 와 공유한다. 아래 상수들이 이름 충돌을
  * 일으키지 않도록 IIFE 로 감싸고, window.PORTFOLIO 하나만 밖으로 내보낸다.
@@ -114,6 +117,7 @@ const COMPANY_PROJECTS = [
     role: "URP 적용·Shader 개발, 광고·분석 SDK 연동, AWS Node.js 인게임 서버 유지보수·기능 개발과 운영툴 서버 개발·유지보수, 딥링크 구현 담당",
     platforms: ["Android", "iOS"],
     blurb: "Idle tycoon · 미국 Google Play 게임 1위 (2024.07) · Unity Awards Best 2D Visual.",
+    blurbTeam: ["미국 Google Play 게임 1위 (2024.07)", "Unity Awards Best 2D Visual"],
     summary:
       "구글 플레이·앱스토어에 출시한 idle tycoon입니다. 팀 성과로 미국 Google Play 게임 카테고리 1위(2024.07)를 기록했고, 제16회 Unity Awards Best 2D Visual 수상작입니다. URP/Shader 비주얼, 광고·분석 SDK, AWS에 배포된 Node.js 인게임 서버와 운영툴 서버 유지보수를 담당했습니다.",
     bullets: [
@@ -150,6 +154,7 @@ const COMPANY_PROJECTS = [
       "Redis",
     ],
     image: "Resource/Neko Omakase/banner.webp",
+    icon: "Resource/Neko Omakase/icon.webp",
     stores: [
       {
         label: "Google Play",
@@ -199,6 +204,7 @@ const COMPANY_PROJECTS = [
       "Shader",
     ],
     image: "Resource/Neko Restaurant/banner.webp",
+    icon: "Resource/Neko Restaurant/icon.webp",
     stores: [
       {
         label: "Google Play",
@@ -249,6 +255,7 @@ const COMPANY_PROJECTS = [
       "PrimeTween",
     ],
     image: "Resource/Hero Craft Town/banner.webp",
+    icon: "Resource/Hero Craft Town/icon.webp",
     stores: [
       {
         label: "Google Play",
@@ -270,6 +277,7 @@ const COMPANY_PROJECTS = [
     role: "gRPC 서버 통신 구현, Spine·LIAPP·AppLovin 등 외부 SDK 유지보수, UniTask 비동기 로직 개발 담당",
     platforms: ["Android", "iOS"],
     blurb: "Idle RPG · 구글 플레이 인기 1위 (2023.07) · gRPC / Spine.",
+    blurbTeam: ["구글 플레이 인기 1위 (2023.07)"],
     summary:
       "테일드 데몬 슬레이어 후속작으로 구글 플레이·앱스토어에 출시한 idle RPG입니다. 팀 성과로 구글 플레이 인기 순위 1위(2023.07)를 기록했습니다. gRPC 서버 통신, Spine, 보안·광고 SDK, UniTask 비동기를 담당했습니다.",
     bullets: [
@@ -299,6 +307,7 @@ const COMPANY_PROJECTS = [
       "OneSignal",
     ],
     image: "Resource/Tailed Demon Slayer Rise/banner.webp",
+    icon: "Resource/Tailed Demon Slayer Rise/icon.webp",
     stores: [
       {
         label: "Google Play",
@@ -324,6 +333,7 @@ const COMPANY_PROJECTS = [
     role: "게임 시스템 데이터 처리·시스템 간 연동·상태 관리 로직과 게임플레이·시스템 UI 개발 담당",
     platforms: ["Android", "iOS"],
     blurb: "미국 소프트런칭 MVP · 약 1개월 런칭 · D1 약 60%.",
+    blurbTeam: ["약 1개월 런칭", "D1 약 60%"],
     summary:
       "방치형 RPG MVP입니다. 팀이 약 1개월 만에 미국 소프트런칭(Google Play·App Store)을 마쳤고 D1 리텐션 약 60%를 기록했습니다. 게임 시스템 데이터 처리·상태 관리와 UI를 담당했습니다.",
     bullets: [
@@ -339,6 +349,7 @@ const COMPANY_PROJECTS = [
     proof: [],
     tech: ["Unity", "UniTask"],
     image: "Resource/Rumble Squad/banner.webp",
+    icon: "Resource/Rumble Squad/icon.webp",
     stores: [
       {
         label: "Google Play",
@@ -378,6 +389,7 @@ const COMPANY_PROJECTS = [
     proof: [],
     tech: ["SG Patcher", "AWS CDN", "Asset Bundle", "UniRx", "Shader"],
     image: "Resource/Soul Dimension/Power_saving_1.webp",
+    icon: "Resource/Soul Dimension/Power_saving_1.webp",
     stores: [],
     shots: [
       "Resource/Soul Dimension/Power_saving_1.webp",
@@ -697,7 +709,7 @@ const CODE_TOPICS = [
   { label: "MyUtil", id: "tools-myutil" },
 ];
 
-/** 카테고리 정의 — 필터·PDF·해시 라우팅이 모두 이 맵을 따른다. */
+/** 카테고리 정의 — 탭·목차·PDF·해시 라우팅이 모두 이 맵을 따른다. */
 const CATEGORIES = {
   company: {
     label: "Company",

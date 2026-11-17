@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
   <title>CY</title>
   <style>
-    .tile { fill: #0b6e63; }
-    .mark { stroke: #f5f8f6; }
+    .tile { fill: #567e65; }
+    .mark { stroke: #fcfdfc; }
     @media (prefers-color-scheme: dark) {
-      .tile { fill: #3dbeb0; }
-      .mark { stroke: #0f1714; }
+      .tile { fill: #96bea1; }
+      .mark { stroke: #1b2221; }
     }
   </style>
   <rect class="tile" width="32" height="32" rx="7"/>
