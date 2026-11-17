@@ -3,15 +3,19 @@
  *
  *   npm run shots                         # ./shots 에 저장
  *   npm run shots -- --out=<dir>          # 저장 폴더 지정
- *   npm run shots -- --detail=<id>        # 상세 패널 샷에 쓸 프로젝트 id (기본 neko-omakase)
+ *   npm run shots -- --page=<path>        # 찍을 페이지, 저장소 루트 기준 (기본 index.html)
+ *                                         #   예: --page=drafts/b/index.html (--out 이 없으면 ./shots/drafts-b)
+ *   npm run shots -- --detail=<id>        # 상세 샷에 쓸 프로젝트 id (기본 neko-omakase)
  *   npm run shots -- --motion             # prefers-reduced-motion 을 끄고 찍는다
  *
  * 만드는 파일:
  *   desktop-light-fold.png / -full.png   1440x900, 라이트
  *   desktop-dark-fold.png  / -full.png   1440x900, 다크
  *   mobile-light-fold.png  / -full.png   390x844, 라이트, 모바일 에뮬레이션 (DPR 2)
- *   desktop-light-detail.png             index.html#<id> 상세 패널이 열린 화면
+ *   desktop-light-detail.png             <page>#<id> 로 연 화면 (상세 패널 · 펼친 행 · 펼친 기록)
  *   desktop-light-featured.png           #featured 섹션 (있을 때만)
+ *
+ * 찍기 전에 웹 글꼴(document.fonts.ready)을 기다리고, 페이지를 끝까지 내려 lazy 이미지를 다 띄운다.
  *
  * 페이지 오류·콘솔 오류·실패한 요청(404 등)은 마지막에 경고로 모아 출력한다.
  */
@@ -34,13 +38,55 @@ const PROFILES = [
   },
 ];
 
+const DEFAULT_PAGE = "index.html";
+
+/** "drafts\\b\\" · "/drafts/b/index.html" · "./drafts/b" → 루트 기준 URL 경로 ("drafts/b/" · "drafts/b/index.html") */
+function normalizePage(raw) {
+  let p = String(raw || DEFAULT_PAGE).trim().replace(/\\/g, "/").replace(/^(\.\/)+/, "").replace(/^\/+/, "");
+  p = p.split(/[?#]/)[0];
+  if (!p) return DEFAULT_PAGE;
+  if (p.split("/").includes("..")) throw new Error(`--page 는 저장소 루트 안이어야 합니다: ${raw}`);
+  // 확장자 없는 마지막 조각은 폴더로 본다 (정적 서버가 폴더/ 를 index.html 로 연다)
+  if (!p.endsWith("/") && !path.posix.extname(p)) p += "/";
+  return p;
+}
+
 function parseArgs(argv) {
   const get = (key) => argv.find((a) => a.startsWith(`--${key}=`))?.slice(key.length + 3);
+  const page = normalizePage(get("page"));
+  // 기본 페이지는 예전처럼 ./shots, 다른 페이지는 ./shots/<경로> 로 나눠 덮어쓰지 않게 한다
+  const slug = page.replace(/(^|\/)index\.html$/, "").replace(/\/+$/, "").replace(/[^\w.-]+/g, "-");
+  const defaultOut = page === DEFAULT_PAGE ? "shots" : path.join("shots", slug || "page");
   return {
-    out: path.resolve(get("out") || "shots"),
+    out: path.resolve(get("out") || defaultOut),
+    page,
     detail: get("detail") || "neko-omakase",
     reduceMotion: !argv.includes("--motion"),
   };
+}
+
+function pageUrl(base, opts, hash = "") {
+  const encoded = opts.page.split("/").map(encodeURIComponent).join("/");
+  return `${base}/${encoded}${hash ? `#${encodeURIComponent(hash)}` : ""}`;
+}
+
+/** 웹 글꼴이 다 들어올 때까지 (CDN 서브셋 글꼴은 글자가 화면에 나온 뒤에 받으므로 찍기 직전에도 부른다) */
+async function fontsReady(page, timeout = 10000) {
+  await page
+    .evaluate(
+      (limit) =>
+        Promise.race([
+          (async () => {
+            await document.fonts?.ready;
+            // ready 뒤에 새로 시작된 로드(스크롤로 드러난 글자)가 있으면 한 번 더
+            await new Promise((r) => requestAnimationFrame(() => r()));
+            await document.fonts?.ready;
+          })(),
+          new Promise((r) => setTimeout(r, limit)),
+        ]),
+      timeout
+    )
+    .catch(() => {});
 }
 
 function watchProblems(page, label, problems) {
@@ -135,6 +181,7 @@ async function waitScrollIdle(page, quietMs = 300, timeout = 4000) {
 const MAX_CAPTURE_PX = 16000;
 
 async function savePng(page, outPath, options = {}) {
+  await fontsReady(page);
   let note = "";
   if (options.fullPage && !options.scale) {
     const { h, dpr } = await page.evaluate(() => ({
@@ -168,8 +215,9 @@ async function shootProfile(browser, base, profile, opts, problems, written) {
   const page = await context.newPage();
   watchProblems(page, name, problems);
 
-  await page.goto(`${base}/index.html`, { waitUntil: "load", timeout: 60000 });
+  await page.goto(pageUrl(base, opts), { waitUntil: "load", timeout: 60000 });
   await settle(page);
+  await fontsReady(page);
   await warmUp(page);
   const broken = await waitForImages(page, 5000);
   broken.forEach((src) => problems.push(`[${name}] broken image ${src}`));
@@ -204,26 +252,43 @@ async function shootDetail(browser, base, opts, problems, written) {
   const page = await context.newPage();
   watchProblems(page, label, problems);
 
-  await page.goto(`${base}/index.html#${encodeURIComponent(opts.detail)}`, {
+  await page.goto(pageUrl(base, opts, opts.detail), {
     waitUntil: "load",
     timeout: 60000,
   });
   await settle(page);
+  await fontsReady(page);
 
-  const panel = page.locator("#detail-panel, .detail-panel").first();
+  // 열린 상세를 찾는다. 사이트(index.html)는 상세 패널, 시안은 해시로 펼친 행·기록.
+  // 찾은 요소의 위쪽이 화면 위에 오게 맞춘다 (펼친 행은 행 머리부터 보이게).
+  let selector = "#detail-panel, .detail-panel";
   try {
-    await page.waitForFunction(
-      () => {
-        const el = document.querySelector("#detail-panel, .detail-panel");
-        return el && el.childElementCount > 0 && el.getBoundingClientRect().height > 0;
+    const handle = await page.waitForFunction(
+      (id) => {
+        const visible = (el) => el && el.getBoundingClientRect().height > 0;
+        const panel = document.querySelector("#detail-panel, .detail-panel");
+        if (panel) {
+          return panel.childElementCount > 0 && visible(panel) ? "#detail-panel, .detail-panel" : false;
+        }
+        const q = CSS.escape(id);
+        const candidates = [
+          `[data-id="${q}"].is-open`, // 표의 펼친 행 (그 아래에 기록이 붙는다)
+          `[id="${q}"].is-open`, // 펼친 행 자체에 id 가 있는 목록
+          `[id="${q}"][open]`, // <details id>
+          `[data-for="${q}"]`, // 행 아래에 붙는 기록
+          `[id="${q}"][aria-expanded="true"]`,
+        ];
+        return candidates.find((sel) => visible(document.querySelector(sel))) || false;
       },
-      null,
+      opts.detail,
       { timeout: 10000 }
     );
+    selector = await handle.jsonValue();
   } catch {
     problems.push(`[${label}] #${opts.detail} 로 열었지만 상세 패널이 열리지 않았습니다`);
   }
 
+  const panel = page.locator(selector).first();
   await waitScrollIdle(page);
   if (await panel.count()) {
     await panel.evaluate(async (el) => {
@@ -249,6 +314,7 @@ async function main() {
   await mkdir(opts.out, { recursive: true });
 
   const { server, base } = await startStaticServer(ROOT);
+  console.log(`page: /${opts.page}  detail: #${opts.detail}`);
   const problems = [];
   const written = [];
   let browser;
