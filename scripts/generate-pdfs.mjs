@@ -1,6 +1,6 @@
 /**
  * Generate PDFs from local HTML.
- * - portfolio: index.html?pdf=1 (Company + Personal fully expanded)
+ * - portfolio: index.html?pdf=1 (라이트 고정 · 모든 카테고리의 모든 작업을 펼친 목록 — script.js renderPdfDoc)
  * - docs: 이력서 / 경력기술서 / 자기소개서
  *
  * Usage:

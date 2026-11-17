@@ -5,12 +5,17 @@
  * 문제(problem)는 실패(exit 1), 경고(warning)는 출력만 한다.
  *
  *  1. id 가 전체에서 유일한가, index.html 의 요소 id 와 겹치지 않는가 (#id 해시 충돌 방지)
- *  2. image / shots / minor 의 파일이 실제로 있는가 (오타는 조용히 깨진다)
- *  3. index.html 의 filter 버튼과 CATEGORIES 의 key 가 일치하는가
- *  4. 배지 색이 필요한 카테고리에 .badge-<key> 가 style.css 에 있는가
+ *  2. image / icon / shots / minor 의 파일이 실제로 있는가 (오타는 조용히 깨진다)
+ *  3. 탭·행 구조 — 카테고리 key 는 id 에 쓸 수 있는 형태이고, script.js 가 만드는 id
+ *     (work-<key> · panel-<key> · f-/head-/body-<id> · grp-…)가 페이지·프로젝트 id 와 겹치지 않는가.
+ *     script.js 가 getElementById("…") · querySelector(All)("#…") 로 찾는 자리(탭·목차·PDF 목록·경력 표 등)가
+ *     index.html 에 있는가. index.html 의 data-project-link 가 실재하는 프로젝트를 가리키는가
+ *  4. script.js 의 그림 크기 표(DIMS)가 실제 파일과 같은가 (없는 파일은 실패, 크기가 다르면 실패,
+ *     표에 없는 데이터 그림은 경고 — 크기 없이 그려져 자리 밀림이 생긴다)
  *  5. 필수 필드(id/title/blurb/summary)가 비어 있지 않은가
  *  6. 대표 작업(featured): 정확히 3개, 중복 없음, 실재하는 id, role·headline 필수
- *  7. role·headline: company·대표 작업은 필수, personal·ai 는 없으면 경고
+ *  7. role·headline: company·대표 작업은 필수, personal·ai 는 없으면 경고.
+ *     blurbTeam 은 blurb 의 " · " 구간과 똑같고, 순위·수상·리텐션으로 보이는 구간은 blurbTeam 에 있어야 한다
  *  8. results[].scope 는 "team" | "personal", proof·stores·repo·docs·codeLink 는 https URL
  *  9. codeTopics 는 {label, id}. ../code_portfolio/topics.json 이 있으면 id 와 codeLink #앵커가 실재하는가
  * 10. index.html · 404.html 의 로컬 href/src (favicon.svg · assets/ · pdf/ · Resource/ …)가 디스크에 있는가
@@ -43,7 +48,7 @@ if (!categories) {
 
 const dataSrc = await readFile(path.join(ROOT, "data", "projects.js"), "utf8");
 const html = await readFile(path.join(ROOT, "index.html"), "utf8");
-const css = await readFile(path.join(ROOT, "style.css"), "utf8");
+const ui = await readFile(path.join(ROOT, "script.js"), "utf8");
 
 async function exists(rel) {
   try {
@@ -65,26 +70,32 @@ function isHttps(href) {
 
 const filled = (v) => typeof v === "string" && v.trim().length > 0;
 
-// ---------------------------------------------------------------- 1–5, 7, 8
+// ---------------------------------------------------------------- 1–3, 5, 7, 8
 const seen = new Map();
 const byId = new Map();
 const htmlIds = new Set([...html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]));
+const dataImages = new Set();
+
+// script.js 가 탭·행·대표 작업을 그리며 만드는 id 의 머리 (renderWork · renderRow · renderFeatured)
+const GENERATED_PREFIXES = ["work-", "panel-", "grp-", "f-", "head-", "body-"];
+const tabIds = new Set();
 
 for (const [key, cat] of Object.entries(categories)) {
   if (!cat.label) problems.push(`카테고리 ${key}: label 이 없습니다`);
   if (!cat.hint) problems.push(`카테고리 ${key}: hint 가 없습니다`);
+
+  // 3 — 탭 id (work-<key> · panel-<key>) 와 딥링크 #work-<key>
+  if (!/^[a-z][a-z0-9-]*$/.test(key)) {
+    problems.push(`카테고리 key "${key}" 는 소문자·숫자·하이픈만 써야 합니다 (탭 id work-${key} 에 들어갑니다)`);
+  }
+  for (const id of [`work-${key}`, `panel-${key}`]) {
+    tabIds.add(id);
+    if (htmlIds.has(id)) problems.push(`index.html 의 요소 id="${id}" 가 카테고리 ${key} 의 탭 id 와 겹칩니다`);
+  }
+
   if (!Array.isArray(cat.list) || !cat.list.length) {
     problems.push(`카테고리 ${key}: list 가 비어 있습니다`);
     continue;
-  }
-
-  // 3 — 필터 버튼
-  if (!html.includes(`data-filter="${key}"`)) {
-    problems.push(`index.html 에 data-filter="${key}" 버튼이 없습니다`);
-  }
-  // 4 — 배지 색 (company 는 기본 .badge 를 쓴다)
-  if (key !== "company" && !css.includes(`.badge-${key}`)) {
-    problems.push(`style.css 에 .badge-${key} 가 없습니다`);
   }
 
   for (const p of cat.list) {
@@ -103,12 +114,17 @@ for (const [key, cat] of Object.entries(categories)) {
     if (htmlIds.has(p.id)) {
       problems.push(`${tag}: index.html 의 요소 id="${p.id}" 와 겹칩니다 (#${p.id} 해시가 충돌)`);
     }
+    const prefix = GENERATED_PREFIXES.find((pre) => String(p.id).startsWith(pre));
+    if (prefix) {
+      problems.push(`${tag}: id 가 "${prefix}" 로 시작합니다 — script.js 가 만드는 요소 id 와 겹칠 수 있습니다`);
+    }
 
     // 2 — 이미지 경로
-    const images = [p.image, ...(p.shots || []), ...(p.minor || []).map((m) => m.img)].filter(
+    const images = [p.image, p.icon, ...(p.shots || []), ...(p.minor || []).map((m) => m.img)].filter(
       Boolean
     );
     for (const rel of images) {
+      dataImages.add(rel);
       if (!(await exists(rel))) {
         problems.push(`${p.id}: 없는 파일 — ${rel}`);
       } else if (/\.(png|jpe?g)$/i.test(rel)) {
@@ -135,6 +151,30 @@ for (const [key, cat] of Object.entries(categories)) {
     }
     if (p.featured !== undefined && ![1, 2, 3].includes(p.featured)) {
       problems.push(`${tag}: featured 는 1 | 2 | 3 이어야 합니다 (받은 값: ${p.featured})`);
+    }
+
+    // 7 — 접힌 행 "팀" 표시 (blurbTeam): blurb 구간과 똑같은가, 순위·수상·리텐션으로 보이는 구간이 빠지지 않았는가
+    const segments = String(p.blurb || "")
+      .split(" · ")
+      .map((s) => s.replace(/\.$/, ""));
+    if (p.blurbTeam !== undefined) {
+      if (!Array.isArray(p.blurbTeam)) {
+        problems.push(`${tag}: blurbTeam 은 문자열 배열이어야 합니다`);
+      } else {
+        for (const s of p.blurbTeam) {
+          if (!segments.includes(s)) {
+            problems.push(`${tag}: blurbTeam "${s}" 가 blurb 의 " · " 구간과 같지 않습니다 (끝 마침표 없이 똑같이)`);
+          }
+        }
+        if (p.blurbTeam.length && !(p.results || []).some((r) => r?.scope === "team")) {
+          problems.push(`${tag}: blurbTeam 이 있는데 results 에 scope "team" 성과가 없습니다`);
+        }
+      }
+    }
+    for (const s of segments) {
+      if (/1\s*위|Award|수상|리텐션|D1\b/i.test(s) && !(p.blurbTeam || []).includes(s)) {
+        problems.push(`${tag}: blurb 구간 "${s}" 는 팀 성과(순위·수상·리텐션)로 보입니다 — blurbTeam 에 넣어 "팀" 표시를 붙여 주세요`);
+      }
     }
 
     // 8 — results · 링크
@@ -174,10 +214,83 @@ for (const [key, cat] of Object.entries(categories)) {
   }
 }
 
-// index.html 에만 있고 데이터에는 없는 필터 버튼
-for (const m of html.matchAll(/data-filter="([^"]+)"/g)) {
-  if (!categories[m[1]]) {
-    problems.push(`index.html 의 data-filter="${m[1]}" 에 대응하는 카테고리가 없습니다`);
+// 3 — 탭 id 가 프로젝트 id 와 겹치지 않는가
+for (const id of tabIds) {
+  if (byId.has(id)) problems.push(`프로젝트 id "${id}" 가 카테고리 탭 id 와 겹칩니다`);
+}
+
+// 3 — script.js 가 getElementById("…") · querySelector(All)("#…") 로 찾는 자리가 index.html 에 있는가
+//     (마크업을 고치다 지우면 그 부분이 조용히 빠진다 — 예: #career 를 지우면 경력 시간축이 사라진다)
+const lookedUp = new Set([
+  ...[...ui.matchAll(/getElementById\("([^"]+)"\)/g)].map((x) => x[1]),
+  ...[...ui.matchAll(/querySelector(?:All)?\(\s*["'`]#([\w-]+)/g)].map((x) => x[1]),
+]);
+for (const m of lookedUp) {
+  if (!htmlIds.has(m)) problems.push(`index.html 에 id="${m}" 가 없습니다 (script.js 가 찾는 자리)`);
+}
+const sectionList = ui.match(/const SECTIONS = \[([^\]]*)\]/);
+if (!sectionList) {
+  problems.push("script.js 에서 목차 섹션 목록(const SECTIONS)을 찾지 못했습니다");
+} else {
+  for (const m of sectionList[1].matchAll(/"([^"]+)"/g)) {
+    if (!htmlIds.has(m[1])) problems.push(`index.html 에 목차 섹션 id="${m[1]}" 가 없습니다 (script.js SECTIONS)`);
+    if (!html.includes(`data-section="${m[1]}"`)) {
+      problems.push(`index.html 목차에 data-section="${m[1]}" 링크가 없습니다 (script.js SECTIONS)`);
+    }
+  }
+}
+
+// 3 — 첫 화면 팀 성과 등 data-project-link 가 실재하는 (숨기지 않은) 프로젝트인가
+for (const m of html.matchAll(/data-project-link="([^"]+)"/g)) {
+  if (!byId.has(m[1])) problems.push(`index.html: data-project-link="${m[1]}" 에 해당하는 프로젝트가 없습니다`);
+}
+
+// ---------------------------------------------------------------- 4 그림 크기 표 (script.js DIMS)
+/** WebP 의 캔버스 크기 (VP8 · VP8L · VP8X). 읽지 못하면 null */
+async function webpSize(rel) {
+  let fh;
+  try {
+    fh = await open(path.join(ROOT, rel), "r");
+    const buf = Buffer.alloc(30);
+    await fh.read(buf, 0, 30, 0);
+    if (buf.toString("ascii", 0, 4) !== "RIFF" || buf.toString("ascii", 8, 12) !== "WEBP") return null;
+    const chunk = buf.toString("ascii", 12, 16);
+    if (chunk === "VP8 ") return { w: buf.readUInt16LE(26) & 0x3fff, h: buf.readUInt16LE(28) & 0x3fff };
+    if (chunk === "VP8L") {
+      const bits = buf.readUInt32LE(21);
+      return { w: (bits & 0x3fff) + 1, h: ((bits >>> 14) & 0x3fff) + 1 };
+    }
+    if (chunk === "VP8X") return { w: buf.readUIntLE(24, 3) + 1, h: buf.readUIntLE(27, 3) + 1 };
+    return null;
+  } catch {
+    return null;
+  } finally {
+    await fh?.close();
+  }
+}
+
+const dims = new Map([...ui.matchAll(/"(Resource\/[^"]+)":\s*\[(\d+),\s*(\d+)\]/g)].map((m) => [m[1], [+m[2], +m[3]]]));
+const storeShot = ui.match(/const STORE_SHOT = \[(\d+),\s*(\d+)\]/);
+if (!dims.size) warnings.push("script.js 에서 그림 크기 표(DIMS)를 찾지 못했습니다");
+function expectedSize(rel) {
+  if (dims.has(rel)) return dims.get(rel);
+  if (storeShot && /\/store_picture_\d\.webp$/.test(rel)) return [+storeShot[1], +storeShot[2]];
+  return null;
+}
+for (const [rel] of dims) {
+  if (!(await exists(rel))) problems.push(`script.js DIMS: 없는 파일 — ${rel}`);
+}
+for (const rel of new Set([...dims.keys(), ...dataImages])) {
+  if (!/\.webp$/i.test(rel) || !(await exists(rel))) continue;
+  const want = expectedSize(rel);
+  if (!want) {
+    if (dataImages.has(rel)) warnings.push(`${rel}: script.js DIMS 에 크기가 없어 자리 밀림이 생길 수 있습니다`);
+    continue;
+  }
+  const got = await webpSize(rel);
+  if (!got) warnings.push(`${rel}: WebP 크기를 읽지 못했습니다`);
+  else if (got.w !== want[0] || got.h !== want[1]) {
+    problems.push(`${rel}: 실제 ${got.w}x${got.h} — script.js 크기 표는 ${want[0]}x${want[1]} 입니다`);
   }
 }
 

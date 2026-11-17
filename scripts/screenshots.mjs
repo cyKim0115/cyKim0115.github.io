@@ -4,7 +4,7 @@
  *   npm run shots                         # ./shots 에 저장
  *   npm run shots -- --out=<dir>          # 저장 폴더 지정
  *   npm run shots -- --page=<path>        # 찍을 페이지, 저장소 루트 기준 (기본 index.html)
- *                                         #   예: --page=drafts/b/index.html (--out 이 없으면 ./shots/drafts-b)
+ *                                         #   예: --page=404.html (--out 이 없으면 ./shots/404.html)
  *   npm run shots -- --detail=<id>        # 상세 샷에 쓸 프로젝트 id (기본 neko-omakase)
  *   npm run shots -- --motion             # prefers-reduced-motion 을 끄고 찍는다
  *
@@ -12,7 +12,7 @@
  *   desktop-light-fold.png / -full.png   1440x900, 라이트
  *   desktop-dark-fold.png  / -full.png   1440x900, 다크
  *   mobile-light-fold.png  / -full.png   390x844, 라이트, 모바일 에뮬레이션 (DPR 2)
- *   desktop-light-detail.png             <page>#<id> 로 연 화면 (상세 패널 · 펼친 행 · 펼친 기록)
+ *   desktop-light-detail.png             <page>#<id> 로 연 화면 (index.html 은 그 작업 행이 펼쳐진 화면)
  *   desktop-light-featured.png           #featured 섹션 (있을 때만)
  *
  * 찍기 전에 웹 글꼴(document.fonts.ready)을 기다리고, 페이지를 끝까지 내려 lazy 이미지를 다 띄운다.
@@ -40,7 +40,7 @@ const PROFILES = [
 
 const DEFAULT_PAGE = "index.html";
 
-/** "drafts\\b\\" · "/drafts/b/index.html" · "./drafts/b" → 루트 기준 URL 경로 ("drafts/b/" · "drafts/b/index.html") */
+/** "docs\\" · "/docs/index.html" · "./docs" → 루트 기준 URL 경로 ("docs/" · "docs/index.html") */
 function normalizePage(raw) {
   let p = String(raw || DEFAULT_PAGE).trim().replace(/\\/g, "/").replace(/^(\.\/)+/, "").replace(/^\/+/, "");
   p = p.split(/[?#]/)[0];
@@ -259,7 +259,8 @@ async function shootDetail(browser, base, opts, problems, written) {
   await settle(page);
   await fontsReady(page);
 
-  // 열린 상세를 찾는다. 사이트(index.html)는 상세 패널, 시안은 해시로 펼친 행·기록.
+  // 열린 상세를 찾는다. 사이트(index.html)는 해시로 펼친 행(li#<id>.is-open).
+  // 다른 모양(상세 패널 #detail-panel · 표 아래 기록 · <details id>)도 찾는다.
   // 찾은 요소의 위쪽이 화면 위에 오게 맞춘다 (펼친 행은 행 머리부터 보이게).
   let selector = "#detail-panel, .detail-panel";
   try {
@@ -285,7 +286,7 @@ async function shootDetail(browser, base, opts, problems, written) {
     );
     selector = await handle.jsonValue();
   } catch {
-    problems.push(`[${label}] #${opts.detail} 로 열었지만 상세 패널이 열리지 않았습니다`);
+    problems.push(`[${label}] #${opts.detail} 로 열었지만 상세(펼친 행·패널)가 열리지 않았습니다`);
   }
 
   const panel = page.locator(selector).first();
@@ -293,8 +294,13 @@ async function shootDetail(browser, base, opts, problems, written) {
   if (await panel.count()) {
     await panel.evaluate(async (el) => {
       el.querySelectorAll("img").forEach((img) => (img.loading = "eager"));
-      const nav = document.querySelector(".site-nav, nav");
-      const navH = nav && getComputedStyle(nav).position === "fixed" ? nav.offsetHeight : 0;
+      // 화면 위에 붙은 머리 띠(가로로 꽉 찬 fixed/sticky 요소)만큼 내려서 찍는다. 넓은 화면의 목차 열(sticky)은 세지 않는다
+      const bar = [...document.querySelectorAll(".side, .site-nav, header, nav")].find((n) => {
+        const pos = getComputedStyle(n).position;
+        const r = n.getBoundingClientRect();
+        return (pos === "fixed" || pos === "sticky") && r.top <= 0 && r.width >= window.innerWidth * 0.9;
+      });
+      const navH = bar ? bar.getBoundingClientRect().height : 0;
       const top = el.getBoundingClientRect().top;
       if (top < navH || top > window.innerHeight * 0.5) {
         window.scrollTo({ top: window.scrollY + top - navH - 16, behavior: "instant" });
