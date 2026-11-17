@@ -8,161 +8,109 @@
     문구는 공개 근거로 확인된 표기만 쓴다 (data/projects.js 의 proof 링크와 같은 사실).
     순위·수상은 팀 성과이고, 차트·부문·시점을 함께 적는다. 확인되지 않은 마켓 순위 표기는 쓰지 않는다
     (scripts/check-data.mjs 의 BANNED 가 이 파일도 검사한다).
-    폰트는 네트워크 없이 같은 결과가 나오도록 시스템 폰트만 쓴다.
+    색·글꼴은 사이트와 같은 세이지 차콜 라이트 토큰과 Pretendard (style.css :root).
+    Pretendard 는 jsDelivr 에서 받는다 — 네트워크가 없으면 Malgun Gothic 으로 찍히니 결과를 눈으로 확인한다.
   -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
   <style>
     :root {
-      --bg: #e8eeea;
-      --bg-deep: #d5e0d9;
-      --ink: #15201c;
-      --ink-soft: #3d4a44;
-      --muted: #5f6e66;
-      --line: rgba(21, 32, 28, 0.14);
-      --accent: #0b6e63;
-      --warm: #c45c26;
-      --font: "Noto Sans KR", "Malgun Gothic", "Apple SD Gothic Neo", "Segoe UI", sans-serif;
+      --bg: #fcfdfc;
+      --surface: #f0f3f0;
+      --fg: #2c3333;
+      --muted: #515b56;
+      --line: #dae1da;
+      --line-soft: #e5eae5;
+      --accent: #567e65;
+      --accent-text: #3f6150;
+      --font: "Pretendard Variable", "Pretendard", "Malgun Gothic", "Apple SD Gothic Neo", "Segoe UI", sans-serif;
+      --mono: "D2Coding", "Cascadia Code", "Cascadia Mono", Consolas, monospace, "Malgun Gothic";
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { width: 1200px; height: 630px; overflow: hidden; }
     body {
       font-family: var(--font);
-      color: var(--ink);
-      background:
-        radial-gradient(ellipse 620px 420px at 6% 0%, rgba(18, 148, 135, 0.20), transparent 70%),
-        radial-gradient(ellipse 560px 380px at 100% 100%, rgba(196, 92, 38, 0.15), transparent 70%),
-        linear-gradient(165deg, #f3f7f4 0%, var(--bg) 48%, var(--bg-deep) 100%);
+      color: var(--fg);
+      background: var(--bg);
+      word-break: keep-all;
       -webkit-font-smoothing: antialiased;
-      text-rendering: geometricPrecision;
     }
-    .frame {
-      position: absolute;
-      inset: 0;
-      padding: 58px 84px 54px;
-      display: flex;
-      flex-direction: column;
-    }
-    .rail {
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 14px;
-      background: linear-gradient(180deg, var(--accent) 0%, var(--accent) 72%, var(--warm) 72%, var(--warm) 100%);
-    }
+    .frame { position: absolute; inset: 0; padding: 56px 80px 0; }
+    .nw { white-space: nowrap; }
+
+    /* 문서 첫머리: 이름 + 아래 1px 선 (사이트 h1 과 같은 결) */
     .head {
       display: flex;
-      align-items: center;
+      align-items: flex-end;
       justify-content: space-between;
       gap: 40px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
     }
-    .eyebrow {
-      font-size: 17px;
-      font-weight: 700;
-      letter-spacing: 0.26em;
-      color: var(--accent);
-      text-transform: uppercase;
-    }
-    h1 {
-      margin-top: 10px;
-      font-size: 96px;
-      line-height: 1.02;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-    }
-    .role {
-      margin-top: 14px;
-      font-size: 38px;
-      line-height: 1.2;
-      font-weight: 600;
-      letter-spacing: -0.015em;
-      color: var(--ink-soft);
-    }
-    .mark {
-      width: 150px;
-      height: 150px;
-      flex: none;
-      border-radius: 34px;
-      box-shadow: 0 18px 40px rgba(11, 110, 99, 0.22);
-    }
-    .highlights {
-      margin-top: 38px;
-      padding-top: 26px;
-      border-top: 1px solid var(--line);
-    }
+    h1 { font-size: 88px; line-height: 1.12; font-weight: 700; letter-spacing: -0.02em; }
+    .mark { width: 88px; height: 88px; flex: none; margin-bottom: 8px; }
+    .role { margin-top: 20px; font-size: 34px; line-height: 1.3; font-weight: 600; letter-spacing: -0.01em; }
+    .role .en { font-size: 26px; font-weight: 400; color: var(--muted); }
+    .facts { margin-top: 8px; font-size: 21px; line-height: 1.5; color: var(--muted); }
+
+    /* 참여작 팀 성과: 구획 라벨 + 줄 (사이트 소개의 팀 성과 목록과 같은 결) */
+    .team { margin-top: 30px; }
     .label {
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--line);
       font-size: 17px;
       font-weight: 600;
-      letter-spacing: 0.04em;
       color: var(--muted);
     }
-    ul {
-      list-style: none;
-      margin-top: 14px;
+    ul { list-style: none; }
+    li {
       display: grid;
-      grid-template-columns: max-content 1fr;
-      column-gap: 26px;
-      row-gap: 12px;
-      font-size: 25px;
-      line-height: 1.3;
+      grid-template-columns: 340px 1fr;
+      column-gap: 24px;
+      align-items: baseline;
+      padding: 9px 0;
+      font-size: 22px;
+      line-height: 1.4;
     }
-    li { display: contents; }
-    .game {
-      font-weight: 700;
-      color: var(--ink);
-      padding-left: 22px;
-      position: relative;
-    }
-    .game::before {
-      content: "";
+    li + li { border-top: 1px solid var(--line-soft); }
+    .game { font-weight: 600; color: var(--accent-text); }
+    .fact { color: var(--fg); }
+
+    /* 페이지 끝 상태 줄 (사이트 바닥 줄과 같은 면·선). 글자는 안전 영역(아래 36px) 안에 둔다 */
+    .status {
       position: absolute;
       left: 0;
-      top: 0.48em;
-      width: 9px;
-      height: 9px;
-      border-radius: 2px;
-      background: var(--warm);
-    }
-    .fact { color: var(--ink-soft); font-weight: 500; }
-    .sep { color: var(--warm); font-weight: 700; padding: 0 0.28em; }
-    .foot {
-      margin-top: auto;
+      right: 0;
+      bottom: 0;
+      height: 90px;
+      padding: 20px 80px 0;
       display: flex;
-      align-items: baseline;
       justify-content: space-between;
+      align-items: baseline;
+      background: var(--surface);
+      border-top: 1px solid var(--line);
     }
-    .url {
-      font-size: 25px;
-      font-weight: 700;
-      letter-spacing: 0.01em;
-      color: var(--accent);
-    }
-    .note {
-      font-size: 16px;
-      color: var(--muted);
-    }
+    .url { font-family: var(--mono); font-size: 24px; color: var(--accent-text); }
+    .note { font-size: 17px; color: var(--muted); }
   </style>
 </head>
 <body>
-  <div class="rail" aria-hidden="true"></div>
   <main class="frame">
     <div class="head">
-      <div>
-        <p class="eyebrow">Portfolio</p>
-        <h1>김찬영</h1>
-        <p class="role">Unity 게임 클라이언트 개발자</p>
-      </div>
+      <h1>김찬영</h1>
       <img class="mark" src="../favicon.svg" alt="">
     </div>
+    <p class="role">Unity 게임 클라이언트 개발자 <span class="en">· Unity Client Developer</span></p>
+    <p class="facts">Unity 클라이언트 6년+ · 출시작 5종 개발 참여 · <span class="nw">Android · iOS · Steam</span></p>
 
-    <section class="highlights">
-      <p class="label">참여 출시작 · 팀 성과</p>
+    <section class="team">
+      <p class="label">참여작 팀 성과</p>
       <ul>
         <li>
           <span class="game">고양이 오마카세</span>
-          <span class="fact">미국 Google Play 게임 1위 (2024.07)<span class="sep">·</span>Unity Awards Best 2D Visual</span>
+          <span class="fact"><span class="nw">미국 Google Play 게임 1위 (2024.07) ·</span> <span class="nw">Unity Awards Best 2D Visual</span></span>
         </li>
         <li>
-          <span class="game">테일드 데몬 슬레이어: 라이즈</span>
+          <span class="game">테일드 데몬 슬레이어 : 라이즈</span>
           <span class="fact">구글 플레이 인기 1위 (2023.07)</span>
         </li>
         <li>
@@ -172,9 +120,10 @@
       </ul>
     </section>
 
-    <div class="foot">
+    <footer class="status">
       <p class="url">cykim0115.github.io</p>
-    </div>
+      <p class="note"><span class="nw">순위·수상·리텐션은</span> 팀 성과입니다</p>
+    </footer>
   </main>
 </body>
 </html>

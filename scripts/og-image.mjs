@@ -16,7 +16,7 @@ import { launchBrowser, startStaticServer, ROOT } from "./browser.mjs";
 const OUT_DIR = path.join(ROOT, "assets");
 const OG_PATH = path.join(OUT_DIR, "og-image.png");
 const TOUCH_PATH = path.join(OUT_DIR, "apple-touch-icon.png");
-const TILE = "#0b6e63";
+const TILE = "#567e65"; // favicon.svg 라이트 타일 색 (세이지 차콜 --accent)
 
 function parseArgs(argv) {
   const preview = argv.find((a) => a.startsWith("--preview="))?.slice("--preview=".length);
